@@ -191,6 +191,61 @@
         </v-card>
       </v-col>
     </div>
+
+    <!-- Optimizer Section -->
+    <div class="optimizer-section">
+      <v-card class="p-4" width="100%">
+        <!-- Progress Bar -->
+        <!-- <v-progress-linear :value="(scored / total) * 100" height="20" color="primary" class="mb-4">
+          <template #default> Scored {{ scored }} / {{ total }} </template>
+        </v-progress-linear> -->
+
+        <v-progress-linear :model-value="progressValue" :height="20" color="primary" class="mb-4">
+          <template #default> {{ progressString }} {{ totalTeamsSearched }} / {{ totalToSearch }} </template>
+        </v-progress-linear>
+
+        <!-- Total Teams Info -->
+        <div class="d-flex justify-space-between">
+          <span>Total Possible Teams: {{ Math.round(totalPossibleTeams) }}</span>
+        </div>
+
+        <!-- Current Best Team Strength -->
+        <div class="text-center mt-2">
+          <strong>
+            Best Team Strength:
+            <span :style="{ color: 'rgb(var(--v-theme-strength))' }">
+              {{ Math.round(bestTeamStrength) }}
+            </span>
+          </strong>
+        </div>
+
+        <!-- Current Best Team -->
+        <div class="d-flex justify-center mt-4">
+          <table>
+            <tbody>
+              <tr>
+                <!-- Pokémon Images -->
+                <td v-for="(sprite, index) in bestTeamSprites" :key="index" class="text-center">
+                  <img :src="sprite" alt="Pokemon Sprite" class="mx-2" width="50" height="50" />
+                </td>
+              </tr>
+              <tr>
+                <!-- Pokémon Custom Names -->
+                <td v-for="(member, index) in bestTeam" :key="index" class="text-center">
+                  <strong>{{ member.name || '' }}</strong>
+                </td>
+              </tr>
+              <tr>
+                <!-- Pokémon Display Names -->
+                <td v-for="(member, index) in bestTeam" :key="index" class="text-center">
+                  {{ member.pokemon.displayName }}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </v-card>
+    </div>
   </v-container>
 
   <v-dialog v-model="isDeleteOpen" aria-label="delete team menu">
@@ -212,11 +267,15 @@
       </v-col>
     </v-row>
   </v-dialog>
+
+  <div class="team-section">
+    <div class="button-container">
+      <v-btn color="primary" @click="startFindOptimalTeam">Find Optimal Team</v-btn>
+    </div>
+  </div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
-
 import CookingResults from '@/components/calculator/results/cooking-results.vue'
 import MemberResults from '@/components/calculator/results/member-results/member-results.vue'
 import TeamResults from '@/components/calculator/results/team-results.vue'
@@ -224,11 +283,15 @@ import TeamName from '@/components/calculator/team-name.vue'
 import TeamSettings from '@/components/calculator/team-settings/team-settings.vue'
 import TeamSlot from '@/components/calculator/team-slot.vue'
 import { useBreakpoint } from '@/composables/use-breakpoint/use-breakpoint'
+import { findOptimalTeam } from '@/services/team/find-optimal'
+import { pokemonImage } from '@/services/utils/image-utils'
 import { useNotificationStore } from '@/stores/notification-store/notification-store'
 import { usePokemonStore } from '@/stores/pokemon/pokemon-store'
 import { useTeamStore } from '@/stores/team/team-store'
 import { useUserStore } from '@/stores/user-store'
-import { MAX_TEAM_MEMBERS } from '@/types/member/instanced'
+import { defineComponent, ref, watch } from 'vue'
+
+const MAX_TEAM_MEMBERS = 5
 
 export default defineComponent({
   components: {
@@ -247,7 +310,88 @@ export default defineComponent({
 
     const { isMobile } = useBreakpoint()
 
-    return { userStore, teamStore, pokemonStore, notificationStore, isMobile }
+    const isLoading = ref(false)
+    const scored = ref(0)
+    const totalToSearch = ref(0)
+    const totalTeamsSearched = ref(0)
+    const totalPossibleTeams = ref(0)
+    const bestTeam = ref([]) // Store the current best team
+    const bestTeamSprites = ref<string[]>([]) // Store the sprites for the best team
+    const bestTeamStrength = ref(0) // Store the strength of the best team
+    const teamsToCheck = ref([])
+    const progressString = ref('')
+
+    const startFindOptimalTeam = async () => {
+      isLoading.value = true
+      scored.value = 0
+      totalToSearch.value = 0
+      totalTeamsSearched.value = 0
+      totalPossibleTeams.value = 0
+      bestTeam.value = []
+      bestTeamSprites.value = []
+      bestTeamStrength.value = 0
+      progressString.value = ''
+
+      await findOptimalTeam(
+        (
+          currentScored,
+          currentTotal,
+          currentTotalTeamsSearched,
+          currentTotalPossibleTeams,
+          currentBestTeam,
+          currentBestTeamStrength,
+          incomingProgressString = ''
+        ) => {
+          scored.value = currentScored
+          totalToSearch.value = currentTotal
+          totalTeamsSearched.value = currentTotalTeamsSearched
+          totalPossibleTeams.value = currentTotalPossibleTeams
+          bestTeam.value = currentBestTeam
+          bestTeamStrength.value = currentBestTeamStrength
+
+          progressString.value = incomingProgressString
+        }
+      )
+
+      isLoading.value = false
+    }
+
+    // Watch for changes to the best team and update the sprites
+    watch(bestTeam, (newTeam) => {
+      bestTeamSprites.value = newTeam.map((member: any) =>
+        pokemonImage({
+          pokemonName: member.pokemon.name,
+          shiny: member.shiny
+        })
+      )
+    })
+
+    const getPokemonImage = (member: any) => {
+      return pokemonImage({
+        pokemonName: member.pokemon.name,
+        shiny: member.shiny
+      })
+    }
+
+    return {
+      userStore,
+      teamStore,
+      pokemonStore,
+      notificationStore,
+      isMobile,
+      isLoading,
+      scored,
+      totalToSearch,
+      totalTeamsSearched,
+      totalPossibleTeams,
+      bestTeam,
+      bestTeamSprites,
+      bestTeamStrength,
+      startFindOptimalTeam,
+      getPokemonImage,
+      teamsToCheck,
+      progressString
+    }
   },
   data: () => ({
     tabs: [
@@ -266,6 +410,10 @@ export default defineComponent({
     },
     teamSlots() {
       return this.teamStore.getTeamSize === 0 ? 1 : MAX_TEAM_MEMBERS
+    },
+    progressValue() {
+      // Calculate the progress value reactively, guarding against division by zero
+      return this.totalToSearch === 0 ? 0 : (this.totalTeamsSearched / this.totalToSearch) * 100
     }
   },
   methods: {
@@ -299,7 +447,6 @@ export default defineComponent({
   }
 })
 </script>
-
 <style lang="scss">
 .tab-item {
   flex: 1;
@@ -312,6 +459,22 @@ export default defineComponent({
 
 .team-container {
   max-width: 100%;
+}
+
+.team-section {
+  position: relative;
+}
+
+.button-container {
+  position: absolute;
+  top: -10px;
+  left: 10px;
+}
+
+.optimizer-section {
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
 }
 
 @media (min-width: $desktop) {

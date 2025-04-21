@@ -99,7 +99,12 @@ async function initializeApp() {
   app.use(vuetify)
   app.use(router)
 
-  app.mount('#app')
-}
+
+app.use(vuetify)
+app.use(router)
+app.use(vue3GoogleLogin, {
+  clientId: '849977224646-h959gvbile1kobn2gehe31o4m8lbm52m.apps.googleusercontent.com'
+})
+
 
 initializeApp()
