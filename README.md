@@ -35,3 +35,20 @@ Thank you for considering contributing to Neroli's Lab, we welcome you with open
 [API docs]: https://api.sleepapi.net/docs
 [sleepapi]: https://sleepapi.net
 [nerolislab]: https://nerolislab.com
+
+## sheamusfitz edits: the "find-optimal" code
+
+in `backend/src/production.controller.ts`, `calculateTeam` now allows `iterations` to be packed in with the `CalculateTeamRequest`, so I can tell it specific amounts to calculate
+
+(and there's associated changes in `production-router.ts`)
+
+`production-service.ts` has, again, similar changes. I had to change how `iterations` was handled here, but maybe I didn't need to and I'm just inexperienced with this language...
+
+`frontend/src/components/calculator`:
+- `team-section.vue` has the optimizer thing at the bottom. The button placement isn't great, sorry, but it works. There's a whole bunch of other stuff added here for the client-side logic, and the displaying of the optimizer's progress.
+- `team-slot.vue`: added a thing here on each pokemon's sprite that allows the user to 'lock' the pokemon onto the team. This forces it to be in the optimizer's team.
+- `frontend/src/services`: `find-optimal.ts` is the main logic for the team optimizer.
+  - `individual-strength-calculator` I stopped using this but maybe it will end up being valuable later. It runs through all the pokemon and quickly runs a calculation to get its strength in a team of 1.
+  - `strength-service.ts`: added a function `calculateTotalStrength` because that wasn't its own function before: it's just calculated as needed for the calculator view.
+  - `team-service.ts`: just added a thing for making the backend request for the team strength.
+- `frontend/src/stores/team-store.ts`: changes made for logistics- getting the list of pokemon and list of *locked* pokemon. 

@@ -355,8 +355,6 @@ const simulatedAnnealing = async (
   }
 }
 
-const factorial = (num: number): number => (num <= 1 ? 1 : num * factorial(num - 1))
-
 function calculatePossibleTeams(boxed: PokemonInstanceExt[], locked: PokemonInstanceExt[]): number {
   const SPECIAL_POKEMON_DISPLAY_NAMES = ['Entei', 'Suicune', 'Raikou', 'Cresselia', 'Darkrai']
   const lockedCount = locked.length

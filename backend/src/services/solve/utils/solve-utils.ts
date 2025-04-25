@@ -65,10 +65,11 @@ export function calculateProductionAll(params: {
     camp: settings.camp
   });
 
-  const userIncludedProduction = calculateTeam(
-    { settings: { ...settings, includeCooking: true }, members: userMembers, userRecipes },
-    1400
-  );
+  const userIncludedProduction = calculateTeam({
+    settings: { ...settings, includeCooking: true },
+    members: userMembers,
+    userRecipes
+  });
 
   const nonSupportProductionStats = calculateNonSupportPokemon({
     nonSupportMembers,
