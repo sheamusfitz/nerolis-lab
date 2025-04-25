@@ -28,8 +28,9 @@ async function initializeApp() {
       'secondary-dark': '#4A4765',
       surface: '#403D58',
       accent: '#9A95C3',
-
       strength: '#FFB81F',
+
+      admin: '#E63946',
       supporter: '#FFB81F',
 
       natureUp: 'FF683A',
@@ -99,12 +100,7 @@ async function initializeApp() {
   app.use(vuetify)
   app.use(router)
 
-
-app.use(vuetify)
-app.use(router)
-app.use(vue3GoogleLogin, {
-  clientId: '849977224646-h959gvbile1kobn2gehe31o4m8lbm52m.apps.googleusercontent.com'
-})
-
+  app.mount('#app')
+}
 
 initializeApp()

@@ -15,7 +15,7 @@ import {
   updateUser,
   upsertUserSettings
 } from '@src/services/user-service/user-service.js';
-import type { IslandShortName, PokemonInstanceWithMeta, UpdateUserRequest, UserHeader } from 'sleepapi-common';
+import type { IslandShortName, PokemonInstanceWithMeta, UpdateUserRequest } from 'sleepapi-common';
 
 export default class UserController {
   public async updateUser(user: DBUser, newSettings: Partial<UpdateUserRequest>) {
