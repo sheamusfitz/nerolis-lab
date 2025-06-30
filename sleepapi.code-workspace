@@ -1,6 +1,10 @@
 {
   "folders": [
     {
+      "name": "Root",
+      "path": "."
+    },
+    {
       "name": "common",
       "path": "common"
     },
@@ -13,12 +17,12 @@
       "path": "frontend"
     },
     {
-      "name": "bot",
-      "path": "bot"
+      "name": "docs",
+      "path": "docs"
     },
     {
-      "name": "Project files",
-      "path": "."
+      "name": "bot",
+      "path": "bot"
     }
   ],
   "settings": {
@@ -37,6 +41,7 @@
       "backend": true,
       "frontend": true,
       "bot": true,
+      "docs": true,
       ".vscode": true,
       "dev-dist": true,
       "*.tsbuildinfo": true,
@@ -56,6 +61,9 @@
     },
     "[typescript]": {
       "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "workbench.editorAssociations": {
+      "*.mdc": "default"
     }
   },
   "extensions": {

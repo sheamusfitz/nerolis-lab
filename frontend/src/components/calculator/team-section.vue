@@ -305,6 +305,7 @@ import { useUserStore } from '@/stores/user-store'
 import { defineComponent, ref, watch } from 'vue'
 
 const MAX_TEAM_MEMBERS = 5
+import { MAX_TEAM_SIZE } from 'sleepapi-common'
 
 export default defineComponent({
   components: {

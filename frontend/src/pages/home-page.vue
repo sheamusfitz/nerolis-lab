@@ -130,7 +130,7 @@ export default defineComponent({
         src: '/images/misc/doctor3.png',
         icon: 'mdi-chart-line',
         to: '/tierlist',
-        enabled: false
+        enabled: true
       }
     ]
   })
@@ -155,7 +155,7 @@ export default defineComponent({
   justify-content: center;
 
   .beta {
-    color: $skill;
+    color: $primary;
     font-style: italic;
     font-size: 36px;
     margin: -20px 0 0 5px;

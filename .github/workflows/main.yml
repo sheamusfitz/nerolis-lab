@@ -1,4 +1,4 @@
-name: Neroli's Lab - CI
+name: CI
 
 on:
   push:
@@ -7,78 +7,117 @@ on:
     branches: ["main", "develop"]
 
 jobs:
-  build-and-test:
+  changes:
     runs-on: ubuntu-latest
+    outputs:
+      common: ${{ steps.changes.outputs.common }}
+      backend: ${{ steps.changes.outputs.backend }}
+      frontend: ${{ steps.changes.outputs.frontend }}
+      docs: ${{ steps.changes.outputs.docs }}
+      bot: ${{ steps.changes.outputs.bot }}
+      workflows: ${{ steps.changes.outputs.workflows }}
     steps:
       - uses: actions/checkout@v4
-
-      - name: Setup Node.js for Common and Frontend
-        uses: actions/setup-node@v4
+      - uses: dorny/paths-filter@v3
+        id: changes
         with:
-          node-version: 22
-
-      - name: Cache common dependencies
-        uses: actions/cache@v4
-        with:
-          path: common/node_modules
-          key: common-${{ hashFiles('common/package-lock.json') }}
-          restore-keys: common-
-
-      - name: Cache backend dependencies
-        uses: actions/cache@v4
-        with:
-          path: backend/node_modules
-          key: backend-${{ hashFiles('backend/package-lock.json') }}
-          restore-keys: backend-
-
-      - name: Cache frontend dependencies
-        uses: actions/cache@v4
-        with:
-          path: frontend/node_modules
-          key: frontend2-${{ hashFiles('frontend/package-lock.json') }}
-          restore-keys: frontend-
-
-      - name: Install and Test Common
+          filters: |
+            common:
+              - 'common/**'
+            backend:
+              - 'backend/**'
+            frontend:
+              - 'frontend/**'
+            docs:
+              - 'docs/**'
+            bot:
+              - 'bot/**'
+            workflows:
+              - '.github/workflows/**'
+      
+      - name: Debug path changes
         run: |
-          cd common
-          npm ci
-          npm run build || (echo "Build failed! Clearing node_modules and forcing cache refresh..." && rm -rf node_modules package-lock.json && exit 1)
-          npm run test
+          echo "Common changes: ${{ steps.changes.outputs.common }}"
+          echo "Backend changes: ${{ steps.changes.outputs.backend }}"
+          echo "Frontend changes: ${{ steps.changes.outputs.frontend }}"
+          echo "Docs changes: ${{ steps.changes.outputs.docs }}"
+          echo "Bot changes: ${{ steps.changes.outputs.bot }}"
+          echo "Workflow changes: ${{ steps.changes.outputs.workflows }}"
 
-      - name: Install and Test Backend
-        run: |
-          cd backend
-          npm ci
-          npm run build
-          npm install -g bun
-          bun install
-          bun compile
-          npm run test
+  common:
+    name: Common
+    needs: changes
+    if: needs.changes.outputs.common == 'true' || needs.changes.outputs.backend == 'true' || needs.changes.outputs.frontend == 'true' || needs.changes.outputs.bot == 'true'
+    uses: ./.github/workflows/build-test.yml
+    with:
+      working-directory: 'common'
 
-      - name: Install and Test Frontend
-        run: |
-          cd frontend
-          npm ci
-          npm run build || (echo "Build failed! Clearing node_modules and forcing cache refresh..." && rm -rf node_modules package-lock.json && exit 1)
-          npm run test
+  backend:
+    name: Backend
+    needs: [changes, common]
+    if: needs.changes.outputs.backend == 'true' || needs.changes.outputs.common == 'true'
+    uses: ./.github/workflows/build-test.yml
+    with:
+      working-directory: 'backend'
+      needs-common-build: true
+      additional-setup: |
+        npm install -g bun
+        cd backend
+        bun install
+        bun compile
 
-      - name: Lint
-        run: |
-          npm ci
-          npm run lint
+  frontend:
+    name: Frontend
+    needs: [changes, common]
+    if: needs.changes.outputs.frontend == 'true' || needs.changes.outputs.common == 'true'
+    uses: ./.github/workflows/build-test.yml
+    with:
+      working-directory: 'frontend'
+      cache-key-suffix: '2'
+      needs-common-build: true
 
-      - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v4-beta
-        env:
-          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+  bot:
+    name: Bot
+    needs: [changes, common]
+    if: needs.changes.outputs.bot == 'true' || needs.changes.outputs.common == 'true'
+    uses: ./.github/workflows/build-test.yml
+    with:
+      working-directory: 'bot'
+      needs-common-build: true
+
+  docs:
+    name: Docs
+    needs: changes
+    if: needs.changes.outputs.docs == 'true'
+    uses: ./.github/workflows/build-test.yml
+    with:
+      working-directory: 'docs'
+
+  lint:
+    name: Lint
+    permissions:
+      contents: read
+      pull-requests: write
+      issues: write
+    uses: ./.github/workflows/lint.yml
 
   release:
+    name: Release
     runs-on: ubuntu-latest
     permissions:
       contents: write
       issues: write
       pull-requests: write
-    needs: build-and-test
+    needs: [common, backend, frontend, docs, bot, lint]
+    if: |
+      always() && 
+      github.ref == 'refs/heads/main' &&
+      (needs.common.result == 'success' || needs.common.result == 'skipped') &&
+      (needs.backend.result == 'success' || needs.backend.result == 'skipped') &&
+      (needs.frontend.result == 'success' || needs.frontend.result == 'skipped') &&
+      (needs.docs.result == 'success' || needs.docs.result == 'skipped') &&
+      (needs.bot.result == 'success' || needs.bot.result == 'skipped') &&
+      needs.lint.result == 'success'
     steps:
       - name: Checkout code
         uses: actions/checkout@v4

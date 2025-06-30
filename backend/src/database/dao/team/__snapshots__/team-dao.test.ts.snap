@@ -9,12 +9,12 @@ exports[`findTeamsWithMembers > shall get team with members 1`] = `
     "index": 0,
     "members": [
       {
-        "carrySize": 10,
+        "carrySize": 22,
         "externalId": "111111111111111111111111111111111111",
         "gender": undefined,
         "ingredients": [
           {
-            "amount": 1,
+            "amount": 0,
             "level": 0,
             "name": "Berry",
           },
@@ -63,12 +63,12 @@ exports[`findTeamsWithMembers > shall get team with members 1`] = `
         "version": 1,
       },
       {
-        "carrySize": 10,
+        "carrySize": 22,
         "externalId": "111111111111111111111111111111111111",
         "gender": undefined,
         "ingredients": [
           {
-            "amount": 1,
+            "amount": 0,
             "level": 0,
             "name": "Berry",
           },
@@ -117,12 +117,12 @@ exports[`findTeamsWithMembers > shall get team with members 1`] = `
         "version": 1,
       },
       {
-        "carrySize": 10,
+        "carrySize": 11,
         "externalId": "222222222222222222222222222222222222",
         "gender": undefined,
         "ingredients": [
           {
-            "amount": 2,
+            "amount": 0,
             "level": 0,
             "name": "Berry",
           },

@@ -63,15 +63,17 @@ exports[`PokemonSearch > selects Pokémon correctly 1`] = `
       "female": 0.5,
       "male": 0.5,
     },
-    "ingredient0": {
-      "amount": 1,
-      "ingredient": {
-        "longName": "Fancy Apple",
-        "name": "Apple",
-        "taxedValue": 23.7,
-        "value": 90,
+    "ingredient0": [
+      {
+        "amount": 1,
+        "ingredient": {
+          "longName": "Fancy Apple",
+          "name": "Apple",
+          "taxedValue": 23.7,
+          "value": 90,
+        },
       },
-    },
+    ],
     "ingredient30": [
       {
         "amount": 2,
@@ -136,7 +138,16 @@ exports[`PokemonSearch > selects Pokémon correctly 1`] = `
         2066,
         2656,
       ],
-      "amount": [
+      "activations": {
+        "strength": {
+          "amount": [Function],
+          "unit": "strength",
+        },
+      },
+      "description": [Function],
+      "image": "strength",
+      "name": "Charge Strength S",
+      "strengthAmounts": [
         400,
         569,
         785,
@@ -145,14 +156,6 @@ exports[`PokemonSearch > selects Pokémon correctly 1`] = `
         2066,
         3002,
       ],
-      "description": "Increases Snorlax's Strength by ?.",
-      "maxLevel": 7,
-      "modifier": {
-        "critChance": 0,
-        "type": "Base",
-      },
-      "name": "Charge Strength S",
-      "unit": "strength",
     },
     "skillPercentage": 2.1,
     "specialty": "berry",
@@ -230,15 +233,17 @@ exports[`PokemonSearch > selects Pokémon correctly 2`] = `
       "female": 0.5,
       "male": 0.5,
     },
-    "ingredient0": {
-      "amount": 1,
-      "ingredient": {
-        "longName": "Fancy Apple",
-        "name": "Apple",
-        "taxedValue": 23.7,
-        "value": 90,
+    "ingredient0": [
+      {
+        "amount": 1,
+        "ingredient": {
+          "longName": "Fancy Apple",
+          "name": "Apple",
+          "taxedValue": 23.7,
+          "value": 90,
+        },
       },
-    },
+    ],
     "ingredient30": [
       {
         "amount": 2,
@@ -303,7 +308,16 @@ exports[`PokemonSearch > selects Pokémon correctly 2`] = `
         2066,
         2656,
       ],
-      "amount": [
+      "activations": {
+        "strength": {
+          "amount": [Function],
+          "unit": "strength",
+        },
+      },
+      "description": [Function],
+      "image": "strength",
+      "name": "Charge Strength S",
+      "strengthAmounts": [
         400,
         569,
         785,
@@ -312,14 +326,6 @@ exports[`PokemonSearch > selects Pokémon correctly 2`] = `
         2066,
         3002,
       ],
-      "description": "Increases Snorlax's Strength by ?.",
-      "maxLevel": 7,
-      "modifier": {
-        "critChance": 0,
-        "type": "Base",
-      },
-      "name": "Charge Strength S",
-      "unit": "strength",
     },
     "skillPercentage": 2.1,
     "specialty": "berry",

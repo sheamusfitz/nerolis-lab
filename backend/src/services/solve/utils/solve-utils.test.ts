@@ -22,16 +22,17 @@ import { splitArrayByCondition } from '@src/utils/database-utils/array-utils.js'
 import { mocks } from '@src/vitest/index.js';
 import type { IngredientSet, Pokedex, SolveSettingsExt } from 'sleepapi-common';
 import {
+  CookingPowerUpS,
   ENTEI,
   INGREDIENT_SUPPORT_MAINSKILLS,
   OPTIMAL_POKEDEX,
   RAIKOU,
   SUICUNE,
+  TastyChanceS,
   commonMocks,
   flatToIngredientSet,
   ingredient,
   ingredientSetToIntFlat,
-  mainskill,
   prettifyIngredientDrop
 } from 'sleepapi-common';
 import { vimic } from 'vimic';
@@ -66,7 +67,7 @@ describe('solve-utils', () => {
       });
 
       const [supportMons] = splitArrayByCondition(OPTIMAL_POKEDEX, (pkmn) =>
-        INGREDIENT_SUPPORT_MAINSKILLS.some((skill) => skill.isSkill(pkmn.skill))
+        INGREDIENT_SUPPORT_MAINSKILLS.some((skill) => skill.is(pkmn.skill))
       );
 
       expect(teamSpy).toHaveBeenCalled();
@@ -110,7 +111,7 @@ describe('solve-utils', () => {
       expect(member.pokemonWithIngredients.ingredientList).toHaveLength(3);
       expect(
         member.pokemonWithIngredients.ingredientList.every(
-          (ing) => ing.ingredient === pokedex[0].ingredient0.ingredient
+          (ing) => ing.ingredient === pokedex[0].ingredient0[0].ingredient
         )
       ).toBe(true);
 
@@ -317,7 +318,7 @@ Set {
       const ingredientListA: IngredientSet = { amount: 1, ingredient: ingredient.FANCY_APPLE };
       const ingredientListB: IngredientSet = { amount: 1, ingredient: ingredient.BEAN_SAUSAGE };
       const pokemon = commonMocks.mockPokemon({
-        ingredient0: ingredientListA,
+        ingredient0: [ingredientListA],
         ingredient30: [ingredientListA],
         ingredient60: [ingredientListA, ingredientListB]
       });
@@ -351,7 +352,7 @@ Set {
     it('should calculate the correct amount of ingredients', () => {
       const ingredientListA: IngredientSet = { amount: 1, ingredient: ingredient.FANCY_APPLE };
       const pokemon = commonMocks.mockPokemon({
-        ingredient0: ingredientListA,
+        ingredient0: [ingredientListA],
         ingredient30: [ingredientListA],
         ingredient60: [ingredientListA],
         ingredientPercentage: 100
@@ -418,19 +419,15 @@ Set {
       });
       const member2 = mocks.setCoverPokemonWithSettings({
         totalIngredients: ingredientSetToIntFlat([
-          commonMocks.mockIngredientSet({ amount: 10, ingredient: ingredient.INGREDIENTS[1] })
+          commonMocks.mockIngredientSet({ amount: 10, ingredient: ingredient.INGREDIENTS[0] })
         ])
       });
 
-      const { ingredientProducers: groupedProducers, producersByIngredientIndex } = groupProducersByIngredient([
-        member1,
-        member2
-      ]);
+      const producersByIngredientIndex = groupProducersByIngredient([member1, member2]);
 
-      expect(groupedProducers).toHaveLength(2);
       expect(producersByIngredientIndex).toHaveLength(ingredient.TOTAL_NUMBER_OF_INGREDIENTS);
-      expect(producersByIngredientIndex[0]).toEqual([0]); // one producer of apple
-      expect(producersByIngredientIndex[1]).toEqual([1]); // one producer of milk
+      expect(producersByIngredientIndex[0]).toEqual([0, 1]); // two producers of apple
+      expect(producersByIngredientIndex[1]).toEqual([]); // no producer of milk
     });
 
     it('should sort producers of same ingredient by amount DESC', () => {
@@ -445,14 +442,9 @@ Set {
         ])
       });
 
-      const { ingredientProducers, producersByIngredientIndex } = groupProducersByIngredient([member1, member2]);
-      expect(ingredientProducers).toHaveLength(2);
-      expect(ingredientProducers[0].pokemonSet.pokemon).toEqual(member2.pokemonSet.pokemon);
-      expect(ingredientProducers[1].pokemonSet.pokemon).toEqual(member1.pokemonSet.pokemon);
+      const producersByIngredientIndex = groupProducersByIngredient([member1, member2]);
       expect(producersByIngredientIndex).toHaveLength(ingredient.TOTAL_NUMBER_OF_INGREDIENTS);
       expect(producersByIngredientIndex[0]).toHaveLength(2); // two producers of apple
-      expect(ingredientProducers[producersByIngredientIndex[0][0]].totalIngredients[0]).toBe(10);
-      expect(ingredientProducers[producersByIngredientIndex[0][1]].totalIngredients[0]).toBe(5);
     });
   });
 
@@ -630,12 +622,12 @@ Set {
       const nonSupportMembers = [
         mocks.teamMemberExt({
           pokemonWithIngredients: mocks.pokemonWithIngredients({
-            pokemon: commonMocks.mockPokemon({ skill: mainskill.TASTY_CHANCE_S })
+            pokemon: commonMocks.mockPokemon({ skill: TastyChanceS })
           })
         }),
         mocks.teamMemberExt({
           pokemonWithIngredients: mocks.pokemonWithIngredients({
-            pokemon: commonMocks.mockPokemon({ skill: mainskill.COOKING_POWER_UP_S })
+            pokemon: commonMocks.mockPokemon({ skill: CookingPowerUpS })
           })
         })
       ];

@@ -1,14 +1,128 @@
 $body-font-family: 'Chakra Petch';
 
-$typoOptions: text-h1, text-sm-h1, text-md-h1, text-lg-h1, text-h2, text-sm-h2, text-md-h2, text-lg-h2, text-h3,
-  text-sm-h3, text-md-h3, text-lg-h3, text-h4, text-sm-h4, text-md-h4, text-lg-h4, text-h5, text-sm-h5, text-md-h5,
-  text-lg-h5, text-h6, text-sm-h6, text-md-h6, text-lg-h6, headline, title, subtitle-1, subtitle-2, text-body-1,
-  text-sm-body-1, text-md-body-1, text-lg-body-1, text-body-2, text-sm-body-2, text-md-body-2, text-lg-body-2,
-  text-caption;
+$typoOptions:
+  text-h1, text-sm-h1, text-md-h1, text-lg-h1, text-h2, text-sm-h2, text-md-h2, text-lg-h2, text-h3, text-sm-h3,
+  text-md-h3, text-lg-h3, text-h4, text-sm-h4, text-md-h4, text-lg-h4, text-h5, text-sm-h5, text-md-h5, text-lg-h5,
+  text-h6, text-sm-h6, text-md-h6, text-lg-h6, headline, title, subtitle-1, subtitle-2, text-body-1, text-sm-body-1,
+  text-md-body-1, text-lg-body-1, text-body-2, text-sm-body-2, text-md-body-2, text-lg-body-2, text-caption;
 
 .fine-print {
   font-size: 14px;
   font-weight: 300;
   font-style: italic;
   color: #9e9e9e;
+}
+
+.text-caption {
+  font-size: 14px !important;
+}
+
+html {
+  font-family: $body-font-family, sans-serif !important;
+
+  @each $typoOption in $typoOptions {
+    .#{$typoOption} {
+      font-family: $body-font-family, sans-serif !important;
+    }
+  }
+
+  @font-face {
+    font-family: 'Chakra Petch';
+    src:
+      url('/fonts/ChakraPetch-Medium.woff2') format('woff2'),
+      url('/fonts/ChakraPetch-Medium.woff') format('woff');
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+  }
+
+  @font-face {
+    font-family: 'Chakra Petch';
+    src:
+      url('/fonts/ChakraPetch-Regular.woff2') format('woff2'),
+      url('/fonts/ChakraPetch-Regular.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+  }
+
+  @font-face {
+    font-family: 'Chakra Petch';
+    src:
+      url('/fonts/ChakraPetch-Italic.woff2') format('woff2'),
+      url('/fonts/ChakraPetch-Italic.woff') format('woff');
+    font-weight: normal;
+    font-style: italic;
+    font-display: swap;
+  }
+
+  @font-face {
+    font-family: 'Chakra Petch';
+    src:
+      url('/fonts/ChakraPetch-LightItalic.woff2') format('woff2'),
+      url('/fonts/ChakraPetch-LightItalic.woff') format('woff');
+    font-weight: 300;
+    font-style: italic;
+    font-display: swap;
+  }
+
+  @font-face {
+    font-family: 'Chakra Petch';
+    src:
+      url('/fonts/ChakraPetch-BoldItalic.woff2') format('woff2'),
+      url('/fonts/ChakraPetch-BoldItalic.woff') format('woff');
+    font-weight: bold;
+    font-style: italic;
+    font-display: swap;
+  }
+
+  @font-face {
+    font-family: 'Chakra Petch';
+    src:
+      url('/fonts/ChakraPetch-MediumItalic.woff2') format('woff2'),
+      url('/fonts/ChakraPetch-MediumItalic.woff') format('woff');
+    font-weight: 500;
+    font-style: italic;
+    font-display: swap;
+  }
+
+  @font-face {
+    font-family: 'Chakra Petch';
+    src:
+      url('/fonts/ChakraPetch-SemiBold.woff2') format('woff2'),
+      url('/fonts/ChakraPetch-SemiBold.woff') format('woff');
+    font-weight: 600;
+    font-style: normal;
+    font-display: swap;
+  }
+
+  @font-face {
+    font-family: 'Chakra Petch';
+    src:
+      url('/fonts/ChakraPetch-SemiBoldItalic.woff2') format('woff2'),
+      url('/fonts/ChakraPetch-SemiBoldItalic.woff') format('woff');
+    font-weight: 600;
+    font-style: italic;
+    font-display: swap;
+  }
+
+  @font-face {
+    font-family: 'Chakra Petch';
+    src:
+      url('/fonts/ChakraPetch-Light.woff2') format('woff2'),
+      url('/fonts/ChakraPetch-Light.woff') format('woff');
+    font-weight: 300;
+    font-style: normal;
+    font-display: swap;
+  }
+
+  @font-face {
+    font-family: 'Chakra Petch';
+    src:
+      url('/fonts/ChakraPetch-Bold.woff2') format('woff2'),
+      url('/fonts/ChakraPetch-Bold.woff') format('woff');
+    font-weight: bold;
+    font-style: normal;
+    font-display: swap;
+  }
 }

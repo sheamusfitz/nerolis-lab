@@ -1,7 +1,7 @@
 <template>
   <template v-if="!isLoggedIn">
     <SettingsCard title="Game Settings" icon="mdi-information">
-      <p class="text-body-2 mb-4">Changing your game settings requires you to be logged in.</p>
+      <p class="mb-4">Changing your game settings requires you to be logged in.</p>
     </SettingsCard>
   </template>
 
@@ -90,7 +90,6 @@
 <script setup lang="ts">
 import NumberInput from '@/components/custom-components/input/number-input/number-input.vue'
 import SettingsCard from '@/components/settings/settings-card.vue'
-import { useBreakpoint } from '@/composables/use-breakpoint/use-breakpoint'
 import { UserService } from '@/services/user/user-service'
 import { islandImage } from '@/services/utils/image-utils'
 import { useTeamStore } from '@/stores/team/team-store'
@@ -120,8 +119,6 @@ const islandBonusData = computed(() => {
   }))
 })
 
-const { isMobile } = useBreakpoint()
-
 let debounceTimer: ReturnType<typeof setTimeout> | undefined
 
 async function updateAreaBonus(shortName: IslandShortName) {
@@ -137,7 +134,7 @@ async function updatePotSize() {
 
   debounceTimer = setTimeout(async () => {
     loadingPotSize.value = true
-    await UserService.upsertUserSettings(userStore.potSize)
+    await UserService.upsertUserSettings({ potSize: userStore.potSize })
     teamStore.clearCalculatorCache()
     loadingPotSize.value = false
     debounceTimer = undefined

@@ -9,20 +9,20 @@ class StrengthServiceImpl {
    * @returns the combined strength of the berry skill and strength skill values
    */
   public skillStrength(params: {
-    skill: Mainskill
+    skillActivation: MainskillActivation
     skillValues: MemberSkillValue
     berries: BerrySet[]
     favoredBerries: Berry[]
     timeWindow: TimeWindowWeek
     areaBonus: number
   }) {
-    const { skill, skillValues, timeWindow, areaBonus } = params
+    const { skillActivation, skillValues, timeWindow, areaBonus } = params
 
     const strengthSkillValue = skillValues['strength'] ?? { amountToSelf: 0, amountToTeam: 0 }
 
     const berrySkillStrength = this.berryStrength(params)
     const skillStrength = this.skillValue({
-      skill,
+      skillActivation,
       amount: strengthSkillValue.amountToSelf + strengthSkillValue.amountToTeam,
       timeWindow,
       areaBonus
@@ -54,11 +54,16 @@ class StrengthServiceImpl {
     return Math.floor(strength)
   }
 
-  public skillValue(params: { skill: Mainskill; amount: number; timeWindow: TimeWindowWeek; areaBonus: number }) {
-    const { skill, amount, timeWindow, areaBonus } = params
+  public skillValue(params: {
+    skillActivation: MainskillActivation
+    amount: number
+    timeWindow: TimeWindowWeek
+    areaBonus: number
+  }) {
+    const { skillActivation, amount, timeWindow, areaBonus } = params
 
-    const isStrengthUnit = skill.isUnit('strength')
-    const isShardsUnit = skill.isUnit('dream shards')
+    const isStrengthUnit = skillActivation.unit === 'strength'
+    const isShardsUnit = skillActivation.unit === 'dream shards'
 
     const rounding = isStrengthUnit || isShardsUnit ? 0 : 1
 

@@ -4,7 +4,7 @@ import { configDefaults, defineConfig } from 'vitest/config'
 import viteConfig from './vite.config.js'
 
 export default mergeConfig(
-  viteConfig,
+  viteConfig({ command: 'serve', mode: 'test' }),
   defineConfig({
     test: {
       environment: 'jsdom',
@@ -15,7 +15,12 @@ export default mergeConfig(
         exclude: ['**/node_modules/**', '**/test/**', '**/main.ts', '**/index.ts'],
         reporter: ['text-summary', 'json', 'lcov']
       },
-      setupFiles: ['./src/vitest']
+      server: {
+        deps: {
+          inline: ['vuetify']
+        }
+      },
+      setupFiles: ['./src/vitest/setup.ts']
     }
   })
 )

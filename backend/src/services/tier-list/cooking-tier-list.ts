@@ -3,6 +3,7 @@ import { ProgrammingError } from '@src/domain/error/programming/programming-erro
 import type { UserRecipes } from '@src/services/simulation-service/team-simulator/cooking-state/cooking-utils.js';
 import { SetCover } from '@src/services/solve/set-cover.js';
 import type {
+  IngredientProducerWithSettings,
   SetCoverPokemonSetup,
   SetCoverPokemonSetupWithSettings
 } from '@src/services/solve/types/set-cover-pokemon-setup-types.js';
@@ -13,16 +14,18 @@ import {
   hashPokemonSetIndexed,
   pokedexToMembers
 } from '@src/services/solve/utils/solve-utils.js';
+import { createTierlistIndex } from '@src/services/tier-list/tierlist-utils.js';
 import { joinPath } from '@src/utils/file-utils/file-utils.js';
 import { promises as fs } from 'fs';
 import { join } from 'path';
 import type {
-  IngredientSetSimple,
   Pokemon,
+  PokemonWithFinalContribution,
+  PokemonWithTiering,
   Recipe,
   SolveSettingsExt,
   TeamMemberExt,
-  TeamMemberSettings,
+  Tier,
   TierlistSettings,
   Time
 } from 'sleepapi-common';
@@ -34,7 +37,6 @@ import {
   ingredient,
   INGREDIENT_SUPPORT_MAINSKILLS,
   ingredientSetToIntFlat,
-  mainskill,
   MathUtils,
   MAX_POT_SIZE,
   MAX_RECIPE_LEVEL,
@@ -43,11 +45,12 @@ import {
   recipeCoverage,
   recipeLevelBonus,
   RECIPES,
-  simplifyIngredientSet
+  simplifyIngredientSet,
+  TastyChanceS
 } from 'sleepapi-common';
 
 export interface RecipeContribution {
-  team: SetCoverPokemonSetup[];
+  team: SetCoverPokemonSetupWithSettings[];
   recipe: Recipe;
   contributedPower: number;
   skillValue: number;
@@ -58,32 +61,6 @@ export interface PokemonWithRecipeContributionsRaw {
   contributions: RecipeContribution[];
 }
 
-export interface PokemonWithRecipeContributions {
-  pokemonWithSettings: {
-    pokemon: string;
-    ingredientList: IngredientSetSimple[];
-    totalIngredients: Float32Array;
-    critMultiplier: number;
-    averageWeekdayPotSize: number;
-    settings: TeamMemberSettings;
-  };
-  contributions: {
-    coverage: number;
-    skillValue: number;
-    score: number;
-    recipe: string;
-    team: { pokemon: string }[];
-  }[];
-}
-export interface PokemonWithFinalContribution extends PokemonWithRecipeContributions {
-  score: number;
-}
-export interface PokemonWithTiering extends PokemonWithFinalContribution {
-  tier: Tier;
-  diff?: number;
-}
-export type Tier = 'S' | 'A' | 'B' | 'C' | 'D' | 'E' | 'F';
-
 // TODO: can we make nrOfMeals to take into consideration a query param? More meals more flexible
 const NUMBER_OF_MEALS = 3;
 
@@ -91,7 +68,7 @@ class CookingTierlistImpl {
   bedtime: Time = { hour: 21, minute: 30, second: 0 };
   wakeup: Time = { hour: 6, minute: 0, second: 0 };
 
-  public async get(settings: TierlistSettings) {
+  public async get(settings: TierlistSettings): Promise<PokemonWithTiering[]> {
     return this.fromFile(settings, 'current');
   }
 
@@ -166,8 +143,8 @@ class CookingTierlistImpl {
       userRecipes
     });
     const defaultCache = new Map();
-    const { ingredientProducers, producersByIngredientIndex } = groupProducersByIngredient(setCoverSetups);
-    const defaultSetCover = new SetCover(ingredientProducers, producersByIngredientIndex, defaultCache);
+    const producersByIngredientIndex = groupProducersByIngredient(setCoverSetups);
+    const defaultSetCover = new SetCover(setCoverSetups, producersByIngredientIndex, defaultCache);
 
     // eslint-disable-next-line SleepAPILogger/no-console
     console.timeEnd('Tierlist default production');
@@ -175,7 +152,7 @@ class CookingTierlistImpl {
 
     // TODO: split into functions
     for (const pkmn of OPTIMAL_POKEDEX) {
-      const isSupport = INGREDIENT_SUPPORT_MAINSKILLS.some((skill) => skill.isSkill(pkmn.skill));
+      const isSupport = INGREDIENT_SUPPORT_MAINSKILLS.some((skill) => skill.is(pkmn.skill));
 
       const { supportProductionMap, pokemonIngredientLists, supportSetCoverSetups } =
         this.getIngredientListsAndSupportMap({
@@ -202,13 +179,13 @@ class CookingTierlistImpl {
 
         // TODO: can we worker thread this?
         for (const recipe of recipesToCook) {
-          const { ingredientProducers, producersByIngredientIndex } = groupProducersByIngredient(supportSetCoverSetups);
+          const producersByIngredientIndex = groupProducersByIngredient(supportSetCoverSetups);
 
           const recipeContribution = this.calculateRecipeContribution({
             recipe,
             currentPokemon: pokemonWithIngredients,
             setCover: isSupport
-              ? new SetCover(ingredientProducers, producersByIngredientIndex, new Map())
+              ? new SetCover(supportSetCoverSetups, producersByIngredientIndex, new Map())
               : defaultSetCover,
             isSupport,
             defaultProduceMap: defaultProductionMap,
@@ -220,7 +197,7 @@ class CookingTierlistImpl {
 
         // eslint-disable-next-line SleepAPILogger/no-console
         console.timeEnd(
-          // FIXME: this doesnt work because some mons only have 4 ing lists
+          // FIXME: this doesn't work because some mons only have 4 ing lists
           `[${counter}/${OPTIMAL_POKEDEX.length * pokemonIngredientLists.length}] ${pokemonWithIngredients.pokemonSet.pokemon}`
         );
 
@@ -353,7 +330,7 @@ class CookingTierlistImpl {
     );
 
     const teamSize = MAX_TEAM_SIZE - 1;
-    let team: SetCoverPokemonSetup[] = [];
+    let team: IngredientProducerWithSettings[] = [];
     let supportedIngredientsRelevant: Int16Array | undefined = undefined;
     let supportedIngredientsFiller: Int16Array | undefined = undefined;
     if (sumRemainingIngredients === 0) {
@@ -486,10 +463,7 @@ class CookingTierlistImpl {
     const valueLeftInRecipe = recipe.valueMax - ownRelevantValue;
     let tastyChanceContribution =
       teamSizePenalty * (ownCritMultiplier * valueLeftInRecipe - defaultCritMultiplier * valueLeftInRecipe);
-    if (
-      tastyChanceContribution < 100 ||
-      !getPokemon(currentPokemon.pokemonSet.pokemon).skill.isSameOrModifiedVersion(mainskill.TASTY_CHANCE_S)
-    ) {
+    if (tastyChanceContribution < 100 || !getPokemon(currentPokemon.pokemonSet.pokemon).skill.is(TastyChanceS)) {
       tastyChanceContribution = 0;
     }
 
@@ -498,9 +472,11 @@ class CookingTierlistImpl {
         ? this.calculateContributedIngredientsValue(recipe, supportedIngredientsRelevant, supportedIngredientsFiller)
         : { fillerValue: 0, relevantValue: 0 };
 
+    const recipeContribution = recipe.valueMax * teamSizePenalty;
+
     const ownContribution = ownCritMultiplier * ownRelevantValue * teamSizePenalty + ownFillerValue;
     const supportedContribution = ownCritMultiplier * supportedRelevantValue * teamSizePenalty + supportedFillerValue;
-    const contributedPower = ownContribution + supportedContribution + tastyChanceContribution;
+    const contributedPower = ownContribution + supportedContribution + tastyChanceContribution + recipeContribution;
 
     return {
       contributedPower,
@@ -580,7 +556,8 @@ class CookingTierlistImpl {
         score: recipeWithContributions.contributedPower,
         recipe: recipeWithContributions.recipe.name,
         team: recipeWithContributions.team.map((member) => ({
-          pokemon: member.pokemonSet.pokemon
+          pokemon: member.pokemonSet.pokemon,
+          ingredientList: simplifyIngredientSet(member.ingredientList)
         }))
       })),
       score: bestXRecipesWithBoost.reduce((acc, recipe) => acc + recipe.contributedPower, 0)
@@ -602,58 +579,42 @@ class CookingTierlistImpl {
     return [...boostedRecipes, ...recipes.slice(nrOfRecipesToBoost, recipes.length)];
   }
 
-  private tierAndDiff(current: PokemonWithFinalContribution[], previous: PokemonWithTiering[]): PokemonWithTiering[] {
+  tierAndDiff(current: PokemonWithFinalContribution[], previous: PokemonWithTiering[]): PokemonWithTiering[] {
     const tiers: { tier: Tier; bucket: number }[] = [
-      { tier: 'S', bucket: 0.9 },
+      { tier: 'S', bucket: 0.8 },
       { tier: 'A', bucket: 0.8 },
       { tier: 'B', bucket: 0.8 },
-      { tier: 'C', bucket: 0.85 },
-      { tier: 'D', bucket: 0.85 },
-      { tier: 'E', bucket: 0.9 }
+      { tier: 'C', bucket: 0.8 },
+      { tier: 'D', bucket: 0.8 },
+      { tier: 'E', bucket: 0.8 }
     ];
 
-    const previousTierlistIndices = this.createTierlistIndex(previous);
-    let threshold = current[0].score;
+    const previousRanks = createTierlistIndex(previous.map((p) => p.pokemonWithSettings.pokemon));
+    const currentRanks = createTierlistIndex(current.map((c) => c.pokemonWithSettings.pokemon));
+
+    let topScoreOfTier = current[0].score;
+    const minScore = current.at(-1)!.score;
 
     const tieredEntries: PokemonWithTiering[] = [];
     for (let i = 0; i < current.length; ++i) {
       const entry = current[i];
       let currentTier = tiers.at(0);
-      if (currentTier && entry.score < currentTier.bucket * threshold) {
-        threshold = entry.score;
+      if (currentTier && entry.score < currentTier.bucket * topScoreOfTier + (1 - currentTier.bucket) * minScore) {
+        topScoreOfTier = entry.score;
         tiers.shift();
         currentTier = tiers.at(0);
       }
 
-      const previousIndex: number | undefined = previousTierlistIndices.get(
-        this.hashPokemonSetSimple(entry.pokemonWithSettings.pokemon, entry.pokemonWithSettings.ingredientList)
-      );
+      const currentRank = currentRanks.get(entry.pokemonWithSettings.pokemon);
+      const previousRank = previousRanks.get(entry.pokemonWithSettings.pokemon);
 
       const tier = currentTier?.tier ?? 'F';
-      const diff = previousIndex && previousIndex - i;
+      const diff = previousRank !== undefined && currentRank !== undefined ? previousRank - currentRank : undefined;
 
       tieredEntries.push({ ...entry, tier, diff });
     }
 
     return tieredEntries;
-  }
-
-  private createTierlistIndex(previous: PokemonWithTiering[]): Map<string, number> {
-    const indexMap = new Map<string, number>();
-
-    previous.forEach((entry, index) => {
-      const hash = this.hashPokemonSetSimple(
-        entry.pokemonWithSettings.pokemon,
-        entry.pokemonWithSettings.ingredientList
-      );
-      indexMap.set(hash, index);
-    });
-
-    return indexMap;
-  }
-
-  private hashPokemonSetSimple(pokemon: string, ingredientList: IngredientSetSimple[]) {
-    return `${pokemon}${ingredientList.map((ing) => ing.name + ing.amount).join('')}`;
   }
 }
 

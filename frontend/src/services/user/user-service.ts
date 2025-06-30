@@ -6,6 +6,7 @@ import type {
   IslandShortName,
   PokemonInstanceExt,
   PokemonInstanceWithMeta,
+  UpdateUserRequest,
   UpsertAreaBonusRequest,
   UpsertRecipeLevelRequest,
   User,
@@ -36,14 +37,15 @@ class UserServiceImpl {
     return serverAxios.delete(`user/pokemon/${externalId}`)
   }
 
-  public async updateUser(updated: Partial<User>) {
-    const response = (await serverAxios.patch<User>(`user`, updated)).data
+  public async updateUser(updated: UpdateUserRequest) {
+    const response = (await serverAxios.patch<User>('user', updated)).data
     const userStore = useUserStore()
 
     userStore.name = response.name
     userStore.externalId = response.external_id
     userStore.role = response.role
     userStore.avatar = response.avatar ?? 'default'
+    userStore.friendCode = response.friend_code
   }
 
   public async getRecipes(): Promise<GetRecipeLevelsResponse> {
@@ -61,8 +63,8 @@ class UserServiceImpl {
     return response.data
   }
 
-  public async upsertUserSettings(potSize: number) {
-    const response = await serverAxios.put<UserSettingsRequest>('user/settings', { potSize })
+  public async upsertUserSettings(settings: UserSettingsRequest) {
+    const response = await serverAxios.put<UserSettingsRequest>('user/settings', settings)
     return response.data
   }
 }

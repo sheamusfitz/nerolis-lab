@@ -145,8 +145,7 @@ import { useBreakpoint } from '@/composables/use-breakpoint/use-breakpoint'
 import { rarityColor } from '@/services/utils/color-utils'
 import { avatarImage, pokemonImage } from '@/services/utils/image-utils'
 import { useTeamStore } from '@/stores/team/team-store'
-import { MAX_TEAM_MEMBERS } from '@/types/member/instanced'
-import { subskill, type PokemonInstanceExt } from 'sleepapi-common'
+import { MAX_TEAM_SIZE, subskill, type PokemonInstanceExt } from 'sleepapi-common'
 import { defineComponent } from 'vue'
 
 export default defineComponent({

@@ -2,6 +2,7 @@ import { UserAreaDAO } from '@src/database/dao/user-area/user-area-dao.js';
 import { UserSettingsDAO } from '@src/database/dao/user-settings/user-settings-dao.js';
 import type { DBUser } from '@src/database/dao/user/user-dao.js';
 import { UserDAO } from '@src/database/dao/user/user-dao.js';
+import { FriendService } from '@src/services/friend-service/friend-service.js';
 import { PatreonProvider } from '@src/services/user-service/login-service/providers/patreon/patreon-provider.js';
 import { DaoFixture } from '@src/utils/test-utils/dao-fixture.js';
 import { TimeUtils } from '@src/utils/time-utils/time-utils.js';
@@ -15,6 +16,12 @@ DaoFixture.init({ recreateDatabasesBeforeEachTest: true });
 uuid.v4 = vi.fn().mockReturnValue('00000000-0000-0000-0000-000000000000');
 TimeUtils.getMySQLNow = vi.fn().mockReturnValue('2024-01-01 18:00:00');
 
+vi.mock('@src/services/friend-service/friend-service.js', () => ({
+  FriendService: {
+    validateFriendCodeUpdate: vi.fn()
+  }
+}));
+
 vi.mock('@src/services/user-service/login-service/providers/patreon/patreon-provider.js', () => ({
   PatreonProvider: {
     getPatronId: vi.fn(),
@@ -24,6 +31,10 @@ vi.mock('@src/services/user-service/login-service/providers/patreon/patreon-prov
 }));
 
 describe('updateUser', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
   it('should update user details successfully', async () => {
     const user: DBUser = mocks.dbUser({
       external_id: uuid.v4(),
@@ -42,6 +53,7 @@ describe('updateUser', () => {
 
     const updatedUser = await updateUser(user, newSettings);
 
+    expect(FriendService.validateFriendCodeUpdate).not.toHaveBeenCalled();
     expect(updatedUser).toEqual(
       expect.objectContaining({
         name: 'Updated Name',
@@ -51,6 +63,27 @@ describe('updateUser', () => {
         friend_code: 'TESTFC'
       })
     );
+  });
+
+  it('should update friend code if provided', async () => {
+    const user: DBUser = mocks.dbUser({
+      external_id: uuid.v4(),
+      friend_code: 'OLDCODE',
+      name: 'Test User',
+      role: Roles.Default,
+      google_id: 'google-id'
+    });
+    await UserDAO.insert(user);
+
+    const newSettings: Partial<UpdateUserRequest> = {
+      friend_code: 'NEWCODE'
+    };
+
+    await updateUser(user, newSettings);
+
+    expect(FriendService.validateFriendCodeUpdate).toHaveBeenCalledWith(user, 'NEWCODE');
+    const updatedUserInDb = await UserDAO.find({ id: user.id });
+    expect(updatedUserInDb?.friend_code).toBe('NEWCODE');
   });
 });
 
@@ -105,7 +138,8 @@ describe('getUserSettings', () => {
         AREA2: 20
       },
       potSize: MAX_POT_SIZE,
-      supporterSince: null
+      supporterSince: null,
+      randomizeNicknames: true
     });
   });
 
@@ -139,7 +173,8 @@ describe('getUserSettings', () => {
       role: Roles.Supporter,
       areaBonuses: {},
       potSize: MAX_POT_SIZE,
-      supporterSince: '2024-01-01'
+      supporterSince: '2024-01-01',
+      randomizeNicknames: true
     });
 
     expect(PatreonProvider.isSupporter).toHaveBeenCalledWith({ patreon_id: user.patreon_id, previousRole: user.role });
@@ -158,7 +193,8 @@ describe('getUserSettings', () => {
     await UserDAO.insert(user);
     await UserSettingsDAO.insert({
       fk_user_id: user.id,
-      pot_size: 150
+      pot_size: 150,
+      randomize_nicknames: true
     });
 
     const settings = await getUserSettings(user);
@@ -169,7 +205,8 @@ describe('getUserSettings', () => {
       role: Roles.Default,
       areaBonuses: {},
       potSize: 150,
-      supporterSince: null
+      supporterSince: null,
+      randomizeNicknames: true
     });
   });
 });
@@ -185,13 +222,14 @@ describe('upsertUserSettings', () => {
     });
 
     await UserDAO.insert(user);
-    await upsertUserSettings(user, 150);
+    await upsertUserSettings(user, { potSize: 150 });
 
     const settings = await UserSettingsDAO.find({ fk_user_id: user.id });
     expect(settings).toEqual(
       expect.objectContaining({
         fk_user_id: user.id,
-        pot_size: 150
+        pot_size: 150,
+        randomize_nicknames: true
       })
     );
   });
@@ -208,16 +246,18 @@ describe('upsertUserSettings', () => {
     await UserDAO.insert(user);
     await UserSettingsDAO.insert({
       fk_user_id: user.id,
-      pot_size: 100
+      pot_size: 100,
+      randomize_nicknames: true
     });
 
-    await upsertUserSettings(user, 200);
+    await upsertUserSettings(user, { potSize: 200 });
 
     const settings = await UserSettingsDAO.find({ fk_user_id: user.id });
     expect(settings).toEqual(
       expect.objectContaining({
         fk_user_id: user.id,
-        pot_size: 200
+        pot_size: 200,
+        randomize_nicknames: true
       })
     );
   });

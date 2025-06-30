@@ -8,31 +8,55 @@
         color="subskillWhite"
         rounded="pill"
       >
-        <v-img :src="mainskillImage(memberWithProduction.member.pokemon)" height="40px" width="40px"></v-img>
+        <v-img
+          :src="mainskillImage(memberWithProduction.member.pokemon)"
+          height="40px"
+          width="40px"
+          :alt="`Disguise (Berry Burst) level ${memberWithProduction.member.skillLevel}`"
+          title="Disguise (Berry Burst)"
+        ></v-img>
       </v-badge>
       <div class="ml-2">
         <div class="flex-center">
           <span class="font-weight-medium text-center">{{
             MathUtils.round(memberWithProduction.production.skillProcs * timeWindowFactor, 1)
           }}</span>
-          <v-img src="/images/misc/skillproc.png" max-height="28" max-width="28px"></v-img>
+          <v-img
+            src="/images/misc/skillproc.png"
+            height="24"
+            width="24"
+            alt="skill activations"
+            title="skill activations"
+          ></v-img>
         </div>
         <div class="flex-left">
           <span class="font-weight-light text-body-2 text-no-wrap font-italic text-center mr-1"
             >x{{ skillValuePerProc }}-{{ skillValuePerProc * critModifier }}</span
           >
-          <v-img src="/images/berries/berries.png" height="20" width="20"></v-img>
+          <v-img src="/images/berries/berries.png" height="20" width="20" alt="berries" title="berries"></v-img>
         </div>
       </div>
     </v-col>
 
     <v-col cols="auto" class="flex-center flex-column">
       <div class="flex-center">
-        <v-img :src="berryImage(memberWithProduction.member.pokemon.berry)" height="20" width="20"></v-img>
+        <v-img
+          :src="berryImage(memberWithProduction.member.pokemon.berry)"
+          height="20"
+          width="20"
+          :alt="`${berryName} berries`"
+          :title="`${berryName} berries`"
+        ></v-img>
         <span class="font-weight-medium text-no-wrap text-center ml-2"> {{ skillValueBluk }} {{ berryName }}</span>
       </div>
       <div class="flex-center">
-        <v-img src="/images/berries/berries.png" height="20" width="20"></v-img>
+        <v-img
+          src="/images/berries/berries.png"
+          height="20"
+          width="20"
+          alt="miscellaneous berries"
+          title="berries"
+        ></v-img>
         <span class="font-weight-medium text-no-wrap text-center ml-2"> {{ skillValueTeam }} other </span>
       </div>
     </v-col>
@@ -46,7 +70,7 @@ import { getIsland } from '@/services/utils/island/island-utils'
 import { useTeamStore } from '@/stores/team/team-store'
 import { useUserStore } from '@/stores/user-store'
 import type { MemberProductionExt } from '@/types/member/instanced'
-import { MathUtils, compactNumber, mainskill } from 'sleepapi-common'
+import { BerryBurstDisguise, MathUtils, compactNumber } from 'sleepapi-common'
 import { defineComponent, type PropType } from 'vue'
 
 export default defineComponent({
@@ -59,7 +83,7 @@ export default defineComponent({
   setup() {
     const teamStore = useTeamStore()
     const userStore = useUserStore()
-    const critModifier = mainskill.DISGUISE_CRIT_MULTIPLIER
+    const critModifier = BerryBurstDisguise.activations.berries.critMultiplier
     return { teamStore, MathUtils, mainskillImage, critModifier, berryImage, userStore }
   },
   computed: {
@@ -76,9 +100,13 @@ export default defineComponent({
             b.berry.name === this.memberWithProduction.member.pokemon.berry.name &&
             b.level === this.memberWithProduction.member.level
         )?.amount ?? 0
+      const skillActivation = this.memberWithProduction.member.pokemon.skill.getFirstActivation()
+      if (!skillActivation) {
+        return 0
+      }
       return compactNumber(
         StrengthService.skillValue({
-          skill: this.memberWithProduction.member.pokemon.skill,
+          skillActivation,
           amount,
           timeWindow: this.teamStore.timeWindow,
           areaBonus: this.userStore.islandBonus(getIsland(this.teamStore.getCurrentTeam.favoredBerries).shortName)
@@ -95,9 +123,13 @@ export default defineComponent({
             : 0),
         0
       )
+      const skillActivation = this.memberWithProduction.member.pokemon.skill.getFirstActivation()
+      if (!skillActivation) {
+        return 0
+      }
       return compactNumber(
         StrengthService.skillValue({
-          skill: this.memberWithProduction.member.pokemon.skill,
+          skillActivation,
           amount,
           timeWindow: this.teamStore.timeWindow,
           areaBonus: this.userStore.islandBonus(getIsland(this.teamStore.getCurrentTeam.favoredBerries).shortName)

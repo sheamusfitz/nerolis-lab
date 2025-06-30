@@ -45,10 +45,12 @@ import type {
   Time
 } from 'sleepapi-common';
 import {
+  BerryBurstDisguise,
   CarrySizeUtils,
   MAX_ENERGY_RECOVERY,
   MAX_ENERGY_RECOVERY_ERB,
   MEALS_IN_DAY,
+  Metronome,
   berrySetToFlat,
   calculateAveragePokemonIngredientSet,
   calculateIngredientPercentage,
@@ -57,9 +59,7 @@ import {
   countErbUsers,
   flatToBerrySet,
   flatToIngredientSet,
-  ingredientSetToIntFlat,
   limitSubSkillsToLevel,
-  mainskill,
   nature,
   subskill
 } from 'sleepapi-common';
@@ -100,10 +100,7 @@ export function setupAndRunProductionSimulation(params: {
     ribbon
   } = input;
 
-  const averageIngredientList = calculateAveragePokemonIngredientSet(
-    ingredientSetToIntFlat(pokemonSet.ingredientList),
-    level
-  );
+  const averageIngredientList = calculateAveragePokemonIngredientSet(pokemonSet.ingredientList, level);
   const averageBerryList = berrySetToFlat([{ amount: 1, berry: pokemonSet.pokemon.berry, level }]);
 
   const ingredientPercentage = calculateIngredientPercentage({
@@ -133,7 +130,7 @@ export function setupAndRunProductionSimulation(params: {
   ];
 
   const inventoryLimit = CarrySizeUtils.calculateCarrySize({
-    baseWithEvolutions: input.inventoryLimit ?? CarrySizeUtils.maxCarrySize(pokemonSet.pokemon),
+    baseWithEvolutions: input.inventoryLimit ?? CarrySizeUtils.baseCarrySize(pokemonSet.pokemon),
     subskillsLevelLimited: limitSubSkillsToLevel(subskills, level),
     ribbon,
     camp
@@ -269,11 +266,7 @@ export function generateSkillActivations(params: {
 
   // run Monte Carlo simulation to estimate skill activations
   const skill = pokemonWithAverageProduce.pokemon.skill;
-  if (
-    skill.isUnit('energy') ||
-    skill.isSkill(mainskill.METRONOME) ||
-    skill.isModifiedVersionOf(mainskill.BERRY_BURST, 'Disguise')
-  ) {
+  if (skill.hasUnit('energy') || skill.is(Metronome) || skill.is(BerryBurstDisguise)) {
     const { averageDailySkillProcs, averageNightlySkillProcOdds, dayHelps, skillCrits } = monteCarlo({
       dayInfo,
       helpFrequency,

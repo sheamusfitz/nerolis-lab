@@ -54,15 +54,15 @@ export default {
 
       const pokemonInstance: PokemonInstanceExt = {
         pokemon: pkmn,
-        name: randomName(12, gender),
+        name: randomName(pkmn, 12, gender),
         level: 60,
         ribbon: 0,
-        carrySize: CarrySizeUtils.maxCarrySize(pkmn),
+        carrySize: CarrySizeUtils.baseCarrySize(pkmn),
         skillLevel: pkmn.previousEvolutions + 1,
         nature: nature.BASHFUL,
         subskills: [],
         ingredients: [
-          { ...pkmn.ingredient0, level: 0 },
+          { ...pkmn.ingredient0[0], level: 0 },
           { ...pkmn.ingredient30[0], level: 30 },
           { ...pkmn.ingredient60[0], level: 60 }
         ],

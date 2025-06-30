@@ -46,7 +46,7 @@ describe('PokemonInput', () => {
     expect(wrapper.findComponent({ name: 'PokemonButton' }).exists()).toBe(true)
     expect(wrapper.findComponent({ name: 'PokemonName' }).exists()).toBe(true)
     expect(wrapper.findComponent({ name: 'LevelButton' }).exists()).toBe(true)
-    expect(wrapper.findComponent({ name: 'CarrySizeButton' }).exists()).toBe(true)
+    expect(wrapper.findComponent({ name: 'CarrySizeDisplay' }).exists()).toBe(true)
     expect(wrapper.findComponent({ name: 'IngredientButton' }).exists()).toBe(true)
     expect(wrapper.findComponent({ name: 'MainskillButton' }).exists()).toBe(true)
     expect(wrapper.findComponent({ name: 'NatureButton' }).exists()).toBe(true)
@@ -89,13 +89,13 @@ describe('PokemonInput', () => {
     const pokemonInstance = wrapper.vm.pokemonInstance
     expect(pokemonInstance.pokemon).toBe(WEAVILE)
     expect(pokemonInstance.ingredients).toEqual([
-      { ...SNEASEL.ingredient0, level: 0 },
+      { ...SNEASEL.ingredient0[0], level: 0 },
       { ...SNEASEL.ingredient30[0], level: 30 },
       { ...SNEASEL.ingredient60[0], level: 60 }
     ])
     expect(pokemonInstance.skillLevel).toBe(1)
     expect(pokemonInstance.gender).toEqual('female')
-    expect(pokemonInstance.carrySize).toBe(CarrySizeUtils.maxCarrySize(WEAVILE))
+    expect(pokemonInstance.carrySize).toBe(CarrySizeUtils.baseCarrySize(WEAVILE))
   })
 
   it('updates name correctly', async () => {
@@ -141,9 +141,7 @@ describe('PokemonInput', () => {
   })
 
   it('saves data and emits cancel event on save button click', async () => {
-    await wrapper.setData({
-      pokemonInstance: { ...wrapper.vm.pokemonInstance, name: 'updatedName' }
-    })
+    wrapper.vm.pokemonInstance.name = 'updatedName'
     const saveButton = wrapper.find('#saveButton')
     await saveButton.trigger('click')
     expect(wrapper.emitted('save')).toHaveLength(1)

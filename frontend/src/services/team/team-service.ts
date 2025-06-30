@@ -3,13 +3,9 @@ import { PokemonInstanceUtils } from '@/services/utils/pokemon-instance-utils'
 import { usePokemonStore } from '@/stores/pokemon/pokemon-store'
 import { useTeamStore } from '@/stores/team/team-store'
 import { UnexpectedError } from '@/types/errors/unexpected-error'
+import { type TeamCombinedProduction, type TeamInstance, type TeamProductionExt } from '@/types/member/instanced'
 import {
-  MAX_TEAM_MEMBERS,
-  type TeamCombinedProduction,
-  type TeamInstance,
-  type TeamProductionExt
-} from '@/types/member/instanced'
-import {
+  MAX_TEAM_SIZE,
   Optimal,
   berry,
   uuid,
@@ -66,14 +62,14 @@ class TeamServiceImpl {
           stockpiledBerries: [],
           stockpiledIngredients: [],
           version: 0,
-          members: new Array(MAX_TEAM_MEMBERS).fill(undefined),
+          members: new Array(MAX_TEAM_SIZE).fill(undefined),
           memberIvs: {},
           production: undefined
         }
         teams.push(emptyTeam)
       } else {
         const members: (string | undefined)[] = []
-        for (let memberIndex = 0; memberIndex < MAX_TEAM_MEMBERS; memberIndex++) {
+        for (let memberIndex = 0; memberIndex < MAX_TEAM_SIZE; memberIndex++) {
           const serverMember = serverTeam.members.find((member) => member.memberIndex === memberIndex)
 
           if (!serverMember) {
@@ -190,17 +186,17 @@ class TeamServiceImpl {
 
     const berrySetup: PokemonInstanceIdentity = PokemonInstanceUtils.toPokemonInstanceIdentity({
       ...currentMember,
-      ...Optimal.berry(currentMember.pokemon, currentMember.ribbon),
+      ...Optimal.berry(currentMember.pokemon, currentMember.ribbon, currentMember.skillLevel),
       externalId: uuid.v4()
     })
     const ingredientSetup: PokemonInstanceIdentity = PokemonInstanceUtils.toPokemonInstanceIdentity({
       ...currentMember,
-      ...Optimal.ingredient(currentMember.pokemon, currentMember.ribbon),
+      ...Optimal.ingredient(currentMember.pokemon, currentMember.ribbon, currentMember.skillLevel),
       externalId: uuid.v4()
     })
     const skillSetup: PokemonInstanceIdentity = PokemonInstanceUtils.toPokemonInstanceIdentity({
       ...currentMember,
-      ...Optimal.skill(currentMember.pokemon, currentMember.ribbon),
+      ...Optimal.skill(currentMember.pokemon, currentMember.ribbon, currentMember.skillLevel),
       externalId: uuid.v4()
     })
 

@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-import type { IngredientSet } from '../../domain/ingredient';
-import type { PokemonInstanceExt } from '../../domain/instance/pokemon-instance';
-import type { Nature } from '../../domain/nature/nature';
-import type { Pokemon } from '../../domain/pokemon';
+import type { IngredientSet } from '../../types/ingredient';
+import type { PokemonInstanceExt } from '../../types/instance/pokemon-instance';
+import type { Nature } from '../../types/nature/nature';
+import type { Pokemon } from '../../types/pokemon';
 import {
   DREAM_SHARD_BONUS,
   ENERGY_RECOVERY_BONUS,
@@ -29,7 +29,7 @@ import {
   INVENTORY_S,
   RESEARCH_EXP_BONUS,
   SLEEP_EXP_BONUS
-} from '../../domain/subskill/subskills';
+} from '../../types/subskill/subskills';
 import { MathUtils } from '../../utils/math-utils';
 import { invertNatureFrequency } from '../../utils/nature-utils';
 import {
@@ -39,7 +39,7 @@ import {
   calculateSkillPercentage
 } from '../../utils/stat-utils';
 
-export type PokemonInstanceWithoutRP = Omit<PokemonInstanceExt, 'rp'>;
+export type PokemonInstanceWithoutRP = Omit<PokemonInstanceExt, 'rp' | 'carrySize'>;
 
 export class RP {
   private pokemon: Pokemon;
@@ -78,37 +78,44 @@ export class RP {
 
     return (
       5 *
-      MathUtils.floor(
+      MathUtils.floorWithIEEE754Correction(
         3600 /
-          (this.pokemon.frequency * MathUtils.floor(levelFactor * natureFreq * helpSpeedSubskills * ribbonFactor, 4)),
+          (this.pokemon.frequency *
+            MathUtils.floorWithIEEE754Correction(levelFactor * natureFreq * helpSpeedSubskills * ribbonFactor, 4)),
         2
       )
     );
   }
 
   get ingredientChance() {
-    return MathUtils.floor(
+    return MathUtils.floorWithIEEE754Correction(
       calculateIngredientPercentage({ pokemon: this.pokemon, nature: this.nature, subskills: this.subskills }),
       4
     );
   }
 
   get skillChance() {
-    return MathUtils.floor(calculateSkillPercentage(this.pokemon.skillPercentage, this.subskills, this.nature), 4);
+    return MathUtils.floorWithIEEE754Correction(
+      calculateSkillPercentage(this.pokemon.skillPercentage, this.subskills, this.nature),
+      4
+    );
   }
 
   get ingredientFactor() {
     // We make assumption regarding ingredient growth past 55
     // We make assumption regarding ingredientsValue being same value for 60 ingredient and divide by 3 then
     const ingredientGrowth =
-      this.ingGrowth[this.level] ??
+      RP.ingGrowth[this.level] ??
       0.000000398 * Math.pow(this.level, 3) + 0.000159 * Math.pow(this.level, 2) + 0.00367 * this.level - 0.00609 + 1;
 
     const ingredientsValue = Math.floor(
       this.ingredientSet.reduce((sum, cur) => (sum += cur.amount * cur.ingredient.value), 0) / this.ingredientSet.length
     );
 
-    return MathUtils.floor(this.helpFactor * this.ingredientChance * ingredientsValue * ingredientGrowth, 2);
+    return MathUtils.floorWithIEEE754Correction(
+      this.helpFactor * this.ingredientChance * ingredientsValue * ingredientGrowth,
+      2
+    );
   }
 
   get berryFactor() {
@@ -120,12 +127,12 @@ export class RP {
         Math.round(Math.pow(1.025, this.level - 1) * this.pokemon.berry.value)
       );
 
-    return MathUtils.floor(this.helpFactor * (1 - this.ingredientChance) * berryValue, 2);
+    return MathUtils.floorWithIEEE754Correction(this.helpFactor * (1 - this.ingredientChance) * berryValue, 2);
   }
 
   get skillFactor() {
     const skillValue = this.pokemon.skill.RP[this.skillLevel - 1];
-    return MathUtils.floor(this.helpFactor * this.skillChance * skillValue, 2);
+    return MathUtils.floorWithIEEE754Correction(this.helpFactor * this.skillChance * skillValue, 2);
   }
 
   get miscFactor() {
@@ -136,7 +143,7 @@ export class RP {
       subskillFactor += this.subskillValue[sub] ?? 0;
     }
 
-    return MathUtils.floor(convertedNatureEnergy * subskillFactor, 2);
+    return MathUtils.floorWithIEEE754Correction(convertedNatureEnergy * subskillFactor, 2);
   }
 
   get frequencySubskills() {
@@ -157,7 +164,7 @@ export class RP {
     [INVENTORY_L.name]: 0.181
   };
 
-  private ingGrowth: { [level: number]: number } = {
+  static ingGrowth: { [level: number]: number } = {
     1: 1.0,
     2: 1.003,
     3: 1.007,
@@ -217,7 +224,12 @@ export class RP {
     57: 1.798,
     58: 1.824,
     59: 1.852,
-    60: 1.88
+    60: 1.88,
+    61: 1.927,
+    62: 1.975,
+    63: 2.024,
+    64: 2.075,
+    65: 2.127
   };
 
   private filteredSubskills(pokemonInstance: PokemonInstanceWithoutRP): Set<string> {

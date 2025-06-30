@@ -8,24 +8,36 @@
         color="subskillWhite"
         rounded="pill"
       >
-        <v-img :src="mainskillImage(memberWithProduction.member.pokemon)" height="40px" width="40px"></v-img>
+        <v-img
+          :src="mainskillImage(memberWithProduction.member.pokemon)"
+          height="40px"
+          width="40px"
+          :alt="`Helper Boost level ${memberWithProduction.member.skillLevel}`"
+          title="Helper Boost"
+        ></v-img>
       </v-badge>
       <div class="ml-2">
         <div class="flex-center">
           <span class="font-weight-medium text-center">{{
             MathUtils.round(memberWithProduction.production.skillProcs * timeWindowFactor, 1)
           }}</span>
-          <v-img src="/images/misc/skillproc.png" max-height="28" max-width="28px"></v-img>
+          <v-img
+            src="/images/misc/skillproc.png"
+            height="24"
+            width="24"
+            alt="skill activations"
+            title="skill activations"
+          ></v-img>
         </div>
         <div class="flex-left">
           <span class="font-weight-light text-body-2 text-no-wrap font-italic text-center"
             >x{{ skillValuePerProc }}
           </span>
-          <v-img src="/images/unit/help.png" height="20" width="20"></v-img>
+          <v-img src="/images/unit/help.png" height="20" width="20" alt="Pokemon helps" title="Pokemon helps"></v-img>
           <span class="font-weight-light text-body-2 text-no-wrap font-italic text-center"
             >x{{ teamStore.getTeamSize }}
           </span>
-          <v-img src="/images/misc/human.png" height="20" width="20"></v-img>
+          <v-img src="/images/misc/human.png" height="20" width="20" alt="teammates" title="teammates"></v-img>
         </div>
       </div>
     </v-col>
@@ -46,7 +58,7 @@ import { usePokemonStore } from '@/stores/pokemon/pokemon-store'
 import { useTeamStore } from '@/stores/team/team-store'
 import { useUserStore } from '@/stores/user-store'
 import type { MemberProductionExt } from '@/types/member/instanced'
-import { MathUtils, compactNumber, mainskill, uniqueMembersWithBerry } from 'sleepapi-common'
+import { compactNumber, HelperBoost, MathUtils, uniqueMembersWithBerry } from 'sleepapi-common'
 import { defineComponent, type PropType } from 'vue'
 
 export default defineComponent({
@@ -70,16 +82,12 @@ export default defineComponent({
           .filter(Boolean)
           .map((member) => this.pokemonStore.getPokemon(member!)!.pokemon)
       })
-      const uniqueHelps =
-        mainskill.HELPER_BOOST_UNIQUE_BOOST_TABLE[count - 1][this.memberWithProduction.member.skillLevel - 1]
-      return (
-        this.memberWithProduction.member.pokemon.skill.amount(this.memberWithProduction.member.skillLevel) + uniqueHelps
-      )
+      return HelperBoost.getHelps(this.memberWithProduction.member.skillLevel, count)
     },
     totalSkillValue() {
       return compactNumber(
         StrengthService.skillValue({
-          skill: this.memberWithProduction.member.pokemon.skill,
+          skillActivation: HelperBoost.activations.helps,
           amount: this.memberWithProduction.production.skillAmount,
           timeWindow: this.teamStore.timeWindow,
           areaBonus: this.userStore.islandBonus(getIsland(this.teamStore.getCurrentTeam.favoredBerries).shortName)

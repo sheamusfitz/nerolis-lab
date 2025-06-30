@@ -8,12 +8,29 @@ import ts from '@typescript-eslint/eslint-plugin';
 import tsParser from '@typescript-eslint/parser';
 import prettierConfig from 'eslint-config-prettier';
 import prettierRecommended from 'eslint-plugin-prettier/recommended';
-import vueRecommended from 'eslint-plugin-vue';
+import vue from 'eslint-plugin-vue';
+import pluginVueA11y from 'eslint-plugin-vuejs-accessibility';
+
+import vuetify from 'eslint-plugin-vuetify';
 import globals from 'globals';
 
 export default typescriptEslint.config(
   {
     ignores: ['**/node_modules', '**/dist', '**/coverage', '**/.vscode', '**/dev-dist', '*.d.ts', '.venv/**']
+  },
+
+  // github scripts
+  {
+    name: 'sleepapi/github-scripts',
+    files: ['.github/**/*.js'],
+    languageOptions: {
+      globals: {
+        ...globals.node
+      }
+    },
+    rules: {
+      'SleepAPILogger/no-console': 'off'
+    }
   },
 
   // frontend-specific rules
@@ -29,13 +46,18 @@ export default typescriptEslint.config(
       },
       sourceType: 'module'
     },
-    extends: [...vueRecommended.configs['flat/recommended']]
+    // @ts-expect-error - eslint-plugin-vuetify is not typed
+    extends: [
+      ...pluginVueA11y.configs['flat/recommended'],
+      ...vue.configs['flat/recommended'],
+      ...vuetify.configs['flat/recommended']
+    ]
   },
 
   // backend-specific rules
   {
     name: 'sleepapi/backend-rules',
-    files: ['**/backend/**', '**/common/**'],
+    files: ['**/backend/**', '**/common/**', '**/bot/**'],
     languageOptions: {
       ecmaVersion: 'latest',
       globals: {
@@ -94,6 +116,13 @@ export default typescriptEslint.config(
         'error',
         {
           prefer: 'type-imports'
+        }
+      ],
+      '@typescript-eslint/no-unused-vars': [
+        'error',
+        {
+          argsIgnorePattern: '^_',
+          reportUsedIgnorePattern: true
         }
       ],
       'SleepAPILogger/no-console': 'error'

@@ -1,3 +1,320 @@
+# [2.20.0](https://github.com/nerolis-lab/nerolis-lab/compare/v2.19.0...v2.20.0) (2025-06-25)
+
+
+### Features
+
+* Add user setting to toggle random Pokémon names ([4bf7584](https://github.com/nerolis-lab/nerolis-lab/commit/4bf7584aee38eebb643856fa21f20bb5bd132cc2))
+
+# [2.19.0](https://github.com/nerolis-lab/nerolis-lab/compare/v2.18.1...v2.19.0) (2025-06-25)
+
+
+### Features
+
+* Add API route to update your friend code ([d080505](https://github.com/nerolis-lab/nerolis-lab/commit/d080505f12598543cd6dc3adb2112769239a9459))
+
+## [2.18.1](https://github.com/nerolis-lab/nerolis-lab/compare/v2.18.0...v2.18.1) (2025-06-24)
+
+# [2.18.0](https://github.com/nerolis-lab/nerolis-lab/compare/v2.17.3...v2.18.0) (2025-06-24)
+
+
+### Bug Fixes
+
+* discord bot code now compiles ([a7de79c](https://github.com/nerolis-lab/nerolis-lab/commit/a7de79cd8b766b3f7394f7ec2947c406dd9406b9))
+
+
+### Features
+
+* **bot:** Implement /recipe slash command ([448fd92](https://github.com/nerolis-lab/nerolis-lab/commit/448fd921c8fce9e763f8f40baedbad9f4824208c))
+
+## [2.17.3](https://github.com/nerolis-lab/nerolis-lab/compare/v2.17.2...v2.17.3) (2025-06-24)
+
+
+### Bug Fixes
+
+* add buffer to flaky async-utils test ([10141eb](https://github.com/nerolis-lab/nerolis-lab/commit/10141eb007ae0bd7e437c49ff7fe66a2ac22509b))
+* compare remove duplicate from box will retain other copies ([86b1307](https://github.com/nerolis-lab/nerolis-lab/commit/86b1307a6ac77fd8bb313498d60131695cfcbdc0))
+* local git hook to work on windows ([5944e58](https://github.com/nerolis-lab/nerolis-lab/commit/5944e587ded4350b593849e3fb74a68b1ca4faa0))
+* tierlist overview shows image using name instead of displayName ([d2acd59](https://github.com/nerolis-lab/nerolis-lab/commit/d2acd592f82b98b1d7712753f173ba0e714768f5))
+
+## [2.17.2](https://github.com/nerolis-lab/nerolis-lab/compare/v2.17.1...v2.17.2) (2025-06-24)
+
+
+### Bug Fixes
+
+* hasPokemonWithIngredients union type check ([e9709f1](https://github.com/nerolis-lab/nerolis-lab/commit/e9709f15b702ab9e51c8da3d0aca8b10880e927c))
+
+## [2.17.1](https://github.com/nerolis-lab/nerolis-lab/compare/v2.17.0...v2.17.1) (2025-06-23)
+
+# [2.17.0](https://github.com/nerolis-lab/nerolis-lab/compare/v2.16.3...v2.17.0) (2025-06-23)
+
+
+### Features
+
+* add tier lists to Neroli's Lab ([530e995](https://github.com/nerolis-lab/nerolis-lab/commit/530e995337d248f34a328c1159ba76e616cb20cf))
+
+## [2.16.3](https://github.com/nerolis-lab/nerolis-lab/compare/v2.16.2...v2.16.3) (2025-06-23)
+
+## [2.16.2](https://github.com/nerolis-lab/nerolis-lab/compare/v2.16.1...v2.16.2) (2025-06-23)
+
+## [2.16.1](https://github.com/nerolis-lab/nerolis-lab/compare/v2.16.0...v2.16.1) (2025-06-23)
+
+
+### Bug Fixes
+
+* search pokemon by display name ([15571b5](https://github.com/nerolis-lab/nerolis-lab/commit/15571b568eb8aa4accbf405d13d2a5d7248ae280))
+
+# [2.16.0](https://github.com/nerolis-lab/nerolis-lab/compare/v2.15.3...v2.16.0) (2025-06-23)
+
+
+### Features
+
+* **pokedex:** add Farfetch'd ([f3ab39f](https://github.com/nerolis-lab/nerolis-lab/commit/f3ab39f6505412d4f3673566327c4ce522f83b71))
+
+## [2.15.3](https://github.com/nerolis-lab/nerolis-lab/compare/v2.15.2...v2.15.3) (2025-06-19)
+
+
+### Bug Fixes
+
+* validates all mainskills have valid units ([1e31d5d](https://github.com/nerolis-lab/nerolis-lab/commit/1e31d5decf1a2677f898a9b397da8db19aa63e82))
+
+## [2.15.2](https://github.com/nerolis-lab/nerolis-lab/compare/v2.15.1...v2.15.2) (2025-06-19)
+
+
+### Bug Fixes
+
+* pot mainskill uses valid unit ([015b781](https://github.com/nerolis-lab/nerolis-lab/commit/015b78166ed080881e2c1159afd97e67e2c97bac))
+
+## [2.15.1](https://github.com/nerolis-lab/nerolis-lab/compare/v2.15.0...v2.15.1) (2025-06-19)
+
+
+### Bug Fixes
+
+* add sukiyaki to team finder ([03e7722](https://github.com/nerolis-lab/nerolis-lab/commit/03e77224506eb0bc59650b9b4b1bf1af5657006e))
+
+# [2.15.0](https://github.com/nerolis-lab/nerolis-lab/compare/v2.14.0...v2.15.0) (2025-06-19)
+
+
+### Features
+
+* **meals:** add "Cut" Sukiyaki Curry ([782f838](https://github.com/nerolis-lab/nerolis-lab/commit/782f838f97fe194e0528e6b1eec222dfb610c193))
+
+# [2.14.0](https://github.com/nerolis-lab/nerolis-lab/compare/v2.13.2...v2.14.0) (2025-06-18)
+
+
+### Bug Fixes
+
+* change back release CI from main to develop ([8337d84](https://github.com/nerolis-lab/nerolis-lab/commit/8337d8402671f74bc02df91d34d17a88e1e17c6d))
+* correct ieee 754 precision in RP floor ([6d2fd7f](https://github.com/nerolis-lab/nerolis-lab/commit/6d2fd7f5ea201dcd94ac97fca390fe209e120002))
+* corrects RP typo for Super Luck ([f998210](https://github.com/nerolis-lab/nerolis-lab/commit/f998210270d8a42c781ee537b939dcfad8f8b5c1))
+* dont skip release if other jobs were skipped ([1135ad2](https://github.com/nerolis-lab/nerolis-lab/commit/1135ad2fedf6f9dfdd308c27c46753d76dced2f3))
+* handle newline characters in commit message ([d5b467f](https://github.com/nerolis-lab/nerolis-lab/commit/d5b467f17e4a6ef0aca99176b6b7c77768c7c726))
+* okay this time we wont skip release job ([39c72cb](https://github.com/nerolis-lab/nerolis-lab/commit/39c72cb82ada913c5cb1494b16a287e19a9924a9))
+* use discord png url instead of inline svg ([995fdef](https://github.com/nerolis-lab/nerolis-lab/commit/995fdeff674b180eac9e4606904f1d651f3f5ea0))
+
+
+### Features
+
+* adds docs.nerolislab.com ([5cb4a3d](https://github.com/nerolis-lab/nerolis-lab/commit/5cb4a3df8727dd657f7b0a1d8f08c4cce6420c4d))
+
+## [2.13.2](https://github.com/nerolis-lab/nerolis-lab/compare/v2.13.1...v2.13.2) (2025-06-13)
+
+
+### Bug Fixes
+
+* adds suspense for async setup ([0ebe635](https://github.com/nerolis-lab/nerolis-lab/commit/0ebe63519989d2372f5d240620df0ed34e3a9921))
+
+## [2.13.1](https://github.com/nerolis-lab/nerolis-lab/compare/v2.13.0...v2.13.1) (2025-06-11)
+
+
+### Bug Fixes
+
+* carry limit in member stats now wraps ([a56688b](https://github.com/nerolis-lab/nerolis-lab/commit/a56688b8801e758a74aeacf34cc7b0303fe7dcd2))
+
+# [2.13.0](https://github.com/nerolis-lab/nerolis-lab/compare/v2.12.0...v2.13.0) (2025-06-11)
+
+
+### Features
+
+* **inventory:** Stop calcing based on evolutions ([a111edb](https://github.com/nerolis-lab/nerolis-lab/commit/a111edb6b47bc3577ede4f7fce4aee7706b145aa))
+
+# [2.12.0](https://github.com/nerolis-lab/nerolis-lab/compare/v2.11.0...v2.12.0) (2025-06-11)
+
+
+### Bug Fixes
+
+* support finding locked ingredients ([6409e25](https://github.com/nerolis-lab/nerolis-lab/commit/6409e25a3f08d4b9104f9b043f669e02893e47a9))
+
+
+### Features
+
+* darkrai ings ui, carry size ui ([619da55](https://github.com/nerolis-lab/nerolis-lab/commit/619da5516e4b2c3710958616314115e269b8b38b))
+
+# [2.11.0](https://github.com/nerolis-lab/nerolis-lab/compare/v2.10.2...v2.11.0) (2025-06-11)
+
+
+### Features
+
+* **main skills:** add hyper cutter ([62ffa4e](https://github.com/nerolis-lab/nerolis-lab/commit/62ffa4e4e5b4b7939b21de5960e05e9a7ec1b9e8))
+* **pokedex:** add mawile ([828501d](https://github.com/nerolis-lab/nerolis-lab/commit/828501dbce6ffa6494c272bd2359cf48b90fbf32))
+
+## [2.10.2](https://github.com/nerolis-lab/nerolis-lab/compare/v2.10.1...v2.10.2) (2025-06-10)
+
+
+### Bug Fixes
+
+* ignore window in vitest node environment ([8172849](https://github.com/nerolis-lab/nerolis-lab/commit/8172849cb27ef0fa801cb57cd12d4cfee4f2247b))
+
+## [2.10.1](https://github.com/nerolis-lab/nerolis-lab/compare/v2.10.0...v2.10.1) (2025-06-09)
+
+
+### Bug Fixes
+
+* avoids JSON parsing Pokemon in pokemon-input ([4c4d881](https://github.com/nerolis-lab/nerolis-lab/commit/4c4d8812f1ab4b4244a516df3382e76272def452))
+
+# [2.10.0](https://github.com/nerolis-lab/nerolis-lab/compare/v2.9.0...v2.10.0) (2025-06-09)
+
+
+### Features
+
+* **Super Luck:** adds frontend UI for super luck ([70cdc78](https://github.com/nerolis-lab/nerolis-lab/commit/70cdc78887c95fa53f6ffa5937c9e8c17f7c23fa))
+
+# [2.9.0](https://github.com/nerolis-lab/nerolis-lab/compare/v2.8.0...v2.9.0) (2025-06-08)
+
+
+### Features
+
+* **mainskill:** refactor mainskill and add Honchkrow ([7c77ff3](https://github.com/nerolis-lab/nerolis-lab/commit/7c77ff34b20ac7d982a319615172bcf8de0da16b))
+
+# [2.8.0](https://github.com/nerolis-lab/nerolis-lab/compare/v2.7.4...v2.8.0) (2025-06-07)
+
+
+### Features
+
+* **Darkrai:** Add locked ingredients for Darkrai ([77a673b](https://github.com/nerolis-lab/nerolis-lab/commit/77a673b7e667d4d8090b327b6f036097b0dab08a))
+* **Darkrai:** add normal ingredients for Darkrai ([35eb640](https://github.com/nerolis-lab/nerolis-lab/commit/35eb6407e1a5d871c9b3aef9701da3624cf1650b))
+
+## [2.7.4](https://github.com/nerolis-lab/nerolis-lab/compare/v2.7.3...v2.7.4) (2025-06-06)
+
+## [2.7.3](https://github.com/nerolis-lab/nerolis-lab/compare/v2.7.2...v2.7.3) (2025-06-05)
+
+## [2.7.2](https://github.com/nerolis-lab/nerolis-lab/compare/v2.7.1...v2.7.2) (2025-06-04)
+
+## [2.7.1](https://github.com/nerolis-lab/nerolis-lab/compare/v2.7.0...v2.7.1) (2025-06-04)
+
+# [2.7.0](https://github.com/nerolis-lab/nerolis-lab/compare/v2.6.0...v2.7.0) (2025-06-01)
+
+
+### Features
+
+* Add Goatcounter to Sleepapi ([fd8c9ee](https://github.com/nerolis-lab/nerolis-lab/commit/fd8c9ee15f982bb8aeb7e69da2511a97a4e9abe0))
+
+# [2.6.0](https://github.com/nerolis-lab/nerolis-lab/compare/v2.5.6...v2.6.0) (2025-06-01)
+
+
+### Features
+
+* show snackbar on cache clear ([16d9769](https://github.com/nerolis-lab/nerolis-lab/commit/16d976976ae51500275819db9ac4ce18423b976b))
+
+## [2.5.6](https://github.com/nerolis-lab/nerolis-lab/compare/v2.5.5...v2.5.6) (2025-05-29)
+
+
+### Bug Fixes
+
+* Add a self-hosted Chakra Petch font as fallback when CDN fails ([cf8c1cb](https://github.com/nerolis-lab/nerolis-lab/commit/cf8c1cb9555a86422aa962e5e7655f1104c13988))
+
+## [2.5.5](https://github.com/nerolis-lab/nerolis-lab/compare/v2.5.4...v2.5.5) (2025-05-21)
+
+## [2.5.4](https://github.com/nerolis-lab/nerolis-lab/compare/v2.5.3...v2.5.4) (2025-05-21)
+
+## [2.5.3](https://github.com/nerolis-lab/nerolis-lab/compare/v2.5.2...v2.5.3) (2025-05-21)
+
+## [2.5.2](https://github.com/nerolis-lab/nerolis-lab/compare/v2.5.1...v2.5.2) (2025-05-21)
+
+## [2.5.1](https://github.com/nerolis-lab/nerolis-lab/compare/v2.5.0...v2.5.1) (2025-05-21)
+
+# [2.5.0](https://github.com/nerolis-lab/nerolis-lab/compare/v2.4.4...v2.5.0) (2025-05-20)
+
+
+### Features
+
+* color rework, img accessibility ([4a238d4](https://github.com/nerolis-lab/nerolis-lab/commit/4a238d4b9da2cb5ebf3d2173912bce1e57d538c3))
+
+## [2.4.4](https://github.com/nerolis-lab/nerolis-lab/compare/v2.4.3...v2.4.4) (2025-05-20)
+
+## [2.4.3](https://github.com/nerolis-lab/nerolis-lab/compare/v2.4.2...v2.4.3) (2025-05-20)
+
+## [2.4.2](https://github.com/nerolis-lab/nerolis-lab/compare/v2.4.1...v2.4.2) (2025-05-20)
+
+## [2.4.1](https://github.com/nerolis-lab/nerolis-lab/compare/v2.4.0...v2.4.1) (2025-05-20)
+
+# [2.4.0](https://github.com/nerolis-lab/nerolis-lab/compare/v2.3.2...v2.4.0) (2025-05-09)
+
+
+### Features
+
+* Blissey tier lists ([792fb5f](https://github.com/nerolis-lab/nerolis-lab/commit/792fb5fef370746b14ef1fd0bbb65912a95aac30))
+
+## [2.3.2](https://github.com/nerolis-lab/nerolis-lab/compare/v2.3.1...v2.3.2) (2025-05-05)
+
+## [2.3.1](https://github.com/nerolis-lab/nerolis-lab/compare/v2.3.0...v2.3.1) (2025-05-05)
+
+# [2.3.0](https://github.com/nerolis-lab/nerolis-lab/compare/v2.2.3...v2.3.0) (2025-05-05)
+
+
+### Features
+
+* adds chansey line ([7bbb0e7](https://github.com/nerolis-lab/nerolis-lab/commit/7bbb0e7c7a46902b5b573e2c4f669ca886cacc3d))
+
+## [2.2.3](https://github.com/nerolis-lab/nerolis-lab/compare/v2.2.2...v2.2.3) (2025-05-03)
+
+## [2.2.2](https://github.com/nerolis-lab/nerolis-lab/compare/v2.2.1...v2.2.2) (2025-05-02)
+
+## [2.2.1](https://github.com/nerolis-lab/nerolis-lab/compare/v2.2.0...v2.2.1) (2025-05-02)
+
+# [2.2.0](https://github.com/nerolis-lab/nerolis-lab/compare/v2.1.1...v2.2.0) (2025-05-02)
+
+
+### Features
+
+* adds spring recipes to sleepapi.net ([0ecf8cd](https://github.com/nerolis-lab/nerolis-lab/commit/0ecf8cd4767150e9b6d40e6b13c66a269305ccaa))
+
+## [2.1.1](https://github.com/nerolis-lab/nerolis-lab/compare/v2.1.0...v2.1.1) (2025-05-02)
+
+
+### Bug Fixes
+
+* updates petal blizzard layered salad to 48% ([1bece15](https://github.com/nerolis-lab/nerolis-lab/commit/1bece152529e088e555e9336a6b64aab55c3cf53))
+
+# [2.1.0](https://github.com/nerolis-lab/nerolis-lab/compare/v2.0.4...v2.1.0) (2025-05-01)
+
+
+### Features
+
+* adds spring festival salads ([af579b4](https://github.com/nerolis-lab/nerolis-lab/commit/af579b452c4d7d5c4e52a9a40f825d5354c29368))
+
+## [2.0.4](https://github.com/nerolis-lab/nerolis-lab/compare/v2.0.3...v2.0.4) (2025-04-29)
+
+
+### Bug Fixes
+
+* refresh to use correct non-server-axios route ([d1aa625](https://github.com/nerolis-lab/nerolis-lab/commit/d1aa62568d5f33ecb8b16856bac44b527ff6b7a4))
+
+## [2.0.3](https://github.com/nerolis-lab/nerolis-lab/compare/v2.0.2...v2.0.3) (2025-04-28)
+
+
+### Bug Fixes
+
+* gitattributes lf line ending ignores png/ico ([8dddf2f](https://github.com/nerolis-lab/nerolis-lab/commit/8dddf2f8d215c34a593179594a251cefa06ef713))
+
+## [2.0.2](https://github.com/nerolis-lab/nerolis-lab/compare/v2.0.1...v2.0.2) (2025-04-28)
+
+
+### Bug Fixes
+
+* cheeseburger curry has 8 sausages, not 6 ([a5de8bb](https://github.com/nerolis-lab/nerolis-lab/commit/a5de8bbb29f3ed90ccd99de806f89e24a1f0ab82))
+
+## [2.0.1](https://github.com/nerolis-lab/nerolis-lab/compare/v2.0.0...v2.0.1) (2025-04-25)
+
 # [2.0.0](https://github.com/nerolis-lab/nerolis-lab/compare/v1.46.0...v2.0.0) (2025-04-24)
 
 
