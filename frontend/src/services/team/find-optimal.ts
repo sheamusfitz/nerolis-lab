@@ -8,8 +8,8 @@ import { getBerry, type PokemonInstanceExt, type TeamSettings } from 'sleepapi-c
 
 const MAX_TEAM_MEMBERS = 5
 const SPECIAL_POKEMON_DISPLAY_NAMES: string[] = ['Entei', 'Suicune', 'Raikou', 'Cresselia', 'Darkrai']
-const numWalkers = 10
-const numTopTeams = 25
+const numWalkers = 4 //TODO change to 10
+const numTopTeams = 10
 
 // Global list of top teams
 const topTeams: { team: PokemonInstanceExt[]; strength: number }[] = []
@@ -309,15 +309,16 @@ const simulatedAnnealing = async (
   let bestTeam = currentTeam
   let bestStrength = currentStrength
   let temperature = initialTemperature
-  const teamsToCheck = 1000
+  const teamsToCheck = 1000 //TODO change to 1000
   const coolingRate = (100 / initialTemperature) ** (numWalkers / teamsToCheck)
 
   let stagnantSteps = 0
   const MAX_STAGNATION = 100
+  const shortSteps = 14
 
   while (teamsSearchedCounter.count + numWalkers < teamsToCheck) {
     const neighbor = generateNeighbor(currentTeam, boxedPokemon, lockedIds)
-    const neighborStrength = await evaluateTeam(neighbor, settings, 8)
+    const neighborStrength = await evaluateTeam(neighbor, settings, shortSteps)
     teamsSearchedCounter.count++
     const delta = neighborStrength - currentStrength
     const accepted = delta > 0 || Math.random() < Math.exp(delta / temperature)

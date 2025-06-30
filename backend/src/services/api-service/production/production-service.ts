@@ -139,11 +139,8 @@ export function calculateTeam(params: {
   userRecipes: UserRecipes;
   iterations?: number;
 }) {
-  logger.log(`calculateTeam received params: ${params.iterations}`);
-
   const { settings, members, userRecipes, iterations = 5110 } = params;
 
-  logger.log(`iter iter ${iterations}`);
   const rng: PreGeneratedRandom = createPreGeneratedRandom();
   const cookingState = settings.includeCooking ? new CookingState(settings, userRecipes, rng) : undefined;
   const teamSimulator = new TeamSimulator({ settings, members, cookingState, iterations, rng });

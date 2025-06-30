@@ -56,7 +56,7 @@ export default class ProductionController {
 
   public async calculateTeam(body: CalculateTeamRequest & { iterations?: number }, maybeUser?: DBUser) {
     const { iterations = 5110 } = body;
-    logger.log(`Controller got iterations: ${iterations}`);
+    // logger.log(`Controller got iterations: ${iterations}`);
 
     const userRecipes = await this.#parseUserRecipes(maybeUser);
     const parsedInput = await this.#parseTeamInput(body, userRecipes, maybeUser);

@@ -54,7 +54,6 @@ class ProductionRouterImpl {
 
           // Combine iterations into the same object, so we only pass two arguments
           const extendedParams = { ...rest, iterations };
-          logger.log(`Sending to worker: ${JSON.stringify(extendedParams.iterations, null, 2)}`);
 
           const data = await calculatorPool.exec('calculateTeam', [extendedParams, user]);
 
