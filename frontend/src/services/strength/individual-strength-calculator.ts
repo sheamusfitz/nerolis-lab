@@ -61,7 +61,7 @@ export const calculateAndCachePokemonStrengths = async (): Promise<ScoredPokemon
       }
 
       try {
-        const teamStrengthResult = await TeamService.calculateTeam(calculateTeamRequest, 1)
+        const teamStrengthResult = await TeamService.calculateTeam(calculateTeamRequest)
 
         // Extract strength from the members array
         // logger.log(`teamStrengthResult: ${JSON.stringify(teamStrengthResult)}`)

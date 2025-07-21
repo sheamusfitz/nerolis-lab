@@ -503,7 +503,7 @@ export const useTeamStore = defineStore('team', {
       // Calculate berry strength
       const berryStrength = StrengthService.berryStrength({
         berries: production.team.berries,
-        favoredBerries: this.getCurrentTeam.favoredBerries.map((b) => b.name),
+        favoredBerries: this.getCurrentTeam.favoredBerries,
         timeWindow: 'WEEK',
         areaBonus: 1 // Adjust based on your logic
       })
@@ -514,7 +514,7 @@ export const useTeamStore = defineStore('team', {
         if (!member) return sum
 
         const memberSkillStrength = StrengthService.skillStrength({
-          skill: member.pokemon.skill,
+          skillActivation: member.pokemon.skill.getFirstActivation()!,
           skillValues: memberProduction.skillValue,
           berries: memberProduction.produceFromSkill.berries,
           favoredBerries: this.getCurrentTeam.favoredBerries,

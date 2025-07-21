@@ -234,7 +234,7 @@ export default defineComponent({
       return subskills.join(' + ')
     },
     fullTeam() {
-      return this.teamStore.getTeamSize === MAX_TEAM_MEMBERS
+      return this.teamStore.getTeamSize === MAX_TEAM_SIZE
     },
     isLocked() {
       return this.pokemonInstance ? this.teamStore.getLockedPokemon.includes(this.pokemonInstance.externalId) : false

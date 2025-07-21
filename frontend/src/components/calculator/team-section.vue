@@ -305,7 +305,7 @@ import { useUserStore } from '@/stores/user-store'
 import { defineComponent, ref, watch } from 'vue'
 
 const MAX_TEAM_MEMBERS = 5
-import { MAX_TEAM_SIZE } from 'sleepapi-common'
+import { MAX_TEAM_SIZE, type PokemonInstanceExt } from 'sleepapi-common'
 
 export default defineComponent({
   components: {
@@ -329,7 +329,7 @@ export default defineComponent({
     const totalToSearch = ref(0)
     const totalTeamsSearched = ref(0)
     const totalPossibleTeams = ref(0)
-    const bestTeam = ref([]) // Store the current best team
+    const bestTeam = ref<PokemonInstanceExt[]>([]) // Store the current best team
     const bestTeamSprites = ref<string[]>([]) // Store the sprites for the best team
     const bestTeamStrength = ref(0) // Store the strength of the best team
     const teamsToCheck = ref([])

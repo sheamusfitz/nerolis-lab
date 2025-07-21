@@ -1,7 +1,8 @@
-import { useTeamStore } from '@/stores/team/team-store'
+import { usePokemonStore } from '@/stores/pokemon/pokemon-store'
+import { logger } from '@/services/logger'
 import type { TeamInstance } from '@/types/member/instanced'
 import type { TimeWindowWeek } from '@/types/time/time-window'
-import type { Mainskill, MemberProduction, MemberSkillValue, RecipeTypeResult } from 'sleepapi-common'
+import type { MainskillActivation, MemberProduction, MemberSkillValue, RecipeTypeResult } from 'sleepapi-common'
 import { MathUtils, berryPowerForLevel, getBerry, type Berry, type BerrySet } from 'sleepapi-common'
 
 class StrengthServiceImpl {
@@ -89,7 +90,7 @@ class StrengthServiceImpl {
   }
 
   public calculateTotalStrength(params: { team: TeamInstance; areaBonus: number; favoredBerries: Berry[] }): number {
-    const teamStore = useTeamStore()
+    const pokemonStore = usePokemonStore()
     const { team, areaBonus, favoredBerries } = params
     // logger.log(`team: ${JSON.stringify(team)}`)
 
@@ -118,20 +119,27 @@ class StrengthServiceImpl {
     )
 
     const skillStrength = (team.production?.members ?? []).reduce((sum: number, memberProduction: MemberProduction) => {
-      // Find the corresponding Pokémon in team.members using externalId
-      const member = team.members.find((m) => m.externalId === memberProduction.externalId)
-      // logger.log(`member: ${JSON.stringify(memberProduction.externalId)}`)
+      // Find the corresponding Pokémon using externalId from the Pokemon store
+      const memberExternalId = team.members.find((memberId) => memberId === memberProduction.externalId)
+      if (!memberExternalId) {
+        logger.warn(`No member ID found for externalId: ${memberProduction.externalId}`)
+        return sum
+      }
 
-      // logger.log(`Team Members: ${JSON.stringify(team.members, null, 2)}`)
-      // logger.log(`Production Members: ${JSON.stringify(team.production.members, null, 2)}`)
-
-      if (!member) {
+      const pokemonData = pokemonStore.getPokemon(memberExternalId)
+      if (!pokemonData) {
         logger.warn(`No Pokémon data found for externalId: ${memberProduction.externalId}`)
         return sum // Skip this member if no data is found
       }
 
+      const skillActivation = pokemonData.pokemon.skill.getFirstActivation()
+      if (!skillActivation) {
+        logger.warn(`No skill activation found for Pokémon with externalId: ${pokemonData.externalId}`)
+        return sum
+      }
+
       const memberSkillStrength = StrengthService.skillStrength({
-        skill: member.pokemon.skill, // Use the skill from the Pokémon data
+        skillActivation,
         skillValues: memberProduction.skillValue, // Use the skill values from production
         berries: memberProduction.produceFromSkill.berries, // Use the berries from production
         favoredBerries: Array.from(favoredBerrySet).map((berryName) => getBerry(berryName)),
@@ -139,7 +147,7 @@ class StrengthServiceImpl {
         areaBonus: areaBonus
       })
 
-      logger.log(`Skill strength for Pokémon with externalId: ${member.externalId}: ${memberSkillStrength}`)
+      logger.log(`Skill strength for Pokémon with externalId: ${pokemonData.externalId}: ${memberSkillStrength}`)
 
       return sum + memberSkillStrength
     }, 0)

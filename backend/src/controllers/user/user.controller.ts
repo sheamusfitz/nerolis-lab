@@ -22,8 +22,8 @@ export default class UserController {
     return updateUser(user, newSettings);
   }
 
-  public async getUserSettings(user: DBUser, userHeader: UserHeader) {
-    return getUserSettings(user, userHeader);
+  public async getUserSettings(user: DBUser) {
+    return getUserSettings(user);
   }
 
   public async upsertUserSettings(user: DBUser, settings: UserSettingsRequest) {

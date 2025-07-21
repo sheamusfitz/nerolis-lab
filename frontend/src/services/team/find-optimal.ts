@@ -92,10 +92,7 @@ function toPokemonInstanceIdentity(p: PokemonInstanceExt) {
     ingredients: p.ingredients.map((ing) => ({ level: ing.level, amount: ing.amount, name: ing.ingredient.name })),
     nature: p.nature.name,
     subskills: p.subskills.map((ss) => {
-      const val =
-        typeof ss.subskill === 'object' && ss.subskill !== null
-          ? ss.subskill.id || ss.subskill.name
-          : String(ss.subskill)
+      const val = typeof ss.subskill === 'object' && ss.subskill !== null ? ss.subskill.name : String(ss.subskill)
       return { ...ss, subskill: val }
     }),
     ribbon: p.ribbon,
@@ -137,11 +134,12 @@ const evaluateTeam = async (team: PokemonInstanceExt[], settings: TeamSettings, 
 
   const skillStrength = result.members.reduce((sum, prod) => {
     const member = team.find((p) => p.externalId === prod.externalId)
+    const skillActivation = member?.pokemon.skill.getFirstActivation()
     return (
       sum +
-      (member
+      (member && skillActivation
         ? StrengthService.skillStrength({
-            skill: member.pokemon.skill,
+            skillActivation,
             skillValues: prod.skillValue,
             berries: prod.produceFromSkill.berries,
             favoredBerries: favoredBerriesArr,
@@ -180,7 +178,6 @@ export const findOptimalTeam = async (
 ) => {
   const logger = console
   const teamStore = useTeamStore()
-  const userStore = useUserStore()
 
   topTeams.length = 0
 
@@ -303,7 +300,6 @@ const simulatedAnnealing = async (
   initialTemperature: number,
   lockedIds: string[]
 ): Promise<void> => {
-  const logger = console
   let currentTeam = initialTeam
   let currentStrength = await evaluateTeam(currentTeam, settings)
   let bestTeam = currentTeam
