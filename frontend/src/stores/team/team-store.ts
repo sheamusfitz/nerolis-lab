@@ -9,6 +9,7 @@ import {
   type PerformanceDetails,
   type TeamInstance
 } from '@/types/member/instanced'
+import type { TeamData } from '@/types/team/team-data'
 import type { TimeWindowDay } from '@/types/time/time-window'
 import { defineStore } from 'pinia'
 import {
@@ -57,7 +58,7 @@ const defaultState = (attrs?: Partial<TeamState>): TeamState => ({
     {
       index: 0,
       memberIndex: 0,
-      name: 'Log in to save teams',
+      name: 'Team 1',
       camp: false,
       bedtime: '21:30',
       wakeup: '06:00',
@@ -243,6 +244,27 @@ export const useTeamStore = defineStore('team', {
     prev() {
       this.currentIndex = (this.currentIndex - 1 + this.teams.length) % this.teams.length
     },
+    async setCurrentTeam(teamData: TeamData) {
+      this.currentIndex = teamData.index
+      await this.deleteTeam()
+
+      // Make sure team exists before adding members
+      this.teams[this.currentIndex] = {
+        ...teamData,
+        members: teamData.members.map((member) => member.externalId),
+        memberIvs: {},
+        production: undefined,
+        version: 0
+      }
+      await this.updateTeam()
+
+      for (let i = 0; i < MAX_TEAM_SIZE; i++) {
+        const maybeMember = teamData.members.at(i)
+        if (maybeMember) {
+          await this.updateTeamMember(maybeMember, i, false)
+        }
+      }
+    },
     async updateTeam() {
       const userStore = useUserStore()
       if (userStore.loggedIn) {
@@ -285,7 +307,7 @@ export const useTeamStore = defineStore('team', {
     async deleteTeam() {
       const userStore = useUserStore()
 
-      const newName = userStore.loggedIn ? `Helper team ${this.currentIndex + 1}` : 'Log in to save teams'
+      const newName = `Helper team ${this.currentIndex + 1}`
 
       this.teams[this.currentIndex] = {
         index: this.currentIndex,
@@ -312,7 +334,7 @@ export const useTeamStore = defineStore('team', {
         }
       }
     },
-    async updateTeamMember(updatedMember: PokemonInstanceExt, memberIndex: number) {
+    async updateTeamMember(updatedMember: PokemonInstanceExt, memberIndex: number, calculateProduction = true) {
       this.loadingMembers[memberIndex] = true
 
       const userStore = useUserStore()
@@ -334,12 +356,14 @@ export const useTeamStore = defineStore('team', {
 
       this.teams[this.currentIndex].members[memberIndex] = updatedMember.externalId
 
-      await this.calculateProduction(this.currentIndex)
-      // reset single production to trigger radar chart recalc
-      if (this.isSupportMember(updatedMember)) {
-        this.resetCurrentTeamIvs()
-      } else {
-        delete this.getCurrentTeam.memberIvs[updatedMember.externalId]
+      if (calculateProduction) {
+        await this.calculateProduction(this.currentIndex)
+        // reset single production to trigger radar chart recalc
+        if (this.isSupportMember(updatedMember)) {
+          this.resetCurrentTeamIvs()
+        } else {
+          delete this.getCurrentTeam.memberIvs[updatedMember.externalId]
+        }
       }
 
       this.loadingMembers[memberIndex] = false
@@ -393,7 +417,7 @@ export const useTeamStore = defineStore('team', {
       await this.updateTeamMember(duplicatedMember, openSlotIndex)
       this.loadingMembers[openSlotIndex] = false
     },
-    async removeMember(memberIndex: number) {
+    async removeMember(memberIndex: number, calculateProduction = true) {
       this.loadingMembers[memberIndex] = true
 
       const userStore = useUserStore()
@@ -432,7 +456,9 @@ export const useTeamStore = defineStore('team', {
       }
 
       this.loadingMembers[memberIndex] = false
-      await this.calculateProduction(this.currentIndex)
+      if (calculateProduction) {
+        await this.calculateProduction(this.currentIndex)
+      }
     },
     async toggleCamp() {
       this.getCurrentTeam.camp = !this.getCurrentTeam.camp

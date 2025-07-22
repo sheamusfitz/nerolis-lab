@@ -1,6 +1,7 @@
 import { ProgrammingError } from '@src/domain/error/programming/programming-error.js';
 import { existsSync } from 'fs';
-import { join } from 'path';
+import { dirname, join } from 'path';
+import { fileURLToPath } from 'url';
 import { findProjectRoot } from '../utils/project-utils.js';
 
 export class FilePathResolver {
@@ -30,11 +31,15 @@ export class FilePathResolver {
       // Fall through to manual fallbacks if project root detection fails
     }
 
+    // Get current file directory for ES modules
+    const currentFileName = fileURLToPath(import.meta.url);
+    const currentDir = dirname(currentFileName);
+
     // Manual fallback paths for common scenarios
     const fallbackPaths = [
       join(process.cwd(), '..', 'CHANGELOG.md'), // From backend/ to parent
       join(process.cwd(), 'CHANGELOG.md'), // From current directory
-      join(__dirname, '..', '..', '..', 'CHANGELOG.md') // From backend/src/config to root
+      join(currentDir, '..', '..', '..', 'CHANGELOG.md') // From backend/src/config to root
     ];
 
     for (const fallbackPath of fallbackPaths) {

@@ -10,7 +10,7 @@
       ></v-img>
       <div class="text-h6 font-weight-medium mt-1">{{ pokemonDisplayName }}</div>
 
-      <div class="text-caption text-medium-emphasis">
+      <div class="text-small text-medium-emphasis">
         <div class="mb-2">
           <v-icon size="small" class="mr-1">mdi-clock-outline</v-icon>
           <span class="font-weight-medium">Frequency:</span> {{ frequencyDisplay }}
@@ -32,6 +32,7 @@
             <span class="font-weight-medium">Skill ({{ pokemonData.skillPercentage }}%):</span>
             {{ pokemonData.skill.name }}
           </div>
+          <div class="ml-6 text-body-2"><span class="font-weight-medium">Level:</span> {{ skillLevelDisplay }}</div>
         </div>
 
         <div class="mb-2">
@@ -83,7 +84,7 @@
                       :alt="ingredient.ingredient.name"
                       :title="ingredient.ingredient.name"
                     />
-                    <span class="text-caption">{{
+                    <span class="text-small">{{
                       `${ingredient.amount}${j < ingredientOption.ingredients.length - 1 ? ',' : ''}`
                     }}</span>
                   </div>
@@ -172,6 +173,10 @@ const ribbonDisplay = computed(() => {
   return props.pokemon.pokemonWithSettings.settings.ribbon
 })
 
+const skillLevelDisplay = computed(() => {
+  return props.pokemon.pokemonWithSettings.settings.skillLevel
+})
+
 const ingredientOptions = computed(() => {
   const pokemon = pokemonData.value
   const options: { level: number; ingredients: IngredientSet[] }[] = []
@@ -215,7 +220,7 @@ const listItems = [
   },
   {
     icon: 'mdi-calculator-variant-outline',
-    title: 'Overall Score',
+    title: 'Score',
     value: localizeNumber(props.pokemon.score),
     bgColor: withOpacity('secondary', 0.2),
     color: `tier-${props.pokemon.tier.toLowerCase()}`

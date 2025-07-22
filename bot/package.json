@@ -18,7 +18,7 @@
   "dependencies": {
     "common": "file:../common",
     "discord.js": "^14.21.0",
-    "dotenv": "^17.0.0",
+    "dotenv": "^17.0.1",
     "express": "^5.1.0",
     "morgan": "^1.10.0"
   },
@@ -30,7 +30,7 @@
     "nodemon": "^3.1.10",
     "typescript": "^5.8.3",
     "vimic": "^1.2.4",
-    "vite": "^7.0.0",
+    "vite": "^7.0.2",
     "vitest": "^3.2.4"
   }
 }

@@ -15,20 +15,15 @@
       <div class="sleep-controls">
         <div class="d-flex align-start justify-space-between w-100">
           <div class="d-flex align-center flex-wrap">
-            <v-text-field
+            <CustomSearchBar
               v-model="searchQuery"
-              label="Search..."
-              prepend-inner-icon="mdi-magnify"
-              flat
-              hide-details
-              clearable
               density="compact"
-              bg-color="rgba(255, 255, 255, 0.15)"
-              variant="solo-filled"
-              min-width="150px"
-              max-width="350px"
+              label="Search..."
+              :autofocus="false"
+              :start-minimized="true"
+              :max-width="!isMobile ? 350 : undefined"
               class="ma-1"
-            ></v-text-field>
+            />
 
             <div class="d-flex align-center flex-nowrap ma-1 flex-shrink-0">
               <v-btn-toggle
@@ -45,9 +40,8 @@
                 <v-img
                   height="40"
                   width="40"
-                  src="/images/misc/camp.png"
+                  :src="camp ? '/images/misc/camp.png' : '/images/misc/camp-grayscale.png'"
                   :alt="camp ? 'Camp Mode On' : 'Camp Mode Off'"
-                  :class="{ 'camp-active': camp, 'camp-inactive': !camp }"
                   eager
                 />
               </v-btn>
@@ -98,7 +92,7 @@
         <v-alert type="error" prominent border="start" variant="tonal" class="frosted-glass-error">
           <template v-slot:title><span class="font-weight-bold">Data Lookup Failed</span></template>
           Could not retrieve tier list data. The server may be temporarily offline, please contact the developers.
-          <div class="text-caption mt-2">Error: {{ error }}</div>
+          <div class="text-small mt-2">Error: {{ error }}</div>
         </v-alert>
       </v-col>
     </v-row>
@@ -128,6 +122,9 @@
         v-if="selectedPokemonForDetail"
         :pokemon="selectedPokemonForDetail"
         :allPokemonVariantsData="selectedPokemonAllVariants"
+        :camp="camp"
+        :level="selectedLevel"
+        @close="showDetailModal = false"
       />
     </v-dialog>
 
@@ -180,14 +177,18 @@
 
 <script setup lang="ts">
 import BubbleBackground from '@/components/custom-components/backgrounds/BubbleBackground.vue'
+import CustomSearchBar from '@/components/custom-components/search-bar/CustomSearchBar.vue'
 import TrendingTicker from '@/components/custom-components/TrendingTicker.vue'
 import PokemonDetailModal from '@/components/tierlist/PokemonDetailModal.vue'
 import TierRow from '@/components/tierlist/TierRow.vue'
+import { useBreakpoint } from '@/composables/use-breakpoint/use-breakpoint'
 import { tierlistService } from '@/services/tierlist-service'
 import { getDiffDisplayInfo } from '@/services/utils/ui-utils'
 import { getPokemon, type PokemonWithTiering, type Tier, type TierlistSettings } from 'sleepapi-common'
 import { computed, onMounted, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+
+const { isMobile } = useBreakpoint()
 
 const route = useRoute()
 const router = useRouter()
@@ -508,10 +509,6 @@ watch(
   backdrop-filter: blur(10px);
   box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.1);
   border-radius: 10px 10px 0 0;
-}
-
-.camp-inactive {
-  filter: grayscale(80%) opacity(0.6);
 }
 
 @keyframes fadeInUp {

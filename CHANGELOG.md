@@ -1,3 +1,82 @@
+## [2.22.2](https://github.com/nerolis-lab/nerolis-lab/compare/v2.22.1...v2.22.2) (2025-07-15)
+
+
+### Bug Fixes
+
+* **pokemon search:** open pokemon input after new pokemon select ([531147d](https://github.com/nerolis-lab/nerolis-lab/commit/531147d5a2fd065c262fcb8843a73c499e17e9f2))
+
+## [2.22.1](https://github.com/nerolis-lab/nerolis-lab/compare/v2.22.0...v2.22.1) (2025-07-15)
+
+
+### Bug Fixes
+
+* **pokemon search:** remove autofocus since it broke browsers ([5b3ea5d](https://github.com/nerolis-lab/nerolis-lab/commit/5b3ea5dba86257ff1a10d55a2c572b3857dd58d2))
+
+# [2.22.0](https://github.com/nerolis-lab/nerolis-lab/compare/v2.21.3...v2.22.0) (2025-07-14)
+
+
+### Bug Fixes
+
+* adding a pokemon from pokedex in search should open PokemonInput ([974ba4f](https://github.com/nerolis-lab/nerolis-lab/commit/974ba4f34b9fd4fc8f5a2884700dc3c601d89149))
+* calculate RP for mons added from pokedex collection ([e7f1790](https://github.com/nerolis-lab/nerolis-lab/commit/e7f1790cfa70aa94c7ccfe18461a63e4002ede99))
+* keyboard now opens for CustomSearchBar on iOS ([a212d75](https://github.com/nerolis-lab/nerolis-lab/commit/a212d758782131d218c4bf2bfd17eb40f96c09a5))
+* **pokemon search:** filter input now supports instance name ([cbba3e0](https://github.com/nerolis-lab/nerolis-lab/commit/cbba3e0f88668a6e779bc476758978ac6c28f5a6))
+* **pokemon search:** long display names now truncate ([da08d4d](https://github.com/nerolis-lab/nerolis-lab/commit/da08d4dfe0a08ee31f556157a637093b699c16eb))
+* **pokemon search:** pokemon button now swaps pokedex mons ([d558c8c](https://github.com/nerolis-lab/nerolis-lab/commit/d558c8c76d362312cd1cdf34103b5d0d64404354))
+* use external id as identifier in pokebox ([7c8e8a0](https://github.com/nerolis-lab/nerolis-lab/commit/7c8e8a00a807523825ba763fa4658d6ed9775b4c))
+
+
+### Features
+
+* adds hoenn starters ([74f8019](https://github.com/nerolis-lab/nerolis-lab/commit/74f8019b3343554c16f0c0afd94ab32bb5768dce))
+* **pokemon search:** clear button now updates the filter ([697d046](https://github.com/nerolis-lab/nerolis-lab/commit/697d0469c023134a56fe9a786d3fbaef3e510e06))
+* redesign Pokémon search ([4772e70](https://github.com/nerolis-lab/nerolis-lab/commit/4772e70c42bb4d8bfda0543c2a2cd0748a1cc359))
+
+## [2.21.3](https://github.com/nerolis-lab/nerolis-lab/compare/v2.21.2...v2.21.3) (2025-07-09)
+
+
+### Bug Fixes
+
+* level 30 tier list simulate no longer creates empty team ([9cc354e](https://github.com/nerolis-lab/nerolis-lab/commit/9cc354e1ad6f5df64a74eb2ccef0a0b6f76598ef))
+* search bar fills space within max-width limit ([4cbe84d](https://github.com/nerolis-lab/nerolis-lab/commit/4cbe84d8963b336524c4d43f696e489782b1c934))
+
+## [2.21.2](https://github.com/nerolis-lab/nerolis-lab/compare/v2.21.1...v2.21.2) (2025-07-06)
+
+
+### Bug Fixes
+
+* **backend:** rename __dirname variables to avoid global conflicts ([ea3a3b1](https://github.com/nerolis-lab/nerolis-lab/commit/ea3a3b1dda0c725066ca0dcc8373fb0b969da93d))
+* **backend:** replace __dirname with import.meta.url for ESM compatibility ([3b28ba8](https://github.com/nerolis-lab/nerolis-lab/commit/3b28ba8fb55535b0314fd067d4a5c1bc590483bd))
+
+## [2.21.1](https://github.com/nerolis-lab/nerolis-lab/compare/v2.21.0...v2.21.1) (2025-07-06)
+
+# [2.21.0](https://github.com/nerolis-lab/nerolis-lab/compare/v2.20.0...v2.21.0) (2025-07-06)
+
+
+### Bug Fixes
+
+* add margin to changelog title ([8c913fb](https://github.com/nerolis-lab/nerolis-lab/commit/8c913fbebf0354faa49838745eba2cb16b659067))
+* **ingredient draw:** update probabilities ([c05e7ab](https://github.com/nerolis-lab/nerolis-lab/commit/c05e7ab0dc2b806aacd77d5a431bff5e16a02f7d))
+* **lint:** allow unused arguments beginning with _ ([0897eb5](https://github.com/nerolis-lab/nerolis-lab/commit/0897eb54711c5ce27acd4f6bcae50fbb1885b7d9))
+* **OAuth:** check supporter status even if patreon unlinked ([a6c343d](https://github.com/nerolis-lab/nerolis-lab/commit/a6c343d16e941957ad234b8c13bdf515c03a1e07))
+* pokemon cache no longer out of sync ([26bf38a](https://github.com/nerolis-lab/nerolis-lab/commit/26bf38aa3f292c1d27a10caa8cc8d756eeb51221))
+* pot size in recipes page uses MAX_POT_SIZE constant ([88b7f40](https://github.com/nerolis-lab/nerolis-lab/commit/88b7f409c5aa8ffcb9c351dbcc4e3022b31a159a))
+* refresh teams on login ([1bb6b21](https://github.com/nerolis-lab/nerolis-lab/commit/1bb6b21e564198ef1cdba811575ec7ead76affb7))
+* tierlist share close button now legible ([f5d2a14](https://github.com/nerolis-lab/nerolis-lab/commit/f5d2a1492cca5e09496aa2d3a6c5fcec2f715782))
+* **tierlist:** Re-bucket tiers ([985164f](https://github.com/nerolis-lab/nerolis-lab/commit/985164f4c7bd44d3da5e234aa79e9a2a82606f89))
+
+
+### Features
+
+* add changelog API and admin interface ([bb9cebe](https://github.com/nerolis-lab/nerolis-lab/commit/bb9cebeae9ddd6a066f31c3e780d0e9fca7e5561))
+* add changelog support for breaking changes ([59cb1bd](https://github.com/nerolis-lab/nerolis-lab/commit/59cb1bd8162699ceaf00c09cdb43f81cfadd0e86))
+* add close button to tierlist pokemon menu ([edd192b](https://github.com/nerolis-lab/nerolis-lab/commit/edd192bae07128859035ff4396c2f582b684f647))
+* adds recreate functionality for tier list solutions ([03fc2f3](https://github.com/nerolis-lab/nerolis-lab/commit/03fc2f380c8f5d61098223d2d6f9eb444695feab))
+* Allow subskill editing from member-results page ([3be293c](https://github.com/nerolis-lab/nerolis-lab/commit/3be293c61b5637a6071d42c3fd45f5a24e0dea4f))
+* **hyper cutter:** use updated probabilities ([96957a9](https://github.com/nerolis-lab/nerolis-lab/commit/96957a9a394b77d3c1104f9a7e15aeef2cc1a409))
+* **super luck:** use updated probabilities ([2f8e683](https://github.com/nerolis-lab/nerolis-lab/commit/2f8e683991d635bc5619a5e688f5911388461dab))
+* **tierlist:** add contribution for recipe strength ([24ce38a](https://github.com/nerolis-lab/nerolis-lab/commit/24ce38a556942c50814d3827c54870ffa0de1c6c))
+
 # [2.20.0](https://github.com/nerolis-lab/nerolis-lab/compare/v2.19.0...v2.20.0) (2025-06-25)
 
 

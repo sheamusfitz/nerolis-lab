@@ -54,6 +54,7 @@ import {
   ChargeStrengthSRange,
   ChargeStrengthSStockpile,
   CookingPowerUpS,
+  CookingPowerUpSMinus,
   DreamShardMagnetS,
   DreamShardMagnetSRange,
   EnergizingCheerS,
@@ -62,6 +63,7 @@ import {
   ExtraHelpfulS,
   HelperBoost,
   IngredientMagnetS,
+  IngredientMagnetSPlus,
   Metronome,
   TastyChanceS
 } from '../mainskill/mainskills';
@@ -694,6 +696,54 @@ export const SUICUNE: Pokemon = {
   skill: HelperBoost
 };
 
+export const TREECKO: Pokemon = {
+  name: 'TREECKO',
+  displayName: 'Treecko',
+  pokedexNumber: 252,
+  specialty: 'skill',
+  frequency: toSeconds(1, 15, 0),
+  ingredientPercentage: 17.2,
+  skillPercentage: 3.5,
+  berry: DURIN,
+  genders: SEVEN_EIGHTHS_MALE,
+  carrySize: 8,
+  previousEvolutions: 0,
+  remainingEvolutions: 2,
+  ingredient0: [{ amount: 1, ingredient: FANCY_EGG }],
+  ingredient30: [
+    { amount: 2, ingredient: FANCY_EGG },
+    { amount: 2, ingredient: ROUSING_COFFEE }
+  ],
+  ingredient60: [
+    { amount: 4, ingredient: FANCY_EGG },
+    { amount: 3, ingredient: ROUSING_COFFEE },
+    { amount: 2, ingredient: LARGE_LEEK }
+  ],
+  skill: BerryBurst
+};
+
+export const GROVYLE: Pokemon = {
+  ...evolvesFrom(TREECKO),
+  name: 'GROVYLE',
+  displayName: 'Grovyle',
+  pokedexNumber: 253,
+  frequency: toSeconds(0, 55, 0),
+  ingredientPercentage: 15,
+  skillPercentage: 3.5,
+  carrySize: 11
+};
+
+export const SCEPTILE: Pokemon = {
+  ...evolvesFrom(GROVYLE),
+  name: 'SCEPTILE',
+  displayName: 'Sceptile',
+  pokedexNumber: 254,
+  frequency: toSeconds(0, 38, 20),
+  ingredientPercentage: 10.7,
+  skillPercentage: 3,
+  carrySize: 17
+};
+
 export const RALTS: Pokemon = {
   name: 'RALTS',
   displayName: 'Ralts',
@@ -766,6 +816,58 @@ export const SABLEYE: Pokemon = {
     { amount: 3, ingredient: SOOTHING_CACAO }
   ],
   skill: DreamShardMagnetSRange
+};
+
+export const PLUSLE: Pokemon = {
+  name: 'PLUSLE',
+  displayName: 'Plusle',
+  pokedexNumber: 311,
+  specialty: 'skill',
+  frequency: toSeconds(0, 40, 0),
+  ingredientPercentage: 10.3,
+  skillPercentage: 4.9,
+  berry: GREPA,
+  genders: BALANCED_GENDER,
+  carrySize: 16,
+  previousEvolutions: 0,
+  remainingEvolutions: 0,
+  ingredient0: [{ amount: 1, ingredient: ROUSING_COFFEE }],
+  ingredient30: [
+    { amount: 2, ingredient: ROUSING_COFFEE },
+    { amount: 2, ingredient: LARGE_LEEK }
+  ],
+  ingredient60: [
+    { amount: 4, ingredient: ROUSING_COFFEE },
+    { amount: 3, ingredient: LARGE_LEEK },
+    { amount: 6, ingredient: MOOMOO_MILK }
+  ],
+  skill: IngredientMagnetSPlus
+};
+
+export const MINUN: Pokemon = {
+  name: 'MINUN',
+  displayName: 'Minun',
+  pokedexNumber: 312,
+  specialty: 'skill',
+  frequency: toSeconds(0, 40, 0),
+  ingredientPercentage: 17.4,
+  skillPercentage: 4.9,
+  berry: GREPA,
+  genders: BALANCED_GENDER,
+  carrySize: 16,
+  previousEvolutions: 0,
+  remainingEvolutions: 0,
+  ingredient0: [{ amount: 1, ingredient: HONEY }],
+  ingredient30: [
+    { amount: 2, ingredient: HONEY },
+    { amount: 2, ingredient: FANCY_EGG }
+  ],
+  ingredient60: [
+    { amount: 4, ingredient: HONEY },
+    { amount: 4, ingredient: FANCY_EGG },
+    { amount: 4, ingredient: MOOMOO_MILK }
+  ],
+  skill: CookingPowerUpSMinus
 };
 
 export const GULPIN: Pokemon = {
@@ -1015,7 +1117,7 @@ export const RUFFLET: Pokemon = {
   ingredient0: [{ amount: 1, ingredient: BEAN_SAUSAGE }],
   ingredient30: [
     { amount: 2, ingredient: BEAN_SAUSAGE },
-    { amount: 1, ingredient: GREENGRASS_CORN }
+    { amount: 2, ingredient: GREENGRASS_CORN }
   ],
   ingredient60: [
     { amount: 4, ingredient: BEAN_SAUSAGE },
@@ -1168,8 +1270,11 @@ export const OPTIMAL_SKILL_SPECIALISTS: Pokemon[] = [
   RAIKOU,
   ENTEI,
   SUICUNE,
+  SCEPTILE,
   GARDEVOIR,
   SABLEYE,
+  PLUSLE,
+  MINUN,
   SWALOT,
   DRIFBLIM,
   HONCHKROW,
@@ -1203,6 +1308,8 @@ export const INFERIOR_SKILL_SPECIALISTS: Pokemon[] = [
   MAREEP,
   FLAAFFY,
   MURKROW,
+  TREECKO,
+  GROVYLE,
   RALTS,
   KIRLIA,
   GULPIN,

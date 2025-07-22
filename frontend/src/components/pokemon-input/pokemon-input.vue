@@ -88,7 +88,7 @@
         />
       </v-col>
       <v-col cols="12" v-if="!ingsAreValid">
-        <div class="text-center text-error-3 text-caption">
+        <div class="text-center text-error-3 text-small">
           Level 30 ingredient must unlock before level 60 ingredient.
         </div>
       </v-col>
@@ -119,7 +119,7 @@
 
     <v-row dense class="mt-2">
       <v-col cols="6">
-        <v-btn id="cancelButton" class="w-100 responsive-text" size="large" rounded="lg" color="surface" @click="cancel"
+        <v-btn id="cancelButton" class="w-100 text-body" size="large" rounded="lg" color="surface" @click="cancel"
           >Cancel</v-btn
         >
       </v-col>
@@ -127,7 +127,7 @@
         <v-btn
           id="saveButton"
           :disabled="!isValid"
-          class="w-100 responsive-text"
+          class="w-100 text-body"
           size="large"
           rounded="lg"
           color="primary"
@@ -154,14 +154,11 @@ import { useBreakpoint } from '@/composables/use-breakpoint/use-breakpoint'
 import { useTeamStore } from '@/stores/team/team-store'
 import { useUserStore } from '@/stores/user-store'
 import {
-  CarrySizeUtils,
   getPokemon,
-  getRandomGender,
   ingredientIndex,
   nature,
   RP,
   type IngredientSet,
-  type Pokemon,
   type PokemonGender,
   type PokemonInstanceExt,
   type SubskillInstanceExt
@@ -250,16 +247,8 @@ export default defineComponent({
       this.pokemonInstance.subskills = updatedSubskills
       this.pokemonInstance.subskills.sort((a, b) => a.level - b.level)
     },
-    updatePokemon(pokemon: Pokemon) {
-      this.pokemonInstance.pokemon = pokemon
-      this.pokemonInstance.ingredients = [
-        { ...pokemon.ingredient0[0], level: 0 },
-        { ...pokemon.ingredient30[0], level: 30 },
-        { ...pokemon.ingredient60[0], level: 60 }
-      ]
-      this.pokemonInstance.skillLevel = Math.min(this.pokemonInstance.skillLevel, pokemon.skill.maxLevel)
-      this.pokemonInstance.gender = getRandomGender(pokemon)
-      this.pokemonInstance.carrySize = CarrySizeUtils.baseCarrySize(pokemon)
+    updatePokemon(instance: PokemonInstanceExt) {
+      this.pokemonInstance = instance
     },
     updateName(newName: string) {
       this.pokemonInstance.name = newName
@@ -325,23 +314,5 @@ export default defineComponent({
 .nowrap {
   display: flex;
   align-items: center;
-}
-
-.responsive-text {
-  font-size: 0.875rem !important;
-}
-
-.responsive-icon {
-  font-size: 0.875rem !important;
-}
-
-@media (max-width: 360px) {
-  .responsive-text {
-    font-size: 0.7rem !important;
-  }
-
-  .responsive-icon {
-    font-size: 0.7rem !important;
-  }
 }
 </style>

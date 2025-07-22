@@ -1,10 +1,16 @@
+import { randomName } from '@/services/utils/name-utils'
 import {
   CarrySizeUtils,
   getIngredient,
   getNature,
   getPokemon,
+  getRandomGender,
   getSubskill,
+  nature,
+  Ribbon,
   RP,
+  uuid,
+  type Pokemon,
   type PokemonInstanceExt,
   type PokemonInstanceIdentity,
   type PokemonInstanceWithMeta,
@@ -12,6 +18,62 @@ import {
 } from 'sleepapi-common'
 
 class PokemonInstanceUtilsImpl {
+  public createDefaultPokemonInstance(pokemon: Pokemon, attrs?: Partial<PokemonInstanceExt>): PokemonInstanceExt {
+    const gender = attrs?.gender ?? getRandomGender(pokemon)
+    const instance = {
+      carrySize: CarrySizeUtils.baseCarrySize(pokemon),
+      externalId: uuid.v4(),
+      gender,
+      level: 60,
+      name: randomName(pokemon, 12, gender),
+      nature: nature.BASHFUL,
+      ribbon: Ribbon.NONE,
+      saved: false,
+      shiny: false,
+      skillLevel: pokemon.previousEvolutions + 1,
+      subskills: [],
+      ingredients: [
+        { ...pokemon.ingredient0[0], level: 0 },
+        { ...pokemon.ingredient30[0], level: 30 },
+        { ...pokemon.ingredient60[0], level: 60 }
+      ],
+      rp: 0,
+      version: 0,
+      ...attrs,
+      pokemon
+    }
+
+    const rp = new RP(instance).calc()
+    return {
+      ...instance,
+      rp
+    }
+  }
+
+  public createPokemonInstanceWithPreservedAttributes(
+    newPokemon: Pokemon,
+    existingInstance: PokemonInstanceExt
+  ): PokemonInstanceExt {
+    const instance = {
+      ...existingInstance,
+      pokemon: newPokemon,
+      ingredients: [
+        { ...newPokemon.ingredient0[0], level: 0 },
+        { ...newPokemon.ingredient30[0], level: 30 },
+        { ...newPokemon.ingredient60[0], level: 60 }
+      ],
+      skillLevel: Math.min(existingInstance.skillLevel, newPokemon.skill.maxLevel),
+      carrySize: CarrySizeUtils.baseCarrySize(newPokemon),
+      gender: getRandomGender(newPokemon)
+    }
+
+    const rp = new RP(instance).calc()
+    return {
+      ...instance,
+      rp
+    }
+  }
+
   public toPokemonInstanceExt(pokemonInstance: PokemonInstanceWithMeta): PokemonInstanceExt {
     if (pokemonInstance.ingredients.length !== 3) {
       throw new Error('Received corrupt ingredient data')

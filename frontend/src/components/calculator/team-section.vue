@@ -31,7 +31,7 @@
         <TeamSettings />
 
         <v-window v-model="teamStore.currentIndex" continuous class="mt-2">
-          <v-window-item v-for="(team, index) in teamStore.teams" :key="index">
+          <v-window-item v-for="(_, index) in teamStore.teams" :key="index">
             <v-row class="flex-column" dense style="height: 75dvh">
               <v-col v-for="member in teamSlots" :key="member" :class="[teamSlots > 1 ? 'team-slot' : '']">
                 <TeamSlot :member-index="member - 1" />
@@ -320,7 +320,6 @@ export default defineComponent({
     const userStore = useUserStore()
     const teamStore = useTeamStore()
     const pokemonStore = usePokemonStore()
-    const notificationStore = useNotificationStore()
 
     const { isMobile } = useBreakpoint()
 

@@ -1,5 +1,38 @@
 <template>
+  <v-menu v-if="showMenu">
+    <template #activator="{ props: activatorProps }">
+      <v-chip
+        :value="value"
+        :color="color"
+        :variant="isSelected ? 'elevated' : 'outlined'"
+        :size="size"
+        :density="density"
+        :disabled="disabled"
+        :style="computedStyle"
+        :class="computedClass"
+        :prepend-avatar="prependAvatar"
+        :append-avatar="appendAvatar"
+        v-bind="chipBindings(activatorProps)"
+        @click="handleClick"
+      >
+        <slot>{{ text }}</slot>
+
+        <template #append>
+          <slot name="append" />
+        </template>
+      </v-chip>
+    </template>
+
+    <v-card :prepend-avatar="prependAvatar">
+      <template #title>
+        <slot name="menu-title" />
+      </template>
+      <slot name="menu-content" />
+    </v-card>
+  </v-menu>
+
   <v-chip
+    v-else
     :value="value"
     :color="color"
     :variant="isSelected ? 'elevated' : 'outlined'"
@@ -10,7 +43,7 @@
     :class="computedClass"
     :prepend-avatar="prependAvatar"
     :append-avatar="appendAvatar"
-    v-bind="$attrs"
+    v-bind="chipBindings()"
     @click="handleClick"
   >
     <slot>{{ text }}</slot>
@@ -22,7 +55,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, useAttrs } from 'vue'
 
 export interface Props {
   value?: any
@@ -35,6 +68,7 @@ export interface Props {
   density?: 'default' | 'comfortable' | 'compact'
   disabled?: boolean
   interactive?: boolean
+  showMenu?: boolean
   class?: string | string[] | Record<string, boolean>
   customStyle?: Record<string, any>
 }
@@ -44,12 +78,15 @@ const props = withDefaults(defineProps<Props>(), {
   size: 'default',
   density: 'default',
   disabled: false,
-  interactive: true
+  interactive: true,
+  showMenu: false
 })
 
 const emit = defineEmits<{
   click: [value: any]
 }>()
+
+const $attrs = useAttrs()
 
 const computedStyle = computed(() => {
   const baseStyle = props.customStyle || {}
@@ -93,6 +130,13 @@ const handleClick = () => {
   if (!props.disabled && props.interactive) {
     emit('click', props.value)
   }
+}
+
+const chipBindings = (activatorProps?: any) => {
+  if (props.showMenu && props.interactive && activatorProps) {
+    return { ...$attrs, ...activatorProps }
+  }
+  return $attrs
 }
 </script>
 

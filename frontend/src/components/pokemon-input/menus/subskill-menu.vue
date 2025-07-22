@@ -1,30 +1,31 @@
 <template>
   <v-card class="pa-4">
+    <!-- Choose the subskill for level -->
     <v-row>
       <v-col cols="12" class="py-5">
         <div v-if="lowestAvailableLevel" style="height: 50px">
-          <CustomLabel>
-            <v-badge location="right center" color="primary" rounded="lg" :content="lowestAvailableLevel">
-              <v-container>
-                <span>Choose the subskill for level</span>
-              </v-container>
+          <CustomLabel class="text-left-override">
+            <v-badge location="right" color="primary" rounded="lg" :content="lowestAvailableLevel" offset-x="-15">
+              <span>Choose the subskill for level</span>
             </v-badge>
           </CustomLabel>
         </div>
         <div v-else style="height: 50px">
-          <CustomLabel> Click on a selected subskill to replace it </CustomLabel>
+          <CustomLabel> Click a selected subskill to replace it </CustomLabel>
         </div>
       </v-col>
     </v-row>
+
+    <!-- Golden subskills -->
     <v-row dense>
-      <v-col cols="6">
+      <v-col cols="6" class="flex-center">
         <SubskillButton
           :subskill="availableSubskills.BERRY_FINDING_S"
           :selected-subskills="selectedSubskills"
           @click="toggleSubskill(availableSubskills.BERRY_FINDING_S)"
         />
       </v-col>
-      <v-col cols="6">
+      <v-col cols="6" class="flex-center">
         <SubskillButton
           :subskill="availableSubskills.HELPING_BONUS"
           :selected-subskills="selectedSubskills"
@@ -34,14 +35,14 @@
     </v-row>
 
     <v-row dense>
-      <v-col cols="6">
+      <v-col cols="6" class="flex-center">
         <SubskillButton
           :subskill="availableSubskills.ENERGY_RECOVERY_BONUS"
           :selected-subskills="selectedSubskills"
           @click="toggleSubskill(availableSubskills.ENERGY_RECOVERY_BONUS)"
         />
       </v-col>
-      <v-col cols="6">
+      <v-col cols="6" class="flex-center">
         <SubskillButton
           :subskill="availableSubskills.SLEEP_EXP_BONUS"
           :selected-subskills="selectedSubskills"
@@ -51,14 +52,14 @@
     </v-row>
 
     <v-row dense>
-      <v-col cols="6">
+      <v-col cols="6" class="flex-center">
         <SubskillButton
           :subskill="availableSubskills.DREAM_SHARD_BONUS"
           :selected-subskills="selectedSubskills"
           @click="toggleSubskill(availableSubskills.DREAM_SHARD_BONUS)"
         />
       </v-col>
-      <v-col cols="6">
+      <v-col cols="6" class="flex-center">
         <SubskillButton
           :subskill="availableSubskills.RESEARCH_EXP_BONUS"
           :selected-subskills="selectedSubskills"
@@ -135,7 +136,7 @@
 
     <v-row dense>
       <v-col cols="6"> <CustomLabel> Inventory Up </CustomLabel> </v-col>
-      <v-col cols="2" class="flex-center pr-1">
+      <v-col cols="2" class="flex-center pr-1 badge-col">
         <SubskillButton
           :subskill="availableSubskills.INVENTORY_S"
           :selected-subskills="selectedSubskills"
@@ -144,7 +145,7 @@
           @click="toggleSubskill(availableSubskills.INVENTORY_S)"
         />
       </v-col>
-      <v-col cols="2" class="flex-center pl-1 pr-1">
+      <v-col cols="2" class="flex-center pl-1 pr-1 badge-col">
         <SubskillButton
           :subskill="availableSubskills.INVENTORY_M"
           :selected-subskills="selectedSubskills"
@@ -153,7 +154,7 @@
           @click="toggleSubskill(availableSubskills.INVENTORY_M)"
         />
       </v-col>
-      <v-col cols="2" class="flex-center pl-1">
+      <v-col cols="2" class="flex-center pl-1 badge-col">
         <SubskillButton
           :subskill="availableSubskills.INVENTORY_L"
           :selected-subskills="selectedSubskills"
@@ -188,30 +189,18 @@
 
     <v-row dense class="mt-3">
       <v-col cols="4">
-        <v-btn
-          class="w-100 responsive-text"
-          size="large"
-          rounded="lg"
-          color="secondary"
-          data-testid="cancel-button"
-          @click="cancel"
+        <v-btn class="w-100" size="large" rounded="lg" color="secondary" data-testid="cancel-button" @click="cancel"
           >Cancel</v-btn
         >
       </v-col>
       <v-col cols="4">
-        <v-btn
-          class="w-100 responsive-text"
-          size="large"
-          rounded="lg"
-          color="surface"
-          data-testid="clear-button"
-          @click="clear"
+        <v-btn class="w-100" size="large" rounded="lg" color="surface" data-testid="clear-button" @click="clear"
           >Clear</v-btn
         >
       </v-col>
       <v-col cols="4">
         <v-btn
-          class="w-100 responsive-text"
+          class="w-100"
           size="large"
           rounded="lg"
           color="primary"
@@ -260,7 +249,8 @@ export default {
     }
   },
   mounted() {
-    this.selectedSubskills = this.currentSubskills
+    // deep copy to avoid mutating the original subskills without even saving
+    this.selectedSubskills = JSON.parse(JSON.stringify(this.currentSubskills))
   },
   methods: {
     subskillForLevel(subskillLevel: number): Subskill | undefined {
@@ -292,3 +282,20 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.text-left-override :deep(.flex-center) {
+  justify-content: flex-start !important;
+  padding-left: 10px !important;
+}
+
+.badge-col:nth-child(2) {
+  z-index: 3;
+}
+.badge-col:nth-child(3) {
+  z-index: 2;
+}
+.badge-col:nth-child(4) {
+  z-index: 1;
+}
+</style>
