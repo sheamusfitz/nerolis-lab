@@ -400,7 +400,7 @@ export default defineComponent({
       userStore,
       teamStore,
       pokemonStore,
-      notificationStore,
+      useNotificationStore,
       isMobile,
       isLoading,
       scored,
