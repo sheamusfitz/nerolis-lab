@@ -3,7 +3,7 @@ import { logger } from '@/services/logger'
 import type { TeamInstance } from '@/types/member/instanced'
 import type { TimeWindowWeek } from '@/types/time/time-window'
 import type { MainskillActivation, MemberProduction, MemberSkillValue, RecipeTypeResult } from 'sleepapi-common'
-import { MathUtils, berryPowerForLevel, getBerry, type Berry, type BerrySet } from 'sleepapi-common'
+import { MathUtils, berryPowerForLevel, getBerry, type BerrySet, type Island } from 'sleepapi-common'
 
 class StrengthServiceImpl {
   /**
@@ -89,12 +89,10 @@ class StrengthServiceImpl {
     }
   }
 
-  public calculateTotalStrength(params: { team: TeamInstance; areaBonus: number; favoredBerries: Berry[] }): number {
+  public calculateTotalStrength(params: { team: TeamInstance; areaBonus: number }): number {
     const pokemonStore = usePokemonStore()
-    const { team, areaBonus, favoredBerries } = params
+    const { team, areaBonus } = params
     // logger.log(`team: ${JSON.stringify(team)}`)
-
-    const favoredBerrySet = new Set(favoredBerries.map((berry) => berry.name))
 
     // Ensure recipeType is valid
     const recipeType = team.recipeType // Default to 'curry' if undefined
@@ -108,7 +106,6 @@ class StrengthServiceImpl {
         return (
           sum +
           this.berryStrength({
-            favoredBerries: Array.from(favoredBerrySet).map((berryName) => getBerry(berryName)),
             berries,
             timeWindow: 'WEEK',
             areaBonus: areaBonus
@@ -142,7 +139,6 @@ class StrengthServiceImpl {
         skillActivation,
         skillValues: memberProduction.skillValue, // Use the skill values from production
         berries: memberProduction.produceFromSkill.berries, // Use the berries from production
-        favoredBerries: Array.from(favoredBerrySet).map((berryName) => getBerry(berryName)),
         timeWindow: 'WEEK',
         areaBonus: areaBonus
       })
@@ -157,7 +153,6 @@ class StrengthServiceImpl {
         return (
           sum +
           this.berryStrength({
-            favoredBerries: Array.from(favoredBerrySet).map((berryName) => getBerry(berryName)),
             berries: [{ berry: getBerry(berry.name), amount: berry.amount, level: berry.level }],
             timeWindow: '24H',
             areaBonus: areaBonus

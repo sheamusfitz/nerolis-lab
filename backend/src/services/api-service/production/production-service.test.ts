@@ -96,7 +96,7 @@ describe('calculateTeam', () => {
       }
     ];
 
-    const result = calculateTeam({ members, settings, userRecipes: defaultUserRecipes() }, 5000);
+    const result = calculateTeam({ members, settings, userRecipes: defaultUserRecipes(), iterations: 5000 });
 
     expect(result.members).toHaveLength(1);
     expect(result.members[0].produceTotal).toMatchInlineSnapshot(`

@@ -1,7 +1,7 @@
 import { StrengthService } from '@/services/strength/strength-service'
 import { TeamService } from '@/services/team/team-service'
 import { UserService } from '@/services/user/user-service'
-import { getIsland } from '@/services/utils/island/island-utils'
+
 import { useTeamStore } from '@/stores/team/team-store'
 import { useUserStore } from '@/stores/user-store'
 import { getBerry, type PokemonInstanceExt, type TeamSettings } from 'sleepapi-common'
@@ -104,8 +104,6 @@ function toPokemonInstanceIdentity(p: PokemonInstanceExt) {
 const evaluateTeam = async (team: PokemonInstanceExt[], settings: TeamSettings, iterations = 5110): Promise<number> => {
   const teamStore = useTeamStore()
   const userStore = useUserStore()
-  const favoredBerries = teamStore.getCurrentTeam.favoredBerries
-  const favoredBerriesArr = favoredBerries.map((b) => getBerry(b.name))
 
   const request = {
     settings,
@@ -115,7 +113,7 @@ const evaluateTeam = async (team: PokemonInstanceExt[], settings: TeamSettings, 
   }
   const result = await TeamService.calculateTeam(request)
   const recipeType = teamStore.getCurrentTeam.recipeType
-  const islandBonus = userStore.islandBonus(getIsland(teamStore.getCurrentTeam.favoredBerries).shortName) || 1
+  const islandBonus = userStore.islandBonus(teamStore.getCurrentTeam.island.shortName) || 1
 
   const cooking = result.cooking?.[recipeType]?.weeklyStrength ?? 0
   const cookingStrength = cooking * islandBonus
@@ -124,8 +122,8 @@ const evaluateTeam = async (team: PokemonInstanceExt[], settings: TeamSettings, 
     (sum, m) =>
       sum +
       StrengthService.berryStrength({
-        favoredBerries: favoredBerriesArr,
         berries: m.produceWithoutSkill.berries,
+        island: teamStore.getCurrentTeam.island,
         timeWindow: 'WEEK',
         areaBonus: islandBonus
       }),
@@ -142,7 +140,7 @@ const evaluateTeam = async (team: PokemonInstanceExt[], settings: TeamSettings, 
             skillActivation,
             skillValues: prod.skillValue,
             berries: prod.produceFromSkill.berries,
-            favoredBerries: favoredBerriesArr,
+            island: teamStore.getCurrentTeam.island,
             timeWindow: 'WEEK',
             areaBonus: islandBonus
           })
@@ -154,8 +152,8 @@ const evaluateTeam = async (team: PokemonInstanceExt[], settings: TeamSettings, 
     (sum, sb) =>
       sum +
       StrengthService.berryStrength({
-        favoredBerries: favoredBerriesArr,
         berries: [{ berry: getBerry(sb.name), amount: sb.amount, level: sb.level }],
+        island: teamStore.getCurrentTeam.island,
         timeWindow: '24H',
         areaBonus: islandBonus
       }),
