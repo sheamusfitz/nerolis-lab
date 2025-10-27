@@ -13,7 +13,6 @@ import type { TeamData } from '@/types/team/team-data'
 import type { TimeWindowDay } from '@/types/time/time-window'
 import { defineStore } from 'pinia'
 import {
-  berry,
   DEFAULT_ISLAND,
   DOMAIN_VERSION,
   EnergizingCheerS,
@@ -29,6 +28,7 @@ import {
   type IslandInstance,
   type PokemonInstanceExt,
   type RecipeType,
+  type TeamAreaDTO,
   type TeamSettings
 } from 'sleepapi-common'
 
@@ -273,13 +273,11 @@ export const useTeamStore = defineStore('team', {
           const { island, name, camp, bedtime, wakeup, recipeType, stockpiledBerries, stockpiledIngredients } =
             this.getCurrentTeam
 
-          // TODO: remove when backend responds with island
-          const anyFavoredBerries = island.berries.length > 0
-          const favoredBerries = anyFavoredBerries
-            ? island.berries.length === berry.BERRIES.length
-              ? ['all']
-              : island.berries.map((b) => b.name)
-            : undefined
+          const islandDTO: TeamAreaDTO = {
+            islandName: island.shortName,
+            favoredBerries: island.berries.map((b) => b.name).join(','),
+            expertModifier: island.expertModifier
+          }
 
           const { version } = await TeamService.createOrUpdateTeam(this.currentIndex, {
             name,
@@ -287,7 +285,7 @@ export const useTeamStore = defineStore('team', {
             bedtime,
             wakeup,
             recipeType,
-            favoredBerries,
+            island: islandDTO,
             stockpiledBerries,
             stockpiledIngredients
           })
