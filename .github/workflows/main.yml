@@ -60,11 +60,6 @@ jobs:
     with:
       working-directory: 'backend'
       needs-common-build: true
-      additional-setup: |
-        npm install -g bun
-        cd backend
-        bun install
-        bun compile
 
   frontend:
     name: Frontend

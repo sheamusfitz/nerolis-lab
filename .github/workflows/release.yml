@@ -1,0 +1,268 @@
+name: Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Environment to release to'
+        required: true
+        type: choice
+        options:
+          - development
+          - production
+        default: 'development'
+      commit_sha:
+        description: 'Commit SHA to release (leave empty for latest)'
+        required: false
+        type: string
+
+jobs:
+  
+  determine-sha:
+    name: Determine Commit SHA
+    runs-on: ubuntu-latest
+    outputs:
+      sha: ${{ steps.get-sha.outputs.sha }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref }}
+          
+      - name: Get commit SHA
+        id: get-sha
+        run: |
+          if [ -n "${{ inputs.commit_sha }}" ]; then
+            echo "Using provided commit SHA: ${{ inputs.commit_sha }}"
+            echo "sha=${{ inputs.commit_sha }}" >> $GITHUB_OUTPUT
+          else
+            echo "Using latest commit SHA from branch: ${{ github.ref_name }}"
+            LATEST_SHA=$(git rev-parse HEAD)
+            echo "Latest commit SHA: $LATEST_SHA"
+            echo "sha=$LATEST_SHA" >> $GITHUB_OUTPUT
+          fi
+
+  common:
+    name: Build Common
+    needs: determine-sha
+    uses: ./.github/workflows/build-test.yml
+    with:
+      working-directory: 'common'
+      commit_sha: ${{ needs.determine-sha.outputs.sha }}
+      skip-tests: true
+
+  frontend:
+    name: Build Frontend
+    needs: [determine-sha, common]
+    uses: ./.github/workflows/build-test.yml
+    with:
+      working-directory: 'frontend'
+      needs-common-build: true
+      commit_sha: ${{ needs.determine-sha.outputs.sha }}
+      skip-tests: true
+
+  backend:
+    name: Build Backend
+    needs: [determine-sha, common]
+    uses: ./.github/workflows/build-test.yml
+    with:
+      working-directory: 'backend'
+      needs-common-build: true
+      commit_sha: ${{ needs.determine-sha.outputs.sha }}
+      skip-tests: true
+
+  docs:
+    name: Build Docs
+    needs: [determine-sha, common]
+    if: ${{ inputs.environment == 'production' }}
+    uses: ./.github/workflows/build-test.yml
+    with:
+      working-directory: 'docs'
+      needs-common-build: true
+      commit_sha: ${{ needs.determine-sha.outputs.sha }}
+      skip-tests: true
+
+  release:
+    name: Release
+    needs: [determine-sha, common, frontend, backend, docs]
+    if: |
+      always() &&
+      (needs.common.result == 'success' || needs.common.result == 'skipped') &&
+      (needs.frontend.result == 'success' || needs.frontend.result == 'skipped') &&
+      (needs.backend.result == 'success' || needs.backend.result == 'skipped') &&
+      (needs.docs.result == 'success' || needs.docs.result == 'skipped')
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.environment }}
+    steps:
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          pattern: '*-${{ needs.determine-sha.outputs.sha }}'
+      
+      - name: Display artifact structure
+        run: |
+          echo "Downloaded artifacts:"
+          ls -la
+          echo "Common artifacts structure:"
+          ls -la common-${{ needs.determine-sha.outputs.sha }}/ 2>/dev/null || echo "No common artifacts directory"
+          echo "Frontend artifacts structure:"
+          ls -la frontend-${{ needs.determine-sha.outputs.sha }}/ 2>/dev/null || echo "No frontend artifacts directory"
+          echo "Backend artifacts structure:"
+          ls -la backend-${{ needs.determine-sha.outputs.sha }}/ 2>/dev/null || echo "No backend artifacts directory"
+          echo "Docs artifacts structure:"
+          ls -la docs-${{ needs.determine-sha.outputs.sha }}/ 2>/dev/null || echo "No docs artifacts directory"
+      
+      - name: Setup SSH
+        uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      - name: Deploy backend to server
+        run: |
+          echo "[${{ inputs.environment }}] Deploying backend..."
+          
+          # Check for required artifacts
+          if [ ! -d "common-${{ needs.determine-sha.outputs.sha }}" ]; then
+            echo "✗ Common artifacts not found at: common-${{ needs.determine-sha.outputs.sha }}"
+            exit 1
+          fi
+          
+          if [ ! -d "backend-${{ needs.determine-sha.outputs.sha }}" ]; then
+            echo "✗ Backend artifacts not found at: backend-${{ needs.determine-sha.outputs.sha }}"
+            exit 1
+          fi
+          
+          echo "✓ Common artifacts found"
+          echo "Common files: $(find common-${{ needs.determine-sha.outputs.sha }} -type f | wc -l)"
+          echo "✓ Backend artifacts found"  
+          echo "Backend files: $(find backend-${{ needs.determine-sha.outputs.sha }} -type f | wc -l)"
+          
+          # Create deployment directory structure on server
+          ssh -o StrictHostKeyChecking=no -o LogLevel=ERROR ${{ secrets.SSH_HOST }} "mkdir -p ${{ vars.DEPLOY_DIR }}/backend"
+          
+          # Deploy backend files
+          rsync -az --delete -e "ssh -o StrictHostKeyChecking=no -o LogLevel=ERROR" backend-${{ needs.determine-sha.outputs.sha }}/ ${{ secrets.SSH_HOST }}:${{ vars.DEPLOY_DIR }}/backend/
+          
+          # Deploy common package (required for backend)
+          rsync -az --delete -e "ssh -o StrictHostKeyChecking=no -o LogLevel=ERROR" common-${{ needs.determine-sha.outputs.sha }}/ ${{ secrets.SSH_HOST }}:${{ vars.DEPLOY_DIR }}/common/
+          
+          # Install production dependencies on server
+          ssh -o StrictHostKeyChecking=no -o LogLevel=ERROR ${{ secrets.SSH_HOST }} << ENDSSH
+            # Load nvm and use the correct Node version
+            export NVM_DIR="\$HOME/.nvm"
+            [ -s "\$NVM_DIR/nvm.sh" ] && \. "\$NVM_DIR/nvm.sh"
+
+            cd ${{ vars.DEPLOY_DIR }}
+            nvm install
+            nvm use
+            
+            # Install common dependencies first
+            echo "Installing common dependencies..."
+            cd ${{ vars.DEPLOY_DIR }}/common
+            npm ci --omit=dev
+            echo "✓ Common dependencies installed"
+            
+            # Install backend dependencies
+            echo "Installing backend dependencies..."
+            cd ${{ vars.DEPLOY_DIR }}/backend
+            npm ci --omit=dev
+            echo "✓ Backend dependencies installed"
+          ENDSSH
+          
+          # Deploy backend assets to web server
+          ssh -o StrictHostKeyChecking=no -o LogLevel=ERROR ${{ secrets.SSH_HOST }} "rsync -a --chown=www-data:www-data ${{ vars.DEPLOY_DIR }}/backend/dist/assets/ /var/www/backend --delete"
+          
+          echo "✓ Backend deployment complete!"
+
+      - name: Deploy frontend dist
+        run: |
+          echo "[${{ inputs.environment }}] Deploying frontend..."
+          
+          # Check for frontend artifacts
+          if [ ! -d "frontend-${{ needs.determine-sha.outputs.sha }}" ]; then
+            echo "✗ Frontend artifacts not found at: frontend-${{ needs.determine-sha.outputs.sha }}"
+            exit 1
+          fi
+          
+          echo "✓ Frontend artifacts found"
+          echo "Frontend files: $(find frontend-${{ needs.determine-sha.outputs.sha }} -type f | wc -l)"
+          
+          # Deploy frontend files
+          rsync -az --delete -e "ssh -o StrictHostKeyChecking=no -o LogLevel=ERROR" frontend-${{ needs.determine-sha.outputs.sha }}/ ${{ secrets.SSH_HOST }}:${{ vars.FRONTEND_DIR }}/
+          
+          echo "✓ Frontend deployment complete!"
+
+      - name: Deploy docs dist
+        if: ${{ inputs.environment == 'production' && vars.DOCS_DIR != '' }}
+        run: |
+          echo "[${{ inputs.environment }}] Deploying docs..."
+          
+          # Check for docs artifacts
+          if [ ! -d "docs-${{ needs.determine-sha.outputs.sha }}" ]; then
+            echo "✗ Docs artifacts not found at: docs-${{ needs.determine-sha.outputs.sha }}"
+            exit 1
+          fi
+          
+          echo "✓ Docs artifacts found"
+          echo "Docs files: $(find docs-${{ needs.determine-sha.outputs.sha }} -type f | wc -l)"
+          
+          # Deploy docs files
+          rsync -az --delete -e "ssh -o StrictHostKeyChecking=no -o LogLevel=ERROR" docs-${{ needs.determine-sha.outputs.sha }}/ ${{ secrets.SSH_HOST }}:${{ vars.DOCS_DIR }}/
+          
+          echo "✓ Docs deployment complete!"
+
+      - name: Deploy PM2 services
+        run: |
+          echo "[${{ inputs.environment }}] Managing PM2 services..."
+          ssh -o StrictHostKeyChecking=no -o LogLevel=ERROR ${{ secrets.SSH_HOST }} << ENDSSH
+            # Load nvm and use the correct Node version
+            export NVM_DIR="\$HOME/.nvm"
+            [ -s "\$NVM_DIR/nvm.sh" ] && \. "\$NVM_DIR/nvm.sh"
+                        
+            # Use the Node version specified in .nvmrc
+            cd ${{ vars.DEPLOY_DIR }}
+            nvm install
+            nvm use
+            
+            # Set environment variables for PM2
+            export NODE_ENV="${{ vars.NODE_ENV }}"
+            export PORT="${{ vars.PORT }}"
+            export DB_HOST="${{ secrets.DB_HOST }}"
+            export DB_PORT="${{ secrets.DB_PORT }}"
+            export DB_USER="${{ secrets.DB_USER }}"
+            export DB_PASS="${{ secrets.DB_PASS }}"
+            export DATABASE_NAME="${{ secrets.DATABASE_NAME }}"
+            export DATABASE_MIGRATION="${{ vars.DATABASE_MIGRATION }}"
+            export ROLLBACK_BATCHES="${{ vars.ROLLBACK_BATCHES }}"
+            export GOOGLE_CLIENT_ID="${{ vars.GOOGLE_CLIENT_ID }}"
+            export GOOGLE_CLIENT_SECRET="${{ secrets.GOOGLE_CLIENT_SECRET }}"
+            export DISCORD_CLIENT_ID="${{ vars.DISCORD_CLIENT_ID }}"
+            export DISCORD_CLIENT_SECRET="${{ secrets.DISCORD_CLIENT_SECRET }}"
+            export PATREON_CLIENT_ID="${{ vars.PATREON_CLIENT_ID }}"
+            export PATREON_CLIENT_SECRET="${{ secrets.PATREON_CLIENT_SECRET }}"
+            export PATREON_CREATOR_ACCESS_TOKEN="${{ secrets.PATREON_CREATOR_ACCESS_TOKEN }}"
+            export PATREON_CREATOR_REFRESH_TOKEN="${{ secrets.PATREON_CREATOR_REFRESH_TOKEN }}"
+            
+            # Check if process exists
+            if pm2 describe "${{ vars.APP_NAME }}" > /dev/null 2>&1; then
+              echo "✅ Process exists. Restarting..."
+              pm2 restart "${{ vars.APP_NAME }}" --update-env
+            else
+              echo "ℹ️ Process does not exist. Starting..."
+              pm2 start "${{ vars.DEPLOY_DIR }}/backend/dist/app.js" \
+                --name "${{ vars.APP_NAME }}" \
+                --time
+            fi
+            
+            # Verify process is online
+            if pm2 list | grep -q "${{ vars.APP_NAME }}.*online"; then
+              echo "✓ ${{ vars.APP_NAME }} deployed successfully"
+              pm2 save
+            else
+              echo "✗ ${{ vars.APP_NAME }} failed to deploy"
+              pm2 logs ${{ vars.APP_NAME }} --lines 20
+              exit 1
+            fi
+            
+            echo "[${{ inputs.environment }}] Deployment complete!"
+          ENDSSH

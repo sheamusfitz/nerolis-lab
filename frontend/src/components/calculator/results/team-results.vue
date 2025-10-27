@@ -114,7 +114,12 @@
 
           <v-row v-for="(member, index) in memberPercentages" :key="index" no-gutters>
             <v-col cols="auto">
-              <v-img :src="`${member.image}`" contain :width="isMobile ? '40' : '72'" />
+              <div class="pokemon-image-card-box">
+                <v-card height="20px" elevation="0" class="bg-transparent text-center text-truncate pokemon-image-card">
+                  {{ member.pokeName }}
+                </v-card>
+                <v-img height="60px" width="60px" class="pokemon-image-img" :src="member.image" cover></v-img>
+              </div>
             </v-col>
             <v-col class="flex-center">
               <StackedBar
@@ -161,11 +166,10 @@ import StackedBar from '@/components/custom-components/stacked-bar.vue'
 import { useBreakpoint } from '@/composables/use-breakpoint/use-breakpoint'
 import { StrengthService } from '@/services/strength/strength-service'
 import { pokemonImage } from '@/services/utils/image-utils'
-import { getIsland } from '@/services/utils/island/island-utils'
 import { usePokemonStore } from '@/stores/pokemon/pokemon-store'
 import { useTeamStore } from '@/stores/team/team-store'
 import { useUserStore } from '@/stores/user-store'
-import { MathUtils, compactNumber, getBerry, type RecipeTypeResult } from 'sleepapi-common'
+import { MathUtils, compactNumber, getBerry, getIsland, type RecipeTypeResult } from 'sleepapi-common'
 export default defineComponent({
   name: 'TeamResults',
   components: { StackedBar },
@@ -190,21 +194,21 @@ export default defineComponent({
     cookingStrength() {
       return (
         (this.currentRecipeTypeResult?.weeklyStrength ?? 0) *
-        this.userStore.islandBonus(getIsland(this.teamStore.getCurrentTeam.favoredBerries).shortName)
+        this.userStore.islandBonus(this.teamStore.getCurrentTeam.island.shortName)
       )
     },
     berryStrength() {
       const members = this.teamStore.getCurrentTeam.production?.members || []
-      const favoredBerries = this.teamStore.getCurrentTeam.favoredBerries
+      const island = this.teamStore.getCurrentTeam.island
 
       return members.reduce((sum, member) => {
         const { berries } = member.produceWithoutSkill
 
         const berryStrength = StrengthService.berryStrength({
-          favoredBerries: favoredBerries,
           berries,
+          island,
           timeWindow: 'WEEK',
-          areaBonus: this.userStore.islandBonus(getIsland(favoredBerries).shortName)
+          areaBonus: this.userStore.islandBonus(island.shortName)
         })
 
         return sum + berryStrength
@@ -215,6 +219,7 @@ export default defineComponent({
 
       return members.reduce((sum, memberProduction) => {
         const member = this.pokemonStore.getPokemon(memberProduction.externalId)
+        const island = this.teamStore.getCurrentTeam.island
 
         const skillActivation = member?.pokemon.skill.getFirstActivation()
         const memberSkillStrength = skillActivation
@@ -222,9 +227,9 @@ export default defineComponent({
               skillActivation,
               skillValues: memberProduction.skillValue,
               berries: memberProduction.produceFromSkill.berries,
-              favoredBerries: this.teamStore.getCurrentTeam.favoredBerries,
+              island,
               timeWindow: 'WEEK',
-              areaBonus: this.userStore.islandBonus(getIsland(this.teamStore.getCurrentTeam.favoredBerries).shortName)
+              areaBonus: this.userStore.islandBonus(island.shortName)
             })
           : 0
 
@@ -232,17 +237,17 @@ export default defineComponent({
       }, 0)
     },
     stockpiledBerryStrength() {
-      const favoredBerries = this.teamStore.getCurrentTeam.favoredBerries
+      const island = this.teamStore.getCurrentTeam.island
 
       return this.teamStore.getCurrentTeam.stockpiledBerries.reduce((sum, stockpiledBerry) => {
         const { amount, level, name } = stockpiledBerry
         const berry = getBerry(name)
 
         const berryStrength = StrengthService.berryStrength({
-          favoredBerries: favoredBerries,
           berries: [{ berry, amount, level }],
+          island,
           timeWindow: '24H', // week multiplies it by 7, but this is already for a week
-          areaBonus: this.userStore.islandBonus(getIsland(favoredBerries).shortName)
+          areaBonus: this.userStore.islandBonus(island.shortName)
         })
 
         return sum + berryStrength
@@ -307,12 +312,12 @@ export default defineComponent({
       for (const memberProduction of this.teamStore.getCurrentTeam.production?.members ?? []) {
         const member = this.pokemonStore.getPokemon(memberProduction.externalId)
         if (!member) continue
-
+        const island = this.teamStore.getCurrentTeam.island
         const berryStrength = StrengthService.berryStrength({
           berries: memberProduction.produceWithoutSkill.berries,
-          favoredBerries: this.teamStore.getCurrentTeam.favoredBerries,
+          island,
           timeWindow: 'WEEK',
-          areaBonus: this.userStore.islandBonus(getIsland(this.teamStore.getCurrentTeam.favoredBerries).shortName)
+          areaBonus: this.userStore.islandBonus(island.shortName)
         })
 
         const skillActivation = member.pokemon.skill.getFirstActivation()
@@ -321,9 +326,9 @@ export default defineComponent({
               skillActivation,
               skillValues: memberProduction.skillValue,
               berries: memberProduction.produceFromSkill.berries,
-              favoredBerries: this.teamStore.getCurrentTeam.favoredBerries,
+              island,
               timeWindow: 'WEEK',
-              areaBonus: this.userStore.islandBonus(getIsland(this.teamStore.getCurrentTeam.favoredBerries).shortName)
+              areaBonus: this.userStore.islandBonus(island.shortName)
             })
           : 0
 
@@ -332,7 +337,8 @@ export default defineComponent({
           skillStrength,
           berryValue: compactNumber(berryStrength),
           skillValue: compactNumber(skillStrength),
-          image: pokemonImage({ pokemonName: member.pokemon.name, shiny: member.shiny })
+          image: pokemonImage({ pokemonName: member.pokemon.name, shiny: member.shiny }),
+          name: member.name
         })
       }
 
@@ -347,7 +353,8 @@ export default defineComponent({
         skillPercentage: MathUtils.round((member.skillStrength / highestTotal) * 100, 1),
         berryValue: member.berryValue,
         skillValue: member.skillValue,
-        image: member.image
+        image: member.image,
+        pokeName: member.name
       }))
     },
     stockpiledIngredientAmount() {
@@ -362,4 +369,19 @@ export default defineComponent({
 })
 </script>
 
-<style lang="scss"></style>
+<style lang="scss">
+.pokemon-image-card-box {
+  overflow: hidden;
+  width: 100px;
+  height: 60px;
+}
+
+.pokemon-image-card {
+  transform: translateY(40px);
+  white-space: nowrap;
+}
+
+.pokemon-image-img {
+  transform: translate(20px, -25px);
+}
+</style>

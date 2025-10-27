@@ -1,3 +1,99 @@
+## [2.28.1](https://github.com/nerolis-lab/nerolis-lab/compare/v2.28.0...v2.28.1) (2025-10-03)
+
+# [2.28.0](https://github.com/nerolis-lab/nerolis-lab/compare/v2.27.0...v2.28.0) (2025-09-29)
+
+
+### Bug Fixes
+
+* replace patreon-api.ts with custom implementation ([fc87e68](https://github.com/nerolis-lab/nerolis-lab/commit/fc87e68bd31013d2448bdcb0bd97b84dee8388a8))
+
+
+### Features
+
+* add event builder ([597e664](https://github.com/nerolis-lab/nerolis-lab/commit/597e664c10dad348b00de180f536a37b5a39a310))
+* adds natu and xatu ([2468cbe](https://github.com/nerolis-lab/nerolis-lab/commit/2468cbe83a51ed7f46642c6b258e382c6c811c0a))
+* **pokemon:** Update skill percentage for Braviary and Mimikyu ([248f11a](https://github.com/nerolis-lab/nerolis-lab/commit/248f11af40dc2cfc649244a44cb99308808db363))
+
+# [2.27.0](https://github.com/nerolis-lab/nerolis-lab/compare/v2.26.0...v2.27.0) (2025-08-28)
+
+
+### Bug Fixes
+
+* improve home page styling and enhance test coverage ([028dd37](https://github.com/nerolis-lab/nerolis-lab/commit/028dd37ab61e82c9070cdb0571f8eaf15a9ec956))
+* **Plus skill:** description shows amount and ingredient ([1253b58](https://github.com/nerolis-lab/nerolis-lab/commit/1253b5817e78cb6b1a82422a052bdd50e947b460))
+
+
+### Features
+
+* add hoenn starters to production calculator ([a24da9d](https://github.com/nerolis-lab/nerolis-lab/commit/a24da9d49e158cd5e66095c434de2571b3f985c9))
+
+# [2.26.0](https://github.com/nerolis-lab/nerolis-lab/compare/v2.25.0...v2.26.0) (2025-08-13)
+
+
+### Bug Fixes
+
+* **toxtricity:** adds missing Sleep API Toxel images ([f2331fa](https://github.com/nerolis-lab/nerolis-lab/commit/f2331fa806f47e465209093dbe6279b0a525a595))
+* **toxtricity:** ingredient magnet plus now uses bonus ingredient to determine bonus amount ([04e305a](https://github.com/nerolis-lab/nerolis-lab/commit/04e305a48d910f85602f987f2c86267c18539f7a))
+
+
+### Features
+
+* show name under Pokémon image in calculator overview ([b2631af](https://github.com/nerolis-lab/nerolis-lab/commit/b2631afb37f6c52889661badc3af656475b0681f))
+
+# [2.25.0](https://github.com/nerolis-lab/nerolis-lab/compare/v2.24.0...v2.25.0) (2025-08-11)
+
+
+### Bug Fixes
+
+* **toxel:** tomatoes -> apples ([18e0252](https://github.com/nerolis-lab/nerolis-lab/commit/18e0252898ed8996d809608eabc47f21fb1fd076))
+
+
+### Features
+
+* **pokemon:** add toxel and its evolutions ([292c6a1](https://github.com/nerolis-lab/nerolis-lab/commit/292c6a19e7120f0b5fed585ef5d11b915c5902e3))
+* **toxel:** adds toxel line assets ([c07b97d](https://github.com/nerolis-lab/nerolis-lab/commit/c07b97d9f511321e6ee32740c091d0f06d893c35))
+
+# [2.24.0](https://github.com/nerolis-lab/nerolis-lab/compare/v2.23.3...v2.24.0) (2025-08-07)
+
+
+### Features
+
+* **2.11.0:** buff marowak/dugtrio/extra helpfus S ([68a6446](https://github.com/nerolis-lab/nerolis-lab/commit/68a64469c2b352846f50c33844bac977a2d29a80))
+
+## [2.23.3](https://github.com/nerolis-lab/nerolis-lab/compare/v2.23.2...v2.23.3) (2025-07-29)
+
+
+### Bug Fixes
+
+* bump vuetify to fix infinite autofocus loop ([d9fc5c4](https://github.com/nerolis-lab/nerolis-lab/commit/d9fc5c4bfc48355386bcd8aef4628d6967be455b))
+* **pokemon search:** exclude instance name from pokedex search ([fbda649](https://github.com/nerolis-lab/nerolis-lab/commit/fbda6490da310da0422e7f4288d9286f5778f248))
+
+## [2.23.2](https://github.com/nerolis-lab/nerolis-lab/compare/v2.23.1...v2.23.2) (2025-07-23)
+
+## [2.23.1](https://github.com/nerolis-lab/nerolis-lab/compare/v2.23.0...v2.23.1) (2025-07-22)
+
+# [2.23.0](https://github.com/nerolis-lab/nerolis-lab/compare/v2.22.2...v2.23.0) (2025-07-22)
+
+
+### Bug Fixes
+
+* **berry-burst:** remove range from skill detail ([63aaa21](https://github.com/nerolis-lab/nerolis-lab/commit/63aaa21c3c2656fa20be835a57ebd8716b08bb9d))
+* **hyper-cutter:** show ing range in details ([a3b0d19](https://github.com/nerolis-lab/nerolis-lab/commit/a3b0d19b06be8a338d0a7a37065d59b408da36a0))
+* **pokemon:** ing counts for Sneasel&Rufflet ([a29ef59](https://github.com/nerolis-lab/nerolis-lab/commit/a29ef5907e5211aa51690fa5563560db666af205))
+* **release:** extract IP from secret ([87a98dc](https://github.com/nerolis-lab/nerolis-lab/commit/87a98dc672714988356379807e8b10ceab605712))
+* **release:** setup ssh with webfactory ([a647445](https://github.com/nerolis-lab/nerolis-lab/commit/a647445de063632a6c293aface7f72eefb7aa233))
+* **release:** skip manual ssh key path ([ddee1da](https://github.com/nerolis-lab/nerolis-lab/commit/ddee1dafd835b5003f279a648a3bd19a523b87d2))
+* **release:** use correct artifact paths ([5d522f6](https://github.com/nerolis-lab/nerolis-lab/commit/5d522f66cc4e9d2b098e4baf334dda4b3b9fa40c))
+* **skills:** minor typos in descriptions ([39a5a84](https://github.com/nerolis-lab/nerolis-lab/commit/39a5a843eccebe1ba03b2df750dbb270d40e5f58))
+
+
+### Features
+
+* **pokedex:** add Plusle and Minun ([04bfc4d](https://github.com/nerolis-lab/nerolis-lab/commit/04bfc4d95c8848952ecf92e6dd32f720e12d1e0a))
+* **pokemon search:** search by ingredients ([ab2cc87](https://github.com/nerolis-lab/nerolis-lab/commit/ab2cc8729c87ab0372459e757e311ca60d38b29a))
+* **pokemon search:** uncheck final stage when searching and persist ([f9c019c](https://github.com/nerolis-lab/nerolis-lab/commit/f9c019c5d0fcb0cdede922f4ee0c505edaddae5e))
+* **skills:** add Plus and Minus ([fd42741](https://github.com/nerolis-lab/nerolis-lab/commit/fd427415645a354a8f9ddc0830861fcdb147abed))
+
 ## [2.22.2](https://github.com/nerolis-lab/nerolis-lab/compare/v2.22.1...v2.22.2) (2025-07-15)
 
 

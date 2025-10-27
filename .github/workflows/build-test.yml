@@ -26,6 +26,11 @@ on:
         type: string
         default: ''
         description: 'Additional setup commands to run'
+      skip-tests:
+        required: false
+        type: boolean
+        default: false
+        description: 'Skip running tests'
 
 jobs:
   check-for-artifact:
@@ -58,6 +63,10 @@ jobs:
         with:
           node-version: ${{ inputs.node-version }}
 
+      - name: Install bun
+        if: ${{ inputs.working-directory == 'backend' }}
+        uses: oven-sh/setup-bun@v2
+
       - name: Restore common build
         if: ${{ inputs.needs-common-build }}
         uses: actions/cache/restore@v4
@@ -86,16 +95,22 @@ jobs:
 
       - name: Build
         if: ${{ (inputs.working-directory != 'common' || steps.cache-build.outputs.cache-hit != 'true') }}
+        env:
+          VITE_GOOGLE_CLIENT_ID: ${{ vars.VITE_GOOGLE_CLIENT_ID }}
+          VITE_DISCORD_CLIENT_ID: ${{ vars.VITE_DISCORD_CLIENT_ID }}
+          VITE_PATREON_CLIENT_ID: ${{ vars.VITE_PATREON_CLIENT_ID }}
         run: |
           cd ${{ inputs.working-directory }}
           npm run build || (echo "Build failed! Clearing node_modules and forcing cache refresh..." && rm -rf node_modules package-lock.json && exit 1)
 
       - name: Test
+        if: ${{ !inputs.skip-tests }}
         run: |
           cd ${{ inputs.working-directory }}
           npm run test
 
       - name: Upload Coverage
+        if: ${{ !inputs.skip-tests }}
         uses: codecov/codecov-action@v4-beta
         with:
           flags: ${{ inputs.working-directory }}
@@ -108,5 +123,8 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: ${{ inputs.working-directory }}-${{ inputs.commit_sha || github.sha }}
-          path: ${{ inputs.working-directory }}/dist/
+          path: |
+            ${{ inputs.working-directory == 'docs' && 'docs/.vitepress/dist/' || format('{0}/dist/', inputs.working-directory) }}
+            ${{ (inputs.working-directory == 'backend' || inputs.working-directory == 'common') && format('{0}/package.json', inputs.working-directory) || '' }}
+            ${{ (inputs.working-directory == 'backend' || inputs.working-directory == 'common') && format('{0}/package-lock.json', inputs.working-directory) || '' }}
           retention-days: 7

@@ -66,12 +66,11 @@
 <script lang="ts">
 import { StrengthService } from '@/services/strength/strength-service'
 import { mainskillImage } from '@/services/utils/image-utils'
-import { getIsland } from '@/services/utils/island/island-utils'
 import { usePokemonStore } from '@/stores/pokemon/pokemon-store'
 import { useTeamStore } from '@/stores/team/team-store'
 import { useUserStore } from '@/stores/user-store'
 import type { MemberProductionExt } from '@/types/member/instanced'
-import { CookingPowerUpSMinus, IngredientMagnetSPlus, MathUtils, compactNumber } from 'sleepapi-common'
+import { CookingPowerUpSMinus, IngredientMagnetSPlus, MathUtils, compactNumber, getIsland } from 'sleepapi-common'
 import { defineComponent, type PropType } from 'vue'
 
 export default defineComponent({
@@ -90,7 +89,9 @@ export default defineComponent({
   },
   computed: {
     skillValuePerProc() {
-      return CookingPowerUpSMinus.activations.solo.amount(this.memberWithProduction.member.skillLevel)
+      return CookingPowerUpSMinus.activations.solo.amount({
+        skillLevel: this.memberWithProduction.member.skillLevel
+      })
     },
     totalPotValue() {
       return compactNumber(
@@ -98,7 +99,7 @@ export default defineComponent({
           skillActivation: CookingPowerUpSMinus.activations.solo,
           amount: this.memberWithProduction.production.skillValue['pot size'].amountToSelf,
           timeWindow: this.teamStore.timeWindow,
-          areaBonus: this.userStore.islandBonus(getIsland(this.teamStore.getCurrentTeam.favoredBerries).shortName)
+          areaBonus: this.userStore.islandBonus(this.teamStore.getCurrentTeam.island.shortName)
         })
       )
     },
@@ -116,7 +117,7 @@ export default defineComponent({
           skillActivation: CookingPowerUpSMinus.activations.paired,
           amount: energyAmount,
           timeWindow: this.teamStore.timeWindow,
-          areaBonus: this.userStore.islandBonus(getIsland(this.teamStore.getCurrentTeam.favoredBerries).shortName)
+          areaBonus: this.userStore.islandBonus(this.teamStore.getCurrentTeam.island.shortName)
         })
       )
     },

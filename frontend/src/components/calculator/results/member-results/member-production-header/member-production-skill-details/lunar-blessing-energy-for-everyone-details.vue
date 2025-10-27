@@ -70,11 +70,10 @@
 <script lang="ts">
 import { StrengthService } from '@/services/strength/strength-service'
 import { berryImage, mainskillImage } from '@/services/utils/image-utils'
-import { getIsland } from '@/services/utils/island/island-utils'
 import { useTeamStore } from '@/stores/team/team-store'
 import { useUserStore } from '@/stores/user-store'
 import type { MemberProductionExt } from '@/types/member/instanced'
-import { EnergyForEveryoneLunarBlessing, MathUtils, compactNumber } from 'sleepapi-common'
+import { EnergyForEveryoneLunarBlessing, MathUtils, compactNumber, getIsland } from 'sleepapi-common'
 import { defineComponent, type PropType } from 'vue'
 
 export default defineComponent({
@@ -102,7 +101,7 @@ export default defineComponent({
           skillActivation: EnergyForEveryoneLunarBlessing.activations.energy,
           amount: this.memberWithProduction.production.skillAmount,
           timeWindow: this.teamStore.timeWindow,
-          areaBonus: this.userStore.islandBonus(getIsland(this.teamStore.getCurrentTeam.favoredBerries).shortName)
+          areaBonus: this.userStore.islandBonus(this.teamStore.getCurrentTeam.island.shortName)
         })
       )
     },
@@ -118,7 +117,7 @@ export default defineComponent({
           skillActivation: EnergyForEveryoneLunarBlessing.activations.energy,
           amount,
           timeWindow: this.teamStore.timeWindow,
-          areaBonus: this.userStore.islandBonus(getIsland(this.teamStore.getCurrentTeam.favoredBerries).shortName)
+          areaBonus: this.userStore.islandBonus(this.teamStore.getCurrentTeam.island.shortName)
         })
       )
     },
@@ -137,7 +136,7 @@ export default defineComponent({
           skillActivation: EnergyForEveryoneLunarBlessing.activations.energy,
           amount,
           timeWindow: this.teamStore.timeWindow,
-          areaBonus: this.userStore.islandBonus(getIsland(this.teamStore.getCurrentTeam.favoredBerries).shortName)
+          areaBonus: this.userStore.islandBonus(this.teamStore.getCurrentTeam.island.shortName)
         })
       )
     },

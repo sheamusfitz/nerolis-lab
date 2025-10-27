@@ -17,7 +17,6 @@ import {
   triggerTeamHelpsEvent
 } from '@src/utils/event-utils/event-utils.js';
 import { MOCKED_MAIN_SLEEP, MOCKED_PRODUCE } from '@src/utils/test-utils/defaults.js';
-import { TimeUtils } from '@src/utils/time-utils/time-utils.js';
 import {
   ABOMASNOW,
   CarrySizeUtils,
@@ -26,7 +25,8 @@ import {
   MathUtils,
   berry,
   ingredient,
-  nature
+  nature,
+  parseTime
 } from 'sleepapi-common';
 import { describe, expect, it } from 'vitest';
 
@@ -44,11 +44,11 @@ describe('getExtraHelpfulEvents', () => {
         SkillEvent {
           "description": "Team Extra Helpful",
           "skillActivation": {
-            "adjustedAmount": 2.2,
+            "adjustedAmount": 2.4,
             "adjustedProduce": {
               "berries": [
                 {
-                  "amount": 4.4,
+                  "amount": 4.8,
                   "berry": {
                     "name": "GREPA",
                     "type": "electric",
@@ -59,7 +59,7 @@ describe('getExtraHelpfulEvents', () => {
               ],
               "ingredients": [
                 {
-                  "amount": 2.2,
+                  "amount": 2.4,
                   "ingredient": {
                     "longName": "Fancy Apple",
                     "name": "Apple",
@@ -89,13 +89,13 @@ describe('getExtraHelpfulEvents', () => {
               },
               "description": [Function],
               "helpAmounts": [
-                5,
                 6,
                 7,
                 8,
                 9,
                 10,
                 11,
+                12,
               ],
               "image": "helps",
               "name": "Extra Helpful S",
@@ -111,11 +111,11 @@ describe('getExtraHelpfulEvents', () => {
         SkillEvent {
           "description": "Team Extra Helpful",
           "skillActivation": {
-            "adjustedAmount": 1.1,
+            "adjustedAmount": 1.2,
             "adjustedProduce": {
               "berries": [
                 {
-                  "amount": 2.2,
+                  "amount": 2.4,
                   "berry": {
                     "name": "GREPA",
                     "type": "electric",
@@ -126,7 +126,7 @@ describe('getExtraHelpfulEvents', () => {
               ],
               "ingredients": [
                 {
-                  "amount": 1.1,
+                  "amount": 1.2,
                   "ingredient": {
                     "longName": "Fancy Apple",
                     "name": "Apple",
@@ -156,13 +156,13 @@ describe('getExtraHelpfulEvents', () => {
               },
               "description": [Function],
               "helpAmounts": [
-                5,
                 6,
                 7,
                 8,
                 9,
                 10,
                 11,
+                12,
               ],
               "image": "helps",
               "name": "Extra Helpful S",
@@ -433,7 +433,7 @@ describe('scheduleEnergyForEveryoneEvents', () => {
       const energyEvent = event as EnergyEvent;
       expect(energyEvent.description).toEqual('E4E');
       expect(energyEvent.delta).toEqual(
-        MathUtils.round(EnergyForEveryone.activations.energy.amount(6) * nature.RELAXED.energy, 2)
+        MathUtils.round(EnergyForEveryone.activations.energy.amount({ skillLevel: 6 }) * nature.RELAXED.energy, 2)
       );
     });
   });
@@ -480,8 +480,8 @@ describe('getDefaultRecoveryEvents', () => {
 
     expect(recoveryEvents.length).toBe(2);
     expect(recoveryEvents.map((e) => e.delta)).toEqual([
-      EnergyForEveryone.activations.energy.amount(6),
-      EnergyForEveryone.activations.energy.amount(6) / 2
+      EnergyForEveryone.activations.energy.amount({ skillLevel: 6 }),
+      EnergyForEveryone.activations.energy.amount({ skillLevel: 6 }) / 2
     ]);
   });
 
@@ -749,7 +749,7 @@ describe('triggerTeamHelpsEvent', () => {
     const helpfulEvents: SkillEvent[] = [
       new SkillEvent({
         description: '1',
-        time: TimeUtils.parseTime('06:00'),
+        time: parseTime('06:00'),
         skillActivation: {
           skill: ExtraHelpfulS,
           adjustedAmount: 1,
@@ -760,7 +760,7 @@ describe('triggerTeamHelpsEvent', () => {
       }),
       new SkillEvent({
         description: '1',
-        time: TimeUtils.parseTime('13:00'),
+        time: parseTime('13:00'),
         skillActivation: {
           skill: ExtraHelpfulS,
           adjustedAmount: 2,
@@ -787,7 +787,7 @@ describe('triggerTeamHelpsEvent', () => {
 
     const result = triggerTeamHelpsEvent({
       helpEvents: helpfulEvents,
-      currentTime: TimeUtils.parseTime('13:00'),
+      currentTime: parseTime('13:00'),
       emptyProduce: CarrySizeUtils.getEmptyInventory(),
       eventLog,
       helpIndex: 1,

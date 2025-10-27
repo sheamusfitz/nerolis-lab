@@ -1,15 +1,16 @@
 import { BELUE } from '../../../types/berry/berries';
 import { BALANCED_GENDER } from '../../../types/gender/gender';
 import { SLOWPOKE_TAIL } from '../../../types/ingredient/ingredients';
+import type { AmountParams } from '../../../types/mainskill/mainskill';
 import { Mainskill } from '../../../types/mainskill/mainskill';
 import type { Pokemon } from '../../../types/pokemon/pokemon';
 
 export const mockMainskill = new (class extends Mainskill {
   name = 'mock skill';
-  description = (skillLevel: number) => `mock skill with level ${skillLevel}`;
+  description = (params: AmountParams) => `mock skill with level ${params.skillLevel}`;
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   amount = (skillLevel: number) => 0;
-  RP = [0];
+  RP = [880, 1251, 1726, 2383, 3936, 5843];
   unit = 'mock unit';
   activations = {};
   image = 'mock';

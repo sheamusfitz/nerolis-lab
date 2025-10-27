@@ -77,12 +77,18 @@
 <script lang="ts">
 import { StrengthService } from '@/services/strength/strength-service'
 import { ingredientImage, mainskillImage } from '@/services/utils/image-utils'
-import { getIsland } from '@/services/utils/island/island-utils'
 import { usePokemonStore } from '@/stores/pokemon/pokemon-store'
 import { useTeamStore } from '@/stores/team/team-store'
 import { useUserStore } from '@/stores/user-store'
 import type { MemberProductionExt } from '@/types/member/instanced'
-import { CookingPowerUpSMinus, IngredientMagnetSPlus, MathUtils, compactNumber, ingredient } from 'sleepapi-common'
+import {
+  CookingPowerUpSMinus,
+  IngredientMagnetSPlus,
+  MathUtils,
+  compactNumber,
+  getIsland,
+  ingredient
+} from 'sleepapi-common'
 import { defineComponent, type PropType } from 'vue'
 
 export default defineComponent({
@@ -108,8 +114,13 @@ export default defineComponent({
       }
     },
     combinedIngCountPerProc() {
-      const magnetIngs = IngredientMagnetSPlus.activations.solo.amount(this.memberWithProduction.member.skillLevel)
-      const aSlotIngs = IngredientMagnetSPlus.activations.paired.amount(this.memberWithProduction.member.skillLevel)
+      const magnetIngs = IngredientMagnetSPlus.activations.solo.amount({
+        skillLevel: this.memberWithProduction.member.skillLevel
+      })
+      const aSlotIngs = IngredientMagnetSPlus.activations.paired.amount({
+        skillLevel: this.memberWithProduction.member.skillLevel,
+        ingredient: this.memberWithProduction.member.pokemon.ingredient0.at(0)?.ingredient
+      })
       const teamMembers = this.teamStore.getCurrentTeam.members
         .filter(Boolean)
         .map((member) => this.pokemonStore.getPokemon(member!)!.pokemon)
@@ -133,7 +144,7 @@ export default defineComponent({
           skillActivation,
           amount,
           timeWindow: this.teamStore.timeWindow,
-          areaBonus: this.userStore.islandBonus(getIsland(this.teamStore.getCurrentTeam.favoredBerries).shortName)
+          areaBonus: this.userStore.islandBonus(this.teamStore.getCurrentTeam.island.shortName)
         })
       )
     },
@@ -152,7 +163,7 @@ export default defineComponent({
           skillActivation,
           amount,
           timeWindow: this.teamStore.timeWindow,
-          areaBonus: this.userStore.islandBonus(getIsland(this.teamStore.getCurrentTeam.favoredBerries).shortName)
+          areaBonus: this.userStore.islandBonus(this.teamStore.getCurrentTeam.island.shortName)
         })
       )
     },
@@ -163,7 +174,7 @@ export default defineComponent({
             skillActivation: IngredientMagnetSPlus.activations.solo,
             amount: this.averageMagnetAmount,
             timeWindow: this.teamStore.timeWindow,
-            areaBonus: this.userStore.islandBonus(getIsland(this.teamStore.getCurrentTeam.favoredBerries).shortName)
+            areaBonus: this.userStore.islandBonus(this.teamStore.getCurrentTeam.island.shortName)
           }),
           2
         )

@@ -13,7 +13,7 @@ class StrengthServiceImpl {
     skillActivation: MainskillActivation
     skillValues: MemberSkillValue
     berries: BerrySet[]
-    favoredBerries: Berry[]
+    island?: Island
     timeWindow: TimeWindowWeek
     areaBonus: number
   }) {
@@ -33,17 +33,17 @@ class StrengthServiceImpl {
 
   public berryStrength(params: {
     berries: BerrySet[]
-    favoredBerries: Berry[]
+    island?: Island
     timeWindow: TimeWindowWeek
     areaBonus: number
   }) {
-    const { berries, favoredBerries, timeWindow, areaBonus } = params
+    const { berries, island, timeWindow, areaBonus } = params
 
     const timeWindowFactor = this.timeWindowFactor(timeWindow)
 
     let strength = 0
     for (const producedBerry of berries) {
-      const favoredBerryMultiplier = favoredBerries.some((berry) => berry.name === producedBerry.berry.name) ? 2 : 1
+      const favoredBerryMultiplier = island?.berries.some((berry) => berry.name === producedBerry.berry.name) ? 2 : 1
 
       strength +=
         producedBerry.amount *
