@@ -114,6 +114,6 @@ async function main() {
 
 export const app = await main();
 
-app.listen(config.PORT, async () => {
+app.listen(config.PORT, "0.0.0.0", async () => {
   logger.info(`Server is running at ${config.PORT}`);
 });

@@ -244,13 +244,13 @@
               <tr>
                 <td v-for="(member, index) in bestTeam" :key="index" class="text-center">
                   <v-progress-linear
-                    :model-value="((topTeamsCountMap[member.externalId] || 0) / 25) * 100"
+                    :model-value="((topTeamsCountMap[member.externalId] || 0) / 10) * 100"
                     height="10"
                     color="primary"
                     rounded
                     style="margin-top: 4px; font-size: 10px"
                   >
-                    {{ topTeamsCountMap[member.externalId] || 0 }}/25
+                    {{ topTeamsCountMap[member.externalId] || 0 }}/10 
                   </v-progress-linear>
                 </td>
               </tr>
