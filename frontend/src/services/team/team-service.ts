@@ -193,8 +193,8 @@ class TeamServiceImpl {
       camp: currentTeam.camp,
       bedtime: currentTeam.bedtime,
       wakeup: currentTeam.wakeup,
-      stockpiledIngredients: currentTeam.stockpiledIngredients
-      // island: currentTeam.island // TODO: bring back when backend responds with island
+      stockpiledIngredients: currentTeam.stockpiledIngredients,
+      island: currentTeam.island
     }
 
     const berrySetup: PokemonInstanceIdentity = PokemonInstanceUtils.toPokemonInstanceIdentity({

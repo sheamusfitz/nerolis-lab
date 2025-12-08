@@ -1,3 +1,86 @@
+# [2.34.0](https://github.com/nerolis-lab/nerolis-lab/compare/v2.33.0...v2.34.0) (2025-12-01)
+
+
+### Bug Fixes
+
+* **Mime Jr.:** carry size 7 -> 10 ([c22118a](https://github.com/nerolis-lab/nerolis-lab/commit/c22118a9938bc2eaa9faf4e05cb957cb8074b6cb))
+
+
+### Features
+
+* add Spiritomb ([4b5552a](https://github.com/nerolis-lab/nerolis-lab/commit/4b5552a6d93cbd0ac44ad2a2030465bc5bb1ed9d))
+
+# [2.33.0](https://github.com/nerolis-lab/nerolis-lab/compare/v2.32.1...v2.33.0) (2025-11-26)
+
+
+### Features
+
+* adds EventBuilder and API event support ([d42493c](https://github.com/nerolis-lab/nerolis-lab/commit/d42493c7a7b98bd208bd2a8a7b734a46fcb9442b))
+* change Delibird's skill to present ([4bb530b](https://github.com/nerolis-lab/nerolis-lab/commit/4bb530bb99750a24a8e31a1bbd9fbd880f8cf0fd))
+
+## [2.32.1](https://github.com/nerolis-lab/nerolis-lab/compare/v2.32.0...v2.32.1) (2025-11-14)
+
+
+### Bug Fixes
+
+* **common:** correct Trapinch line skill ([8c4d2fa](https://github.com/nerolis-lab/nerolis-lab/commit/8c4d2fa73409b7f11cb2d4d82d7c1c66e9fd89b8))
+* **Shelgon:** use settled stats ([63b0a17](https://github.com/nerolis-lab/nerolis-lab/commit/63b0a17e2e92fc9e5d4be03c695e5896be8a0f25))
+
+# [2.32.0](https://github.com/nerolis-lab/nerolis-lab/compare/v2.31.0...v2.32.0) (2025-11-07)
+
+
+### Features
+
+* adds Amber Canyon ([87d6705](https://github.com/nerolis-lab/nerolis-lab/commit/87d6705f32229c69aa579430921ceb60c9a83753))
+
+# [2.31.0](https://github.com/nerolis-lab/nerolis-lab/compare/v2.30.0...v2.31.0) (2025-11-06)
+
+
+### Features
+
+* tierlist including pumpkin and avocado ([819812c](https://github.com/nerolis-lab/nerolis-lab/commit/819812c7c88f78cd2e13bd334bd881223571cbe1))
+
+# [2.30.0](https://github.com/nerolis-lab/nerolis-lab/compare/v2.29.0...v2.30.0) (2025-11-06)
+
+
+### Bug Fixes
+
+* **Minun:** egg count at 60: 4->3 ([1763541](https://github.com/nerolis-lab/nerolis-lab/commit/176354186b37b7c038da28d400850d83c48b299e))
+* recipe page slider uses max recipe size as max ([d22fcf6](https://github.com/nerolis-lab/nerolis-lab/commit/d22fcf67e0e76048ae39f31b6d497463c4ac392b))
+* spill ingredients during day if help is huge ([e605caf](https://github.com/nerolis-lab/nerolis-lab/commit/e605caf5878649cd0156cd5663dc663c65cdf4e0))
+* **typos:** dont->don't, missleading->misleading ([c3661ef](https://github.com/nerolis-lab/nerolis-lab/commit/c3661efb945517f7df1bf92784a3a2cdc69515e9))
+
+
+### Features
+
+* add avocado and recipes ([9db60a7](https://github.com/nerolis-lab/nerolis-lab/commit/9db60a7c95bb593c63d7515627f79daf72c943f0))
+* add bagon/trapinch/dwebble lines assets ([8fb8532](https://github.com/nerolis-lab/nerolis-lab/commit/8fb8532c70cc209212bc35bb43731b13ca58a051))
+* **amber:** add new mons ([18bb479](https://github.com/nerolis-lab/nerolis-lab/commit/18bb47945b9da0a510c56d3e0c78bb50b953b159))
+* bump max area bonus to 85 ([e9f2a0b](https://github.com/nerolis-lab/nerolis-lab/commit/e9f2a0be141dfbc161dedbd6ec95f2d69106de07))
+* **l10n:** extract Pokemon display names ([cd87063](https://github.com/nerolis-lab/nerolis-lab/commit/cd87063edf993ded8ec6cb580245d20f42d6374f))
+* **pokedex:** add references to evolution line ([cba32cd](https://github.com/nerolis-lab/nerolis-lab/commit/cba32cd360f435c1ae7f27931dc94e532c2fd5d4))
+
+# [2.29.0](https://github.com/nerolis-lab/nerolis-lab/compare/v2.28.1...v2.29.0) (2025-11-03)
+
+
+### Bug Fixes
+
+* create empty teams before adding members ([bf4ba4b](https://github.com/nerolis-lab/nerolis-lab/commit/bf4ba4b779c9e399646e89abd504edc0fb5fbb17))
+* **images:** rename pumpkaboo/gourgeist images ([e9affaa](https://github.com/nerolis-lab/nerolis-lab/commit/e9affaa456dbb56085885d0779c904e9b5c469c2))
+* migration 0_12 now supports NULL favored_berries ([1c55792](https://github.com/nerolis-lab/nerolis-lab/commit/1c557923a3d3d31d184d13c3860d65d9bc5bdd4f))
+
+
+### Features
+
+* add Halloween Eevee ([375fab1](https://github.com/nerolis-lab/nerolis-lab/commit/375fab1897d807a7c8e4ba33c92b4e5b8662b1af))
+* add Pumpkaboo and Gourgeist ([6f36627](https://github.com/nerolis-lab/nerolis-lab/commit/6f366273d0ecf231f0adaa0a3861025c24000b81))
+* add pumpkin ([0ce4daf](https://github.com/nerolis-lab/nerolis-lab/commit/0ce4daf37a75c1fcdec2f036d9367bbebf41e3c0))
+* add pumpkin and pumpkaboo assets ([335c51a](https://github.com/nerolis-lab/nerolis-lab/commit/335c51a1b7ae3f42cb72bd386b98ed927a492f87))
+* cheer/stockpile buff, bad dreams Lv7 ([d142832](https://github.com/nerolis-lab/nerolis-lab/commit/d1428322abe392fb7ac7cb915673f85fc0bfefc1))
+* move stamps up slightly to avoid overlap with text ([2c14913](https://github.com/nerolis-lab/nerolis-lab/commit/2c149138732abb37061e78150d8b6ff05eab940c))
+* stamp images with sizes for pumpkaboo line ([57627cd](https://github.com/nerolis-lab/nerolis-lab/commit/57627cd8b4ce9144c2a328788c397215c8e7369e))
+* stamp pumpkaboo portraits ([3394c70](https://github.com/nerolis-lab/nerolis-lab/commit/3394c703e2ed40876bd8903f07649529743debfc))
+
 ## [2.28.1](https://github.com/nerolis-lab/nerolis-lab/compare/v2.28.0...v2.28.1) (2025-10-03)
 
 # [2.28.0](https://github.com/nerolis-lab/nerolis-lab/compare/v2.27.0...v2.28.0) (2025-09-29)

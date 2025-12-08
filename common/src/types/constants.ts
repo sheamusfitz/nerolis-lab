@@ -14,7 +14,7 @@ export const MAX_STOCKPILED_BERRIES = 999;
 
 // cooking
 export const MIN_POT_SIZE = 15;
-export const MAX_POT_SIZE = 69;
+export const MAX_POT_SIZE = 81;
 export const MEALS_IN_DAY = 3;
 export const WEEKDAY_CRIT_CHANCE = 0.1;
 export const WEEKDAY_CRIT_MULTIPLIER = 2;
@@ -23,7 +23,7 @@ export const SUNDAY_CRIT_MULTIPLIER = 3;
 export const AVERAGE_WEEKLY_CRIT_MULTIPLIER = 1.171428571;
 
 // island
-export const MAX_ISLAND_BONUS = 75;
+export const MAX_ISLAND_BONUS = 85;
 
 // misc
 export const MAX_TEAM_SIZE = 5;

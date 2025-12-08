@@ -29,3 +29,28 @@ describe('previousEvolutions', () => {
     });
   });
 });
+
+describe('COMPLETE_POKEDEX', () => {
+  COMPLETE_POKEDEX.forEach((pokemon: Pokemon) => {
+    it(`shall not change ${pokemon.name} unexpectedly`, () => {
+      expect(pokemon).toMatchSnapshot();
+    });
+
+    it(`shall include matching evolution references for ${pokemon.name}`, () => {
+      if (pokemon.evolvesFrom !== undefined) {
+        const previousForm = COMPLETE_POKEDEX.find((mon: Pokemon) => mon.name === pokemon.evolvesFrom);
+        expect(previousForm.evolvesInto).toContain(pokemon.name);
+      }
+      pokemon.evolvesInto.forEach((evolvedFormName: string) => {
+        const evolvedForm = COMPLETE_POKEDEX.find((mon: Pokemon) => mon.name === evolvedFormName);
+        expect(evolvedForm.evolvesFrom).toBe(pokemon.name);
+      });
+    });
+  });
+
+  COMPLETE_POKEDEX.forEach((pokemon: Pokemon) => {
+    it(`shall define a display name for ${pokemon.name}`, () => {
+      expect(pokemon.displayName).toBeDefined();
+    });
+  });
+});

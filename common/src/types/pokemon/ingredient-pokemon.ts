@@ -1,4 +1,8 @@
-import { evolvesFrom, evolvesInto } from '../../utils/pokemon-utils/evolution-utils';
+import {
+  createIngredientSpecialist,
+  evolvedPokemon,
+  preEvolvedPokemon
+} from '../../utils/pokemon-utils/pokemon-constructors';
 import { toSeconds } from '../../utils/time-utils/frequency-utils';
 import {
   BELUE,
@@ -26,6 +30,7 @@ import {
   FANCY_APPLE,
   FANCY_EGG,
   FIERY_HERB,
+  GLOSSY_AVOCADO,
   GREENGRASS_CORN,
   GREENGRASS_SOYBEANS,
   HONEY,
@@ -49,8 +54,10 @@ import {
   CookingPowerUpS,
   EnergizingCheerS,
   EnergyForEveryone,
+  ExtraHelpfulS,
   IngredientDrawSHyperCutter,
   IngredientMagnetS,
+  PresentIngredientMagnetS,
   SkillCopyMimic,
   SkillCopyTransform,
   TastyChanceS
@@ -58,11 +65,9 @@ import {
 
 import type { Pokemon } from './pokemon';
 
-export const BULBASAUR: Pokemon = {
+export const BULBASAUR: Pokemon = createIngredientSpecialist({
   name: 'BULBASAUR',
-  displayName: 'Bulbasaur',
   pokedexNumber: 1,
-  specialty: 'ingredient',
   frequency: toSeconds(1, 13, 20),
   ingredientPercentage: 25.7,
   skillPercentage: 1.9,
@@ -71,46 +76,35 @@ export const BULBASAUR: Pokemon = {
   carrySize: 11,
   previousEvolutions: 0,
   remainingEvolutions: 2,
-  ingredient0: [{ amount: 2, ingredient: HONEY }],
-  ingredient30: [
-    { amount: 5, ingredient: HONEY },
-    { amount: 4, ingredient: SNOOZY_TOMATO }
-  ],
-  ingredient60: [
-    { amount: 7, ingredient: HONEY },
-    { amount: 7, ingredient: SNOOZY_TOMATO },
-    { amount: 6, ingredient: SOFT_POTATO }
-  ],
+  ingredients: {
+    a: HONEY,
+    b: SNOOZY_TOMATO,
+    c: SOFT_POTATO
+  },
   skill: IngredientMagnetS
-};
+});
 
-export const IVYSAUR: Pokemon = {
-  ...evolvesFrom(BULBASAUR),
+export const IVYSAUR: Pokemon = evolvedPokemon(BULBASAUR, {
   name: 'IVYSAUR',
-  displayName: 'Ivysaur',
   pokedexNumber: 2,
   frequency: toSeconds(0, 55, 0),
   ingredientPercentage: 25.5,
   skillPercentage: 1.9,
   carrySize: 14
-};
+});
 
-export const VENUSAUR: Pokemon = {
-  ...evolvesFrom(IVYSAUR),
+export const VENUSAUR: Pokemon = evolvedPokemon(IVYSAUR, {
   name: 'VENUSAUR',
-  displayName: 'Venusaur',
   pokedexNumber: 3,
   frequency: toSeconds(0, 46, 40),
   ingredientPercentage: 26.6,
   skillPercentage: 2.1,
   carrySize: 17
-};
+});
 
-export const CHARMANDER: Pokemon = {
+export const CHARMANDER: Pokemon = createIngredientSpecialist({
   name: 'CHARMANDER',
-  displayName: 'Charmander',
   pokedexNumber: 4,
-  specialty: 'ingredient',
   frequency: toSeconds(0, 58, 20),
   ingredientPercentage: 20.1,
   skillPercentage: 1.1,
@@ -119,46 +113,35 @@ export const CHARMANDER: Pokemon = {
   carrySize: 12,
   previousEvolutions: 0,
   remainingEvolutions: 2,
-  ingredient0: [{ amount: 2, ingredient: BEAN_SAUSAGE }],
-  ingredient30: [
-    { amount: 5, ingredient: BEAN_SAUSAGE },
-    { amount: 4, ingredient: WARMING_GINGER }
-  ],
-  ingredient60: [
-    { amount: 7, ingredient: BEAN_SAUSAGE },
-    { amount: 7, ingredient: WARMING_GINGER },
-    { amount: 6, ingredient: FIERY_HERB }
-  ],
+  ingredients: {
+    a: BEAN_SAUSAGE,
+    b: WARMING_GINGER,
+    c: FIERY_HERB
+  },
   skill: IngredientMagnetS
-};
+});
 
-export const CHARMELEON: Pokemon = {
-  ...evolvesFrom(CHARMANDER),
+export const CHARMELEON: Pokemon = evolvedPokemon(CHARMANDER, {
   name: 'CHARMELEON',
-  displayName: 'Charmeleon',
   pokedexNumber: 5,
   frequency: toSeconds(0, 50, 0),
   ingredientPercentage: 22.7,
   skillPercentage: 1.6,
   carrySize: 15
-};
+});
 
-export const CHARIZARD: Pokemon = {
-  ...evolvesFrom(CHARMELEON),
+export const CHARIZARD: Pokemon = evolvedPokemon(CHARMELEON, {
   name: 'CHARIZARD',
-  displayName: 'Charizard',
   pokedexNumber: 6,
   frequency: toSeconds(0, 40, 0),
   ingredientPercentage: 22.4,
   skillPercentage: 1.6,
   carrySize: 19
-};
+});
 
-export const SQUIRTLE: Pokemon = {
+export const SQUIRTLE: Pokemon = createIngredientSpecialist({
   name: 'SQUIRTLE',
-  displayName: 'Squirtle',
   pokedexNumber: 7,
-  specialty: 'ingredient',
   frequency: toSeconds(1, 15, 0),
   ingredientPercentage: 27.1,
   skillPercentage: 2.0,
@@ -167,46 +150,35 @@ export const SQUIRTLE: Pokemon = {
   carrySize: 10,
   previousEvolutions: 0,
   remainingEvolutions: 2,
-  ingredient0: [{ amount: 2, ingredient: MOOMOO_MILK }],
-  ingredient30: [
-    { amount: 5, ingredient: MOOMOO_MILK },
-    { amount: 3, ingredient: SOOTHING_CACAO }
-  ],
-  ingredient60: [
-    { amount: 7, ingredient: MOOMOO_MILK },
-    { amount: 5, ingredient: SOOTHING_CACAO },
-    { amount: 7, ingredient: BEAN_SAUSAGE }
-  ],
+  ingredients: {
+    a: MOOMOO_MILK,
+    b: SOOTHING_CACAO,
+    c: BEAN_SAUSAGE
+  },
   skill: IngredientMagnetS
-};
+});
 
-export const WARTORTLE: Pokemon = {
-  ...evolvesFrom(SQUIRTLE),
+export const WARTORTLE: Pokemon = evolvedPokemon(SQUIRTLE, {
   name: 'WARTORTLE',
-  displayName: 'Wartortle',
   pokedexNumber: 8,
   frequency: toSeconds(0, 56, 40),
   ingredientPercentage: 27.1,
   skillPercentage: 2.0,
   carrySize: 14
-};
+});
 
-export const BLASTOISE: Pokemon = {
-  ...evolvesFrom(WARTORTLE),
+export const BLASTOISE: Pokemon = evolvedPokemon(WARTORTLE, {
   name: 'BLASTOISE',
-  displayName: 'Blastoise',
   pokedexNumber: 9,
   frequency: toSeconds(0, 46, 40),
   ingredientPercentage: 27.5,
   skillPercentage: 2.1,
   carrySize: 17
-};
+});
 
-export const DIGLETT: Pokemon = {
+export const DIGLETT: Pokemon = createIngredientSpecialist({
   name: 'DIGLETT',
-  displayName: 'Diglett',
   pokedexNumber: 50,
-  specialty: 'ingredient',
   frequency: toSeconds(1, 11, 40),
   ingredientPercentage: 19.2,
   skillPercentage: 2.1,
@@ -215,35 +187,26 @@ export const DIGLETT: Pokemon = {
   carrySize: 10,
   previousEvolutions: 0,
   remainingEvolutions: 1,
-  ingredient0: [{ amount: 2, ingredient: SNOOZY_TOMATO }],
-  ingredient30: [
-    { amount: 5, ingredient: SNOOZY_TOMATO },
-    { amount: 3, ingredient: LARGE_LEEK }
-  ],
-  ingredient60: [
-    { amount: 7, ingredient: SNOOZY_TOMATO },
-    { amount: 4, ingredient: LARGE_LEEK },
-    { amount: 8, ingredient: GREENGRASS_SOYBEANS }
-  ],
+  ingredients: {
+    a: SNOOZY_TOMATO,
+    b: LARGE_LEEK,
+    c: GREENGRASS_SOYBEANS
+  },
   skill: ChargeStrengthS
-};
+});
 
-export const DUGTRIO: Pokemon = {
-  ...evolvesFrom(DIGLETT),
+export const DUGTRIO: Pokemon = evolvedPokemon(DIGLETT, {
   name: 'DUGTRIO',
-  displayName: 'Dugtrio',
   pokedexNumber: 51,
   frequency: toSeconds(0, 44, 10),
   ingredientPercentage: 19.0,
   skillPercentage: 2.0,
   carrySize: 16
-};
+});
 
-export const BELLSPROUT: Pokemon = {
+export const BELLSPROUT: Pokemon = createIngredientSpecialist({
   name: 'BELLSPROUT',
-  displayName: 'Bellsprout',
   pokedexNumber: 69,
-  specialty: 'ingredient',
   frequency: toSeconds(1, 26, 40),
   ingredientPercentage: 23.3,
   skillPercentage: 3.9,
@@ -252,46 +215,35 @@ export const BELLSPROUT: Pokemon = {
   carrySize: 8,
   previousEvolutions: 0,
   remainingEvolutions: 2,
-  ingredient0: [{ amount: 2, ingredient: SNOOZY_TOMATO }],
-  ingredient30: [
-    { amount: 5, ingredient: SNOOZY_TOMATO },
-    { amount: 4, ingredient: SOFT_POTATO }
-  ],
-  ingredient60: [
-    { amount: 7, ingredient: SNOOZY_TOMATO },
-    { amount: 6, ingredient: SOFT_POTATO },
-    { amount: 4, ingredient: LARGE_LEEK }
-  ],
+  ingredients: {
+    a: SNOOZY_TOMATO,
+    b: SOFT_POTATO,
+    c: LARGE_LEEK
+  },
   skill: ChargeEnergyS
-};
+});
 
-export const WEEPINBELL: Pokemon = {
-  ...evolvesFrom(BELLSPROUT),
+export const WEEPINBELL: Pokemon = evolvedPokemon(BELLSPROUT, {
   name: 'WEEPINBELL',
-  displayName: 'Weepinbell',
   pokedexNumber: 70,
   frequency: toSeconds(1, 3, 20),
   ingredientPercentage: 23.5,
   skillPercentage: 4.0,
   carrySize: 12
-};
+});
 
-export const VICTREEBEL: Pokemon = {
-  ...evolvesFrom(WEEPINBELL),
+export const VICTREEBEL: Pokemon = evolvedPokemon(WEEPINBELL, {
   name: 'VICTREEBEL',
-  displayName: 'Victreebel',
   pokedexNumber: 71,
   frequency: toSeconds(0, 46, 40),
   ingredientPercentage: 23.3,
   skillPercentage: 3.9,
   carrySize: 17
-};
+});
 
-export const GEODUDE: Pokemon = {
+export const GEODUDE: Pokemon = createIngredientSpecialist({
   name: 'GEODUDE',
-  displayName: 'Geodude',
   pokedexNumber: 74,
-  specialty: 'ingredient',
   frequency: toSeconds(1, 35, 0),
   ingredientPercentage: 28.1,
   skillPercentage: 5.2,
@@ -300,46 +252,35 @@ export const GEODUDE: Pokemon = {
   carrySize: 9,
   previousEvolutions: 0,
   remainingEvolutions: 2,
-  ingredient0: [{ amount: 2, ingredient: GREENGRASS_SOYBEANS }],
-  ingredient30: [
-    { amount: 5, ingredient: GREENGRASS_SOYBEANS },
-    { amount: 4, ingredient: SOFT_POTATO }
-  ],
-  ingredient60: [
-    { amount: 7, ingredient: GREENGRASS_SOYBEANS },
-    { amount: 6, ingredient: SOFT_POTATO },
-    { amount: 4, ingredient: TASTY_MUSHROOM }
-  ],
+  ingredients: {
+    a: GREENGRASS_SOYBEANS,
+    b: SOFT_POTATO,
+    c: TASTY_MUSHROOM
+  },
   skill: ChargeStrengthSRange
-};
+});
 
-export const GRAVELER: Pokemon = {
-  ...evolvesFrom(GEODUDE),
+export const GRAVELER: Pokemon = evolvedPokemon(GEODUDE, {
   name: 'GRAVELER',
-  displayName: 'Graveler',
   pokedexNumber: 75,
   frequency: toSeconds(1, 6, 40),
   ingredientPercentage: 27.2,
   skillPercentage: 4.8,
   carrySize: 12
-};
+});
 
-export const GOLEM: Pokemon = {
-  ...evolvesFrom(GRAVELER),
+export const GOLEM: Pokemon = evolvedPokemon(GRAVELER, {
   name: 'GOLEM',
-  displayName: 'Golem',
   pokedexNumber: 76,
   frequency: toSeconds(0, 51, 40),
   ingredientPercentage: 28.0,
   skillPercentage: 5.2,
   carrySize: 16
-};
+});
 
-export const FARFETCHD: Pokemon = {
+export const FARFETCHD: Pokemon = createIngredientSpecialist({
   name: 'FARFETCHD',
-  displayName: "Farfetch'd",
   pokedexNumber: 83,
-  specialty: 'ingredient',
   frequency: toSeconds(0, 50, 0),
   ingredientPercentage: 16,
   skillPercentage: 4.3,
@@ -348,24 +289,17 @@ export const FARFETCHD: Pokemon = {
   carrySize: 18,
   previousEvolutions: 0,
   remainingEvolutions: 0,
-  ingredient0: [{ amount: 2, ingredient: LARGE_LEEK }],
-  ingredient30: [
-    { amount: 5, ingredient: LARGE_LEEK },
-    { amount: 8, ingredient: BEAN_SAUSAGE }
-  ],
-  ingredient60: [
-    { amount: 7, ingredient: LARGE_LEEK },
-    { amount: 13, ingredient: BEAN_SAUSAGE },
-    { amount: 12, ingredient: WARMING_GINGER }
-  ],
+  ingredients: {
+    a: LARGE_LEEK,
+    b: BEAN_SAUSAGE,
+    c: WARMING_GINGER
+  },
   skill: ChargeStrengthS
-};
+});
 
-export const GASTLY: Pokemon = {
+export const GASTLY: Pokemon = createIngredientSpecialist({
   name: 'GASTLY',
-  displayName: 'Gastly',
   pokedexNumber: 92,
-  specialty: 'ingredient',
   frequency: toSeconds(1, 3, 20),
   ingredientPercentage: 14.4,
   skillPercentage: 1.5,
@@ -374,46 +308,35 @@ export const GASTLY: Pokemon = {
   carrySize: 10,
   previousEvolutions: 0,
   remainingEvolutions: 2,
-  ingredient0: [{ amount: 2, ingredient: FIERY_HERB }],
-  ingredient30: [
-    { amount: 5, ingredient: FIERY_HERB },
-    { amount: 4, ingredient: TASTY_MUSHROOM }
-  ],
-  ingredient60: [
-    { amount: 7, ingredient: FIERY_HERB },
-    { amount: 6, ingredient: TASTY_MUSHROOM },
-    { amount: 8, ingredient: PURE_OIL }
-  ],
+  ingredients: {
+    a: FIERY_HERB,
+    b: TASTY_MUSHROOM,
+    c: PURE_OIL
+  },
   skill: ChargeStrengthSRange
-};
+});
 
-export const HAUNTER: Pokemon = {
-  ...evolvesFrom(GASTLY),
+export const HAUNTER: Pokemon = evolvedPokemon(GASTLY, {
   name: 'HAUNTER',
-  displayName: 'Haunter',
   pokedexNumber: 93,
   frequency: toSeconds(0, 50, 0),
   ingredientPercentage: 15.7,
   skillPercentage: 2.2,
   carrySize: 14
-};
+});
 
-export const GENGAR: Pokemon = {
-  ...evolvesFrom(HAUNTER),
+export const GENGAR: Pokemon = evolvedPokemon(HAUNTER, {
   name: 'GENGAR',
-  displayName: 'Gengar',
   pokedexNumber: 94,
   frequency: toSeconds(0, 36, 40),
   ingredientPercentage: 16.1,
   skillPercentage: 2.4,
   carrySize: 18
-};
+});
 
-export const KANGASKHAN: Pokemon = {
+export const KANGASKHAN: Pokemon = createIngredientSpecialist({
   name: 'KANGASKHAN',
-  displayName: 'Kangaskhan',
   pokedexNumber: 115,
-  specialty: 'ingredient',
   frequency: toSeconds(0, 44, 10),
   ingredientPercentage: 22.2,
   skillPercentage: 1.7,
@@ -422,24 +345,17 @@ export const KANGASKHAN: Pokemon = {
   carrySize: 21,
   previousEvolutions: 0,
   remainingEvolutions: 0,
-  ingredient0: [{ amount: 2, ingredient: WARMING_GINGER }],
-  ingredient30: [
-    { amount: 5, ingredient: WARMING_GINGER },
-    { amount: 4, ingredient: SOFT_POTATO }
-  ],
-  ingredient60: [
-    { amount: 7, ingredient: WARMING_GINGER },
-    { amount: 6, ingredient: SOFT_POTATO },
-    { amount: 8, ingredient: GREENGRASS_SOYBEANS }
-  ],
+  ingredients: {
+    a: WARMING_GINGER,
+    b: SOFT_POTATO,
+    c: GREENGRASS_SOYBEANS
+  },
   skill: IngredientMagnetS
-};
+});
 
-export const CHANSEY: Pokemon = {
+export const CHANSEY: Pokemon = createIngredientSpecialist({
   name: 'CHANSEY',
-  displayName: 'Chansey',
   pokedexNumber: 113,
-  specialty: 'ingredient',
   frequency: toSeconds(0, 55, 0),
   ingredientPercentage: 23.6,
   skillPercentage: 2.3,
@@ -448,24 +364,17 @@ export const CHANSEY: Pokemon = {
   carrySize: 15,
   previousEvolutions: 1,
   remainingEvolutions: 1,
-  ingredient0: [{ amount: 2, ingredient: FANCY_EGG }],
-  ingredient30: [
-    { amount: 5, ingredient: FANCY_EGG },
-    { amount: 4, ingredient: SOFT_POTATO }
-  ],
-  ingredient60: [
-    { amount: 7, ingredient: FANCY_EGG },
-    { amount: 7, ingredient: SOFT_POTATO },
-    { amount: 8, ingredient: HONEY }
-  ],
+  ingredients: {
+    a: FANCY_EGG,
+    b: SOFT_POTATO,
+    c: HONEY
+  },
   skill: EnergyForEveryone
-};
+});
 
-export const MR_MIME: Pokemon = {
+export const MR_MIME: Pokemon = createIngredientSpecialist({
   name: 'MR_MIME',
-  displayName: 'Mr. Mime',
   pokedexNumber: 122,
-  specialty: 'ingredient',
   frequency: toSeconds(0, 46, 40),
   ingredientPercentage: 21.6,
   skillPercentage: 3.9,
@@ -474,24 +383,17 @@ export const MR_MIME: Pokemon = {
   carrySize: 17,
   previousEvolutions: 1,
   remainingEvolutions: 0,
-  ingredient0: [{ amount: 2, ingredient: SNOOZY_TOMATO }],
-  ingredient30: [
-    { amount: 5, ingredient: SNOOZY_TOMATO },
-    { amount: 4, ingredient: SOFT_POTATO }
-  ],
-  ingredient60: [
-    { amount: 7, ingredient: SNOOZY_TOMATO },
-    { amount: 6, ingredient: SOFT_POTATO },
-    { amount: 4, ingredient: LARGE_LEEK }
-  ],
+  ingredients: {
+    a: SNOOZY_TOMATO,
+    b: SOFT_POTATO,
+    c: LARGE_LEEK
+  },
   skill: SkillCopyMimic
-};
+});
 
-export const PINSIR: Pokemon = {
+export const PINSIR: Pokemon = createIngredientSpecialist({
   name: 'PINSIR',
-  displayName: 'Pinsir',
   pokedexNumber: 127,
-  specialty: 'ingredient',
   frequency: toSeconds(0, 40, 0),
   ingredientPercentage: 21.6,
   skillPercentage: 3.1,
@@ -500,24 +402,17 @@ export const PINSIR: Pokemon = {
   carrySize: 24,
   previousEvolutions: 0,
   remainingEvolutions: 0,
-  ingredient0: [{ amount: 2, ingredient: HONEY }],
-  ingredient30: [
-    { amount: 5, ingredient: HONEY },
-    { amount: 5, ingredient: FANCY_APPLE }
-  ],
-  ingredient60: [
-    { amount: 7, ingredient: HONEY },
-    { amount: 8, ingredient: FANCY_APPLE },
-    { amount: 7, ingredient: BEAN_SAUSAGE }
-  ],
+  ingredients: {
+    a: HONEY,
+    b: FANCY_APPLE,
+    c: BEAN_SAUSAGE
+  },
   skill: ChargeStrengthS
-};
+});
 
-export const DITTO: Pokemon = {
+export const DITTO: Pokemon = createIngredientSpecialist({
   name: 'DITTO',
-  displayName: 'Ditto',
   pokedexNumber: 132,
-  specialty: 'ingredient',
   frequency: toSeconds(0, 58, 20),
   ingredientPercentage: 20.1,
   skillPercentage: 3.6,
@@ -526,24 +421,17 @@ export const DITTO: Pokemon = {
   carrySize: 17,
   previousEvolutions: 0,
   remainingEvolutions: 0,
-  ingredient0: [{ amount: 2, ingredient: PURE_OIL }],
-  ingredient30: [
-    { amount: 5, ingredient: PURE_OIL },
-    { amount: 3, ingredient: LARGE_LEEK }
-  ],
-  ingredient60: [
-    { amount: 7, ingredient: PURE_OIL },
-    { amount: 5, ingredient: LARGE_LEEK },
-    { amount: 3, ingredient: SLOWPOKE_TAIL }
-  ],
+  ingredients: {
+    a: PURE_OIL,
+    b: LARGE_LEEK,
+    c: SLOWPOKE_TAIL
+  },
   skill: SkillCopyTransform
-};
+});
 
-export const DRATINI: Pokemon = {
+export const DRATINI: Pokemon = createIngredientSpecialist({
   name: 'DRATINI',
-  displayName: 'Dratini',
   pokedexNumber: 147,
-  specialty: 'ingredient',
   frequency: toSeconds(1, 23, 20),
   ingredientPercentage: 25.0,
   skillPercentage: 2.0,
@@ -552,46 +440,35 @@ export const DRATINI: Pokemon = {
   carrySize: 9,
   previousEvolutions: 0,
   remainingEvolutions: 2,
-  ingredient0: [{ amount: 2, ingredient: FIERY_HERB }],
-  ingredient30: [
-    { amount: 5, ingredient: FIERY_HERB },
-    { amount: 4, ingredient: GREENGRASS_CORN }
-  ],
-  ingredient60: [
-    { amount: 7, ingredient: FIERY_HERB },
-    { amount: 7, ingredient: GREENGRASS_CORN },
-    { amount: 8, ingredient: PURE_OIL }
-  ],
+  ingredients: {
+    a: FIERY_HERB,
+    b: GREENGRASS_CORN,
+    c: PURE_OIL
+  },
   skill: ChargeEnergyS
-};
+});
 
-export const DRAGONAIR: Pokemon = {
-  ...evolvesFrom(DRATINI),
+export const DRAGONAIR: Pokemon = evolvedPokemon(DRATINI, {
   name: 'DRAGONAIR',
-  displayName: 'Dragonair',
   pokedexNumber: 148,
   frequency: toSeconds(1, 3, 20),
   ingredientPercentage: 26.2,
   skillPercentage: 2.5,
   carrySize: 12
-};
+});
 
-export const DRAGONITE: Pokemon = {
-  ...evolvesFrom(DRAGONAIR),
+export const DRAGONITE: Pokemon = evolvedPokemon(DRAGONAIR, {
   name: 'DRAGONITE',
-  displayName: 'Dragonite',
   pokedexNumber: 149,
   frequency: toSeconds(0, 43, 20),
   ingredientPercentage: 26.4,
   skillPercentage: 2.6,
   carrySize: 20
-};
+});
 
-export const WOOPER: Pokemon = {
+export const WOOPER: Pokemon = createIngredientSpecialist({
   name: 'WOOPER',
-  displayName: 'Wooper',
   pokedexNumber: 194,
-  specialty: 'ingredient',
   frequency: toSeconds(1, 38, 20),
   ingredientPercentage: 20.1,
   skillPercentage: 3.8,
@@ -600,24 +477,17 @@ export const WOOPER: Pokemon = {
   carrySize: 10,
   previousEvolutions: 0,
   remainingEvolutions: 1,
-  ingredient0: [{ amount: 2, ingredient: TASTY_MUSHROOM }],
-  ingredient30: [
-    { amount: 5, ingredient: TASTY_MUSHROOM },
-    { amount: 6, ingredient: SOFT_POTATO }
-  ],
-  ingredient60: [
-    { amount: 7, ingredient: TASTY_MUSHROOM },
-    { amount: 10, ingredient: SOFT_POTATO },
-    { amount: 12, ingredient: BEAN_SAUSAGE }
-  ],
+  ingredients: {
+    a: TASTY_MUSHROOM,
+    b: SOFT_POTATO,
+    c: BEAN_SAUSAGE
+  },
   skill: ChargeEnergyS
-};
+});
 
-export const WOOPER_PALDEAN: Pokemon = {
+export const WOOPER_PALDEAN: Pokemon = createIngredientSpecialist({
   name: 'WOOPER_PALDEAN',
-  displayName: 'Wooper (Paldean Form)',
   pokedexNumber: 194,
-  specialty: 'ingredient',
   frequency: toSeconds(1, 46, 40),
   ingredientPercentage: 20.9,
   skillPercentage: 5.6,
@@ -626,72 +496,54 @@ export const WOOPER_PALDEAN: Pokemon = {
   carrySize: 9,
   previousEvolutions: 0,
   remainingEvolutions: 1,
-  ingredient0: [{ amount: 2, ingredient: SOOTHING_CACAO }],
-  ingredient30: [
-    { amount: 5, ingredient: SOOTHING_CACAO },
-    { amount: 4, ingredient: ROUSING_COFFEE }
-  ],
-  ingredient60: [
-    { amount: 7, ingredient: SOOTHING_CACAO },
-    { amount: 7, ingredient: ROUSING_COFFEE },
-    { amount: 9, ingredient: SOFT_POTATO }
-  ],
+  ingredients: {
+    a: SOOTHING_CACAO,
+    b: ROUSING_COFFEE,
+    c: SOFT_POTATO
+  },
   skill: ChargeEnergyS
-};
+});
 
-export const QUAGSIRE: Pokemon = {
-  ...evolvesFrom(WOOPER),
+export const QUAGSIRE: Pokemon = evolvedPokemon(WOOPER, {
   name: 'QUAGSIRE',
-  displayName: 'Quagsire',
   pokedexNumber: 195,
   frequency: toSeconds(0, 56, 40),
   ingredientPercentage: 19,
   skillPercentage: 3.2,
   carrySize: 16
-};
+});
 
-export const DELIBIRD: Pokemon = {
+export const DELIBIRD: Pokemon = createIngredientSpecialist({
   name: 'DELIBIRD',
-  displayName: 'Delibird',
   pokedexNumber: 225,
-  specialty: 'ingredient',
   frequency: toSeconds(0, 41, 40),
   ingredientPercentage: 18.8,
-  skillPercentage: 1.5,
+  skillPercentage: 3,
   berry: PAMTRE,
   genders: BALANCED_GENDER,
   carrySize: 20,
   previousEvolutions: 0,
   remainingEvolutions: 0,
-  ingredient0: [{ amount: 2, ingredient: FANCY_EGG }],
-  ingredient30: [
-    { amount: 5, ingredient: FANCY_EGG },
-    { amount: 6, ingredient: FANCY_APPLE }
-  ],
-  ingredient60: [
-    { amount: 7, ingredient: FANCY_EGG },
-    { amount: 9, ingredient: FANCY_APPLE },
-    { amount: 5, ingredient: SOOTHING_CACAO }
-  ],
-  skill: IngredientMagnetS
-};
+  ingredients: {
+    a: FANCY_EGG,
+    b: FANCY_APPLE,
+    c: SOOTHING_CACAO
+  },
+  skill: PresentIngredientMagnetS
+});
 
-export const BLISSEY: Pokemon = {
-  ...evolvesFrom(CHANSEY),
+export const BLISSEY: Pokemon = evolvedPokemon(CHANSEY, {
   name: 'BLISSEY',
-  displayName: 'Blissey',
   pokedexNumber: 242,
   frequency: toSeconds(0, 51, 40),
   ingredientPercentage: 23.8,
   skillPercentage: 2.3,
   carrySize: 21
-};
+});
 
-export const LARVITAR: Pokemon = {
+export const LARVITAR: Pokemon = createIngredientSpecialist({
   name: 'LARVITAR',
-  displayName: 'Larvitar',
   pokedexNumber: 246,
-  specialty: 'ingredient',
   frequency: toSeconds(1, 20, 0),
   ingredientPercentage: 23.8,
   skillPercentage: 4.1,
@@ -700,47 +552,36 @@ export const LARVITAR: Pokemon = {
   carrySize: 9,
   previousEvolutions: 0,
   remainingEvolutions: 2,
-  ingredient0: [{ amount: 2, ingredient: WARMING_GINGER }],
-  ingredient30: [
-    { amount: 5, ingredient: WARMING_GINGER },
-    { amount: 5, ingredient: GREENGRASS_SOYBEANS }
-  ],
-  ingredient60: [
-    { amount: 7, ingredient: WARMING_GINGER },
-    { amount: 8, ingredient: GREENGRASS_SOYBEANS },
-    { amount: 8, ingredient: BEAN_SAUSAGE }
-  ],
+  ingredients: {
+    a: WARMING_GINGER,
+    b: GREENGRASS_SOYBEANS,
+    c: BEAN_SAUSAGE
+  },
   skill: ChargeEnergyS
-};
+});
 
-export const PUPITAR: Pokemon = {
-  ...evolvesFrom(LARVITAR),
+export const PUPITAR: Pokemon = evolvedPokemon(LARVITAR, {
   name: 'PUPITAR',
-  displayName: 'Pupitar',
   pokedexNumber: 247,
   frequency: toSeconds(1, 0, 0),
   ingredientPercentage: 24.7,
   skillPercentage: 4.5,
   carrySize: 13
-};
+});
 
-export const TYRANITAR: Pokemon = {
-  ...evolvesFrom(PUPITAR),
+export const TYRANITAR: Pokemon = evolvedPokemon(PUPITAR, {
   name: 'TYRANITAR',
-  displayName: 'Tyranitar',
   pokedexNumber: 248,
   frequency: toSeconds(0, 45, 0),
   ingredientPercentage: 26.6,
   skillPercentage: 5.2,
   berry: WIKI,
   carrySize: 19
-};
+});
 
-export const MAWILE: Pokemon = {
+export const MAWILE: Pokemon = createIngredientSpecialist({
   name: 'MAWILE',
-  displayName: 'Mawile',
   pokedexNumber: 303,
-  specialty: 'ingredient',
   frequency: toSeconds(0, 53, 20),
   ingredientPercentage: 20.4,
   skillPercentage: 3.8,
@@ -749,24 +590,17 @@ export const MAWILE: Pokemon = {
   carrySize: 17,
   previousEvolutions: 0,
   remainingEvolutions: 0,
-  ingredient0: [{ amount: 2, ingredient: PURE_OIL }],
-  ingredient30: [
-    { amount: 5, ingredient: PURE_OIL },
-    { amount: 4, ingredient: GREENGRASS_CORN }
-  ],
-  ingredient60: [
-    { amount: 7, ingredient: PURE_OIL },
-    { amount: 6, ingredient: GREENGRASS_CORN },
-    { amount: 8, ingredient: SNOOZY_TOMATO }
-  ],
+  ingredients: {
+    a: PURE_OIL,
+    b: GREENGRASS_CORN,
+    c: SNOOZY_TOMATO
+  },
   skill: IngredientDrawSHyperCutter
-};
+});
 
-export const ARON: Pokemon = {
+export const ARON: Pokemon = createIngredientSpecialist({
   name: 'ARON',
-  displayName: 'Aron',
   pokedexNumber: 304,
-  specialty: 'ingredient',
   frequency: toSeconds(1, 35, 0),
   ingredientPercentage: 27.3,
   skillPercentage: 4.6,
@@ -775,46 +609,72 @@ export const ARON: Pokemon = {
   carrySize: 10,
   previousEvolutions: 0,
   remainingEvolutions: 2,
-  ingredient0: [{ amount: 2, ingredient: BEAN_SAUSAGE }],
-  ingredient30: [
-    { amount: 5, ingredient: BEAN_SAUSAGE },
-    { amount: 3, ingredient: ROUSING_COFFEE }
-  ],
-  ingredient60: [
-    { amount: 7, ingredient: BEAN_SAUSAGE },
-    { amount: 5, ingredient: ROUSING_COFFEE },
-    { amount: 7, ingredient: GREENGRASS_SOYBEANS }
-  ],
+  ingredients: {
+    a: BEAN_SAUSAGE,
+    b: ROUSING_COFFEE,
+    c: GREENGRASS_SOYBEANS
+  },
   skill: ChargeEnergyS
-};
+});
 
-export const LAIRON: Pokemon = {
-  ...evolvesFrom(ARON),
+export const LAIRON: Pokemon = evolvedPokemon(ARON, {
   name: 'LAIRON',
-  displayName: 'Lairon',
   pokedexNumber: 305,
   frequency: toSeconds(1, 10, 0),
   ingredientPercentage: 27.7,
   skillPercentage: 4.8,
   carrySize: 13
-};
+});
 
-export const AGGRON: Pokemon = {
-  ...evolvesFrom(LAIRON),
+export const AGGRON: Pokemon = evolvedPokemon(LAIRON, {
   name: 'AGGRON',
-  displayName: 'Aggron',
   pokedexNumber: 306,
   frequency: toSeconds(0, 50, 0),
   ingredientPercentage: 28.5,
   skillPercentage: 5.2,
   carrySize: 18
-};
+});
 
-export const ABSOL: Pokemon = {
+export const TRAPINCH: Pokemon = createIngredientSpecialist({
+  name: 'TRAPINCH',
+  pokedexNumber: 328,
+  frequency: toSeconds(1, 23, 20),
+  ingredientPercentage: 15.2,
+  skillPercentage: 3.1,
+  berry: FIGY,
+  genders: BALANCED_GENDER,
+  carrySize: 8,
+  previousEvolutions: 0,
+  remainingEvolutions: 2,
+  ingredients: {
+    a: GLOSSY_AVOCADO,
+    b: FIERY_HERB,
+    c: GREENGRASS_SOYBEANS
+  },
+  skill: ChargeStrengthS
+});
+
+export const VIBRAVA: Pokemon = evolvedPokemon(TRAPINCH, {
+  name: 'VIBRAVA',
+  pokedexNumber: 329,
+  frequency: toSeconds(1, 1, 40),
+  ingredientPercentage: 15.5,
+  skillPercentage: 3.4,
+  carrySize: 12
+});
+
+export const FLYGON: Pokemon = evolvedPokemon(VIBRAVA, {
+  name: 'FLYGON',
+  pokedexNumber: 330,
+  frequency: toSeconds(0, 45, 0),
+  ingredientPercentage: 17.2,
+  skillPercentage: 3.9,
+  carrySize: 17
+});
+
+export const ABSOL: Pokemon = createIngredientSpecialist({
   name: 'ABSOL',
-  displayName: 'Absol',
   pokedexNumber: 359,
-  specialty: 'ingredient',
   frequency: toSeconds(0, 49, 10),
   ingredientPercentage: 17.8,
   skillPercentage: 3.8,
@@ -823,24 +683,17 @@ export const ABSOL: Pokemon = {
   carrySize: 21,
   previousEvolutions: 0,
   remainingEvolutions: 0,
-  ingredient0: [{ amount: 2, ingredient: SOOTHING_CACAO }],
-  ingredient30: [
-    { amount: 5, ingredient: SOOTHING_CACAO },
-    { amount: 8, ingredient: FANCY_APPLE }
-  ],
-  ingredient60: [
-    { amount: 7, ingredient: SOOTHING_CACAO },
-    { amount: 12, ingredient: FANCY_APPLE },
-    { amount: 7, ingredient: TASTY_MUSHROOM }
-  ],
+  ingredients: {
+    a: SOOTHING_CACAO,
+    b: FANCY_APPLE,
+    c: TASTY_MUSHROOM
+  },
   skill: ChargeStrengthS
-};
+});
 
-export const SHINX: Pokemon = {
+export const SHINX: Pokemon = createIngredientSpecialist({
   name: 'SHINX',
-  displayName: 'Shinx',
   pokedexNumber: 403,
-  specialty: 'ingredient',
   frequency: toSeconds(1, 13, 20),
   ingredientPercentage: 18.1,
   skillPercentage: 1.8,
@@ -849,68 +702,68 @@ export const SHINX: Pokemon = {
   carrySize: 11,
   previousEvolutions: 0,
   remainingEvolutions: 2,
-  ingredient0: [{ amount: 2, ingredient: SNOOZY_TOMATO }],
-  ingredient30: [
-    { amount: 5, ingredient: SNOOZY_TOMATO },
-    { amount: 4, ingredient: PURE_OIL }
-  ],
-  ingredient60: [
-    { amount: 7, ingredient: SNOOZY_TOMATO },
-    { amount: 7, ingredient: PURE_OIL },
-    { amount: 5, ingredient: ROUSING_COFFEE }
-  ],
+  ingredients: {
+    a: SNOOZY_TOMATO,
+    b: PURE_OIL,
+    c: ROUSING_COFFEE
+  },
   skill: CookingPowerUpS
-};
+});
 
-export const LUXIO: Pokemon = {
-  ...evolvesFrom(SHINX),
+export const LUXIO: Pokemon = evolvedPokemon(SHINX, {
   name: 'LUXIO',
-  displayName: 'Luxio',
   pokedexNumber: 404,
   frequency: toSeconds(0, 53, 20),
   ingredientPercentage: 18.2,
   skillPercentage: 1.8,
   carrySize: 16
-};
+});
 
-export const LUXRAY: Pokemon = {
-  ...evolvesFrom(LUXIO),
+export const LUXRAY: Pokemon = evolvedPokemon(LUXIO, {
   name: 'LUXRAY',
-  displayName: 'Luxray',
   pokedexNumber: 405,
   frequency: toSeconds(0, 40, 0),
   ingredientPercentage: 20,
   skillPercentage: 2.3,
   carrySize: 21
-};
+});
 
-export const MIME_JR: Pokemon = {
-  ...evolvesInto(MR_MIME),
+export const MIME_JR: Pokemon = preEvolvedPokemon(MR_MIME, {
   name: 'MIME_JR',
-  displayName: 'Mime Jr.',
   pokedexNumber: 439,
   frequency: toSeconds(1, 11, 40),
   ingredientPercentage: 20.1,
   skillPercentage: 3.2,
-  carrySize: 7
-};
+  carrySize: 10
+});
 
-export const HAPPINY: Pokemon = {
-  ...evolvesInto(CHANSEY),
+export const HAPPINY: Pokemon = preEvolvedPokemon(CHANSEY, {
   name: 'HAPPINY',
-  displayName: 'Happiny',
   pokedexNumber: 440,
   frequency: toSeconds(1, 30, 0),
   ingredientPercentage: 21,
   skillPercentage: 1.3,
   carrySize: 7
-};
+});
 
-export const CROAGUNK: Pokemon = {
+export const SPIRITOMB: Pokemon = createIngredientSpecialist({
+  name: 'SPIRITOMB',
+  pokedexNumber: 442,
+  frequency: toSeconds(0, 58, 20),
+  ingredientPercentage: 19.8,
+  skillPercentage: 3.6,
+  berry: WIKI,
+  genders: BALANCED_GENDER,
+  carrySize: 27,
+  previousEvolutions: 0,
+  remainingEvolutions: 0,
+  ingredients: { a: TASTY_MUSHROOM, b: PLUMP_PUMPKIN, c: LARGE_LEEK },
+  skill: ExtraHelpfulS
+});
+
+export const CROAGUNK: Pokemon = createIngredientSpecialist({
   name: 'CROAGUNK',
-  displayName: 'Croagunk',
   pokedexNumber: 453,
-  specialty: 'ingredient',
   frequency: toSeconds(1, 33, 20),
   ingredientPercentage: 22.8,
   skillPercentage: 4.2,
@@ -919,34 +772,25 @@ export const CROAGUNK: Pokemon = {
   carrySize: 10,
   previousEvolutions: 0,
   remainingEvolutions: 1,
-  ingredient0: [{ amount: 2, ingredient: PURE_OIL }],
-  ingredient30: [
-    { amount: 5, ingredient: PURE_OIL },
-    { amount: 5, ingredient: BEAN_SAUSAGE }
-  ],
-  ingredient60: [
-    { amount: 7, ingredient: PURE_OIL },
-    { amount: 8, ingredient: BEAN_SAUSAGE }
-  ],
+  ingredients: {
+    a: PURE_OIL,
+    b: BEAN_SAUSAGE
+  },
   skill: ChargeStrengthS
-};
+});
 
-export const TOXICROAK: Pokemon = {
-  ...evolvesFrom(CROAGUNK),
+export const TOXICROAK: Pokemon = evolvedPokemon(CROAGUNK, {
   name: 'TOXICROAK',
-  displayName: 'Toxicroak',
   pokedexNumber: 454,
   frequency: toSeconds(0, 56, 40),
   ingredientPercentage: 22.9,
   skillPercentage: 4.3,
   carrySize: 14
-};
+});
 
-export const SNOVER: Pokemon = {
+export const SNOVER: Pokemon = createIngredientSpecialist({
   name: 'SNOVER',
-  displayName: 'Snover',
   pokedexNumber: 459,
-  specialty: 'ingredient',
   frequency: toSeconds(1, 33, 20),
   ingredientPercentage: 25.1,
   skillPercentage: 4.4,
@@ -955,129 +799,104 @@ export const SNOVER: Pokemon = {
   carrySize: 10,
   previousEvolutions: 0,
   remainingEvolutions: 1,
-  ingredient0: [{ amount: 2, ingredient: SNOOZY_TOMATO }],
-  ingredient30: [
-    { amount: 5, ingredient: SNOOZY_TOMATO },
-    { amount: 4, ingredient: FANCY_EGG }
-  ],
-  ingredient60: [
-    { amount: 7, ingredient: SNOOZY_TOMATO },
-    { amount: 7, ingredient: FANCY_EGG },
-    { amount: 5, ingredient: TASTY_MUSHROOM }
-  ],
+  ingredients: {
+    a: SNOOZY_TOMATO,
+    b: FANCY_EGG,
+    c: TASTY_MUSHROOM
+  },
   skill: ChargeStrengthSRange
-};
+});
 
-export const ABOMASNOW: Pokemon = {
-  ...evolvesFrom(SNOVER),
+export const ABOMASNOW: Pokemon = evolvedPokemon(SNOVER, {
   name: 'ABOMASNOW',
-  displayName: 'Abomasnow',
   pokedexNumber: 460,
   frequency: toSeconds(0, 50, 0),
   ingredientPercentage: 25.0,
   skillPercentage: 4.4,
   carrySize: 21
-};
+});
 
-export const PUMPKABOO_SMALL: Pokemon = {
-  name: 'PUMPKABOO_SMALL',
-  displayName: 'Pumpkaboo (Small Variety)',
+const pumpkabooSharedStats = {
   pokedexNumber: 710,
-  specialty: 'ingredient',
-  frequency: toSeconds(1, 28, 20),
   ingredientPercentage: 12.0,
   skillPercentage: 4.9,
   berry: BLUK,
   genders: BALANCED_GENDER,
-  carrySize: 7,
   previousEvolutions: 0,
   remainingEvolutions: 1,
-  ingredient0: [{ amount: 2, ingredient: PLUMP_PUMPKIN }],
-  ingredient30: [
-    { amount: 5, ingredient: PLUMP_PUMPKIN },
-    { amount: 11, ingredient: GREENGRASS_SOYBEANS }
-  ],
-  ingredient60: [
-    { amount: 7, ingredient: PLUMP_PUMPKIN },
-    { amount: 18, ingredient: GREENGRASS_SOYBEANS },
-    { amount: 15, ingredient: SOFT_POTATO }
-  ],
+  ingredients: {
+    a: PLUMP_PUMPKIN,
+    b: GREENGRASS_SOYBEANS,
+    c: SOFT_POTATO
+  },
   skill: ChargeStrengthS
 };
 
-export const PUMPKABOO_MEDIUM: Pokemon = {
-  ...PUMPKABOO_SMALL,
+export const PUMPKABOO_SMALL: Pokemon = createIngredientSpecialist({
+  ...pumpkabooSharedStats,
+  name: 'PUMPKABOO_SMALL',
+  frequency: toSeconds(1, 28, 20),
+  carrySize: 7
+});
+
+export const PUMPKABOO_MEDIUM: Pokemon = createIngredientSpecialist({
+  ...pumpkabooSharedStats,
   name: 'PUMPKABOO_MEDIUM',
-  displayName: 'Pumpkaboo (Medium Variety)',
   frequency: toSeconds(1, 30, 0),
   carrySize: 11
-};
+});
 
-export const PUMPKABOO_LARGE: Pokemon = {
-  ...PUMPKABOO_SMALL,
+export const PUMPKABOO_LARGE: Pokemon = createIngredientSpecialist({
+  ...pumpkabooSharedStats,
   name: 'PUMPKABOO_LARGE',
-  displayName: 'Pumpkaboo (Large Variety)',
   frequency: toSeconds(1, 31, 40),
   carrySize: 15
-};
+});
 
-export const PUMPKABOO_JUMBO: Pokemon = {
-  ...PUMPKABOO_SMALL,
+export const PUMPKABOO_JUMBO: Pokemon = createIngredientSpecialist({
+  ...pumpkabooSharedStats,
   name: 'PUMPKABOO_JUMBO',
-  displayName: 'Pumpkaboo (Jumbo Variety)',
   frequency: toSeconds(1, 33, 20),
   carrySize: 21
+});
+
+const gourgeistSharedStats = {
+  pokedexNumber: 711,
+  ingredientPercentage: 13.0,
+  skillPercentage: 4.9
 };
 
-export const GOURGEIST_SMALL: Pokemon = {
-  ...evolvesFrom(PUMPKABOO_SMALL),
+export const GOURGEIST_SMALL: Pokemon = evolvedPokemon(PUMPKABOO_SMALL, {
+  ...gourgeistSharedStats,
   name: 'GOURGEIST_SMALL',
-  displayName: 'Gourgeist (Small Variety)',
-  pokedexNumber: 711,
   frequency: toSeconds(0, 51, 40),
-  ingredientPercentage: 13.0,
-  skillPercentage: 4.9,
   carrySize: 10
-};
+});
 
-export const GOURGEIST_MEDIUM: Pokemon = {
-  ...evolvesFrom(PUMPKABOO_MEDIUM),
+export const GOURGEIST_MEDIUM: Pokemon = evolvedPokemon(PUMPKABOO_MEDIUM, {
+  ...gourgeistSharedStats,
   name: 'GOURGEIST_MEDIUM',
-  displayName: 'Gourgeist (Medium Variety)',
-  pokedexNumber: 711,
   frequency: toSeconds(0, 53, 20),
-  ingredientPercentage: 13.0,
-  skillPercentage: 4.9,
   carrySize: 14
-};
+});
 
-export const GOURGEIST_LARGE: Pokemon = {
-  ...evolvesFrom(PUMPKABOO_LARGE),
+export const GOURGEIST_LARGE: Pokemon = evolvedPokemon(PUMPKABOO_LARGE, {
+  ...gourgeistSharedStats,
   name: 'GOURGEIST_LARGE',
-  displayName: 'Gourgeist (Large Variety)',
-  pokedexNumber: 711,
   frequency: toSeconds(0, 55, 0),
-  ingredientPercentage: 13.0,
-  skillPercentage: 4.9,
   carrySize: 19
-};
+});
 
-export const GOURGEIST_JUMBO: Pokemon = {
-  ...evolvesFrom(PUMPKABOO_JUMBO),
+export const GOURGEIST_JUMBO: Pokemon = evolvedPokemon(PUMPKABOO_JUMBO, {
+  ...gourgeistSharedStats,
   name: 'GOURGEIST_JUMBO',
-  displayName: 'Gourgeist (Jumbo Variety)',
-  pokedexNumber: 711,
   frequency: toSeconds(0, 56, 40),
-  ingredientPercentage: 13.0,
-  skillPercentage: 4.9,
   carrySize: 25
-};
+});
 
-export const GRUBBIN: Pokemon = {
+export const GRUBBIN: Pokemon = createIngredientSpecialist({
   name: 'GRUBBIN',
-  displayName: 'Grubbin',
   pokedexNumber: 736,
-  specialty: 'ingredient',
   frequency: toSeconds(1, 16, 40),
   ingredientPercentage: 15.5,
   skillPercentage: 2.9,
@@ -1086,46 +905,35 @@ export const GRUBBIN: Pokemon = {
   carrySize: 11,
   previousEvolutions: 0,
   remainingEvolutions: 2,
-  ingredient0: [{ amount: 2, ingredient: ROUSING_COFFEE }],
-  ingredient30: [
-    { amount: 5, ingredient: ROUSING_COFFEE },
-    { amount: 4, ingredient: TASTY_MUSHROOM }
-  ],
-  ingredient60: [
-    { amount: 7, ingredient: ROUSING_COFFEE },
-    { amount: 7, ingredient: TASTY_MUSHROOM },
-    { amount: 11, ingredient: HONEY }
-  ],
+  ingredients: {
+    a: ROUSING_COFFEE,
+    b: TASTY_MUSHROOM,
+    c: HONEY
+  },
   skill: ChargeStrengthS
-};
+});
 
-export const CHARJABUG: Pokemon = {
-  ...evolvesFrom(GRUBBIN),
+export const CHARJABUG: Pokemon = evolvedPokemon(GRUBBIN, {
   name: 'CHARJABUG',
-  displayName: 'Charjabug',
   pokedexNumber: 737,
   frequency: toSeconds(0, 55, 0),
   ingredientPercentage: 15.4,
   skillPercentage: 2.8,
   carrySize: 15
-};
+});
 
-export const VIKAVOLT: Pokemon = {
-  ...evolvesFrom(CHARJABUG),
+export const VIKAVOLT: Pokemon = evolvedPokemon(CHARJABUG, {
   name: 'VIKAVOLT',
-  displayName: 'Vikavolt',
   pokedexNumber: 738,
   frequency: toSeconds(0, 46, 40),
   ingredientPercentage: 19.4,
   skillPercentage: 5.1,
   carrySize: 19
-};
+});
 
-export const STUFFUL: Pokemon = {
+export const STUFFUL: Pokemon = createIngredientSpecialist({
   name: 'STUFFUL',
-  displayName: 'Stufful',
   pokedexNumber: 759,
-  specialty: 'ingredient',
   frequency: toSeconds(1, 8, 20),
   ingredientPercentage: 22.5,
   skillPercentage: 1.1,
@@ -1134,35 +942,26 @@ export const STUFFUL: Pokemon = {
   carrySize: 13,
   previousEvolutions: 0,
   remainingEvolutions: 1,
-  ingredient0: [{ amount: 2, ingredient: GREENGRASS_CORN }],
-  ingredient30: [
-    { amount: 5, ingredient: GREENGRASS_CORN },
-    { amount: 6, ingredient: BEAN_SAUSAGE }
-  ],
-  ingredient60: [
-    { amount: 7, ingredient: GREENGRASS_CORN },
-    { amount: 10, ingredient: BEAN_SAUSAGE },
-    { amount: 9, ingredient: FANCY_EGG }
-  ],
+  ingredients: {
+    a: GREENGRASS_CORN,
+    b: BEAN_SAUSAGE,
+    c: FANCY_EGG
+  },
   skill: ChargeStrengthSRange
-};
+});
 
-export const BEWEAR: Pokemon = {
-  ...evolvesFrom(STUFFUL),
+export const BEWEAR: Pokemon = evolvedPokemon(STUFFUL, {
   name: 'BEWEAR',
-  displayName: 'Bewear',
   pokedexNumber: 760,
   frequency: toSeconds(0, 46, 40),
   ingredientPercentage: 22.9,
   skillPercentage: 1.3,
   carrySize: 20
-};
+});
 
-export const COMFEY: Pokemon = {
+export const COMFEY: Pokemon = createIngredientSpecialist({
   name: 'COMFEY',
-  displayName: 'Comfey',
   pokedexNumber: 764,
-  specialty: 'ingredient',
   frequency: toSeconds(0, 41, 40),
   ingredientPercentage: 16.7,
   skillPercentage: 3.5,
@@ -1171,24 +970,17 @@ export const COMFEY: Pokemon = {
   carrySize: 20,
   previousEvolutions: 0,
   remainingEvolutions: 0,
-  ingredient0: [{ amount: 2, ingredient: GREENGRASS_CORN }],
-  ingredient30: [
-    { amount: 5, ingredient: GREENGRASS_CORN },
-    { amount: 6, ingredient: WARMING_GINGER }
-  ],
-  ingredient60: [
-    { amount: 7, ingredient: GREENGRASS_CORN },
-    { amount: 9, ingredient: WARMING_GINGER },
-    { amount: 7, ingredient: SOOTHING_CACAO }
-  ],
+  ingredients: {
+    a: GREENGRASS_CORN,
+    b: WARMING_GINGER,
+    c: SOOTHING_CACAO
+  },
   skill: EnergizingCheerS
-};
+});
 
-export const CRAMORANT: Pokemon = {
+export const CRAMORANT: Pokemon = createIngredientSpecialist({
   name: 'CRAMORANT',
-  displayName: 'Cramorant',
   pokedexNumber: 845,
-  specialty: 'ingredient',
   frequency: toSeconds(0, 45, 0),
   ingredientPercentage: 16.5,
   skillPercentage: 3.9,
@@ -1197,24 +989,17 @@ export const CRAMORANT: Pokemon = {
   carrySize: 19,
   previousEvolutions: 0,
   remainingEvolutions: 0,
-  ingredient0: [{ amount: 2, ingredient: PURE_OIL }],
-  ingredient30: [
-    { amount: 5, ingredient: PURE_OIL },
-    { amount: 4, ingredient: SOFT_POTATO }
-  ],
-  ingredient60: [
-    { amount: 7, ingredient: PURE_OIL },
-    { amount: 7, ingredient: SOFT_POTATO },
-    { amount: 8, ingredient: FANCY_EGG }
-  ],
+  ingredients: {
+    a: PURE_OIL,
+    b: SOFT_POTATO,
+    c: FANCY_EGG
+  },
   skill: TastyChanceS
-};
+});
 
-export const SPRIGATITO: Pokemon = {
+export const SPRIGATITO: Pokemon = createIngredientSpecialist({
   name: 'SPRIGATITO',
-  displayName: 'Sprigatito',
   pokedexNumber: 906,
-  specialty: 'ingredient',
   frequency: toSeconds(1, 16, 40),
   ingredientPercentage: 20.8,
   skillPercentage: 2.3,
@@ -1223,47 +1008,36 @@ export const SPRIGATITO: Pokemon = {
   carrySize: 10,
   previousEvolutions: 0,
   remainingEvolutions: 2,
-  ingredient0: [{ amount: 2, ingredient: SOFT_POTATO }],
-  ingredient30: [
-    { amount: 5, ingredient: SOFT_POTATO },
-    { amount: 6, ingredient: MOOMOO_MILK }
-  ],
-  ingredient60: [
-    { amount: 7, ingredient: SOFT_POTATO },
-    { amount: 9, ingredient: MOOMOO_MILK },
-    { amount: 8, ingredient: WARMING_GINGER }
-  ],
+  ingredients: {
+    a: SOFT_POTATO,
+    b: MOOMOO_MILK,
+    c: WARMING_GINGER
+  },
   skill: CookingPowerUpS
-};
+});
 
-export const FLORAGATO: Pokemon = {
-  ...evolvesFrom(SPRIGATITO),
+export const FLORAGATO: Pokemon = evolvedPokemon(SPRIGATITO, {
   name: 'FLORAGATO',
-  displayName: 'Floragato',
   pokedexNumber: 907,
   frequency: toSeconds(0, 58, 20),
   ingredientPercentage: 20.9,
   skillPercentage: 2.3,
   carrySize: 14
-};
+});
 
-export const MEOWSCARADA: Pokemon = {
-  ...evolvesFrom(FLORAGATO),
+export const MEOWSCARADA: Pokemon = evolvedPokemon(FLORAGATO, {
   name: 'MEOWSCARADA',
-  displayName: 'Meowscarada',
   pokedexNumber: 908,
   frequency: toSeconds(0, 43, 20),
   ingredientPercentage: 19,
   skillPercentage: 2.2,
   berry: WIKI,
   carrySize: 18
-};
+});
 
-export const FUECOCO: Pokemon = {
+export const FUECOCO: Pokemon = createIngredientSpecialist({
   name: 'FUECOCO',
-  displayName: 'Fuecoco',
   pokedexNumber: 909,
-  specialty: 'ingredient',
   frequency: toSeconds(1, 10, 0),
   ingredientPercentage: 25.4,
   skillPercentage: 5.3,
@@ -1272,47 +1046,36 @@ export const FUECOCO: Pokemon = {
   carrySize: 11,
   previousEvolutions: 0,
   remainingEvolutions: 2,
-  ingredient0: [{ amount: 2, ingredient: FANCY_APPLE }],
-  ingredient30: [
-    { amount: 5, ingredient: FANCY_APPLE },
-    { amount: 4, ingredient: BEAN_SAUSAGE }
-  ],
-  ingredient60: [
-    { amount: 7, ingredient: FANCY_APPLE },
-    { amount: 6, ingredient: BEAN_SAUSAGE },
-    { amount: 5, ingredient: FIERY_HERB }
-  ],
+  ingredients: {
+    a: FANCY_APPLE,
+    b: BEAN_SAUSAGE,
+    c: FIERY_HERB
+  },
   skill: ChargeEnergyS
-};
+});
 
-export const CROCALOR: Pokemon = {
-  ...evolvesFrom(FUECOCO),
+export const CROCALOR: Pokemon = evolvedPokemon(FUECOCO, {
   name: 'CROCALOR',
-  displayName: 'Crocalor',
   pokedexNumber: 910,
   frequency: toSeconds(0, 51, 40),
   ingredientPercentage: 24.7,
   skillPercentage: 5,
   carrySize: 16
-};
+});
 
-export const SKELEDIRGE: Pokemon = {
-  ...evolvesFrom(CROCALOR),
+export const SKELEDIRGE: Pokemon = evolvedPokemon(CROCALOR, {
   name: 'SKELEDIRGE',
-  displayName: 'Skeledirge',
   pokedexNumber: 911,
   frequency: toSeconds(0, 45, 0),
   ingredientPercentage: 26.8,
   skillPercentage: 6.2,
   berry: BLUK,
   carrySize: 19
-};
+});
 
-export const QUAXLY: Pokemon = {
+export const QUAXLY: Pokemon = createIngredientSpecialist({
   name: 'QUAXLY',
-  displayName: 'Quaxly',
   pokedexNumber: 912,
-  specialty: 'ingredient',
   frequency: toSeconds(1, 20, 0),
   ingredientPercentage: 26.1,
   skillPercentage: 2.8,
@@ -1321,52 +1084,41 @@ export const QUAXLY: Pokemon = {
   carrySize: 10,
   previousEvolutions: 0,
   remainingEvolutions: 2,
-  ingredient0: [{ amount: 2, ingredient: GREENGRASS_SOYBEANS }],
-  ingredient30: [
-    { amount: 5, ingredient: GREENGRASS_SOYBEANS },
-    { amount: 2, ingredient: LARGE_LEEK }
-  ],
-  ingredient60: [
-    { amount: 7, ingredient: GREENGRASS_SOYBEANS },
-    { amount: 4, ingredient: LARGE_LEEK },
-    { amount: 6, ingredient: PURE_OIL }
-  ],
+  ingredients: {
+    a: GREENGRASS_SOYBEANS,
+    b: LARGE_LEEK,
+    c: PURE_OIL
+  },
   skill: ChargeStrengthM
-};
+});
 
-export const QUAXWELL: Pokemon = {
-  ...evolvesFrom(QUAXLY),
+export const QUAXWELL: Pokemon = evolvedPokemon(QUAXLY, {
   name: 'QUAXWELL',
-  displayName: 'Quaxwell',
   pokedexNumber: 913,
   frequency: toSeconds(1, 0, 0),
   ingredientPercentage: 25.9,
   skillPercentage: 2.7,
   carrySize: 14
-};
+});
 
-export const QUAQUAVAL: Pokemon = {
-  ...evolvesFrom(QUAXWELL),
+export const QUAQUAVAL: Pokemon = evolvedPokemon(QUAXWELL, {
   name: 'QUAQUAVAL',
-  displayName: 'Quaquaval',
   pokedexNumber: 914,
   frequency: toSeconds(0, 43, 20),
   ingredientPercentage: 23.2,
   skillPercentage: 2.4,
   berry: CHERI,
   carrySize: 19
-};
+});
 
-export const CLODSIRE: Pokemon = {
-  ...evolvesFrom(WOOPER_PALDEAN),
+export const CLODSIRE: Pokemon = evolvedPokemon(WOOPER_PALDEAN, {
   name: 'CLODSIRE',
-  displayName: 'Clodsire',
   pokedexNumber: 980,
   frequency: toSeconds(0, 58, 20),
   ingredientPercentage: 20.8,
   skillPercentage: 5.5,
   carrySize: 20
-};
+});
 
 export const OPTIMAL_INGREDIENT_SPECIALISTS: Pokemon[] = [
   VENUSAUR,
@@ -1389,6 +1141,7 @@ export const OPTIMAL_INGREDIENT_SPECIALISTS: Pokemon[] = [
   TYRANITAR,
   MAWILE,
   AGGRON,
+  FLYGON,
   ABSOL,
   LUXRAY,
   TOXICROAK,
@@ -1432,10 +1185,13 @@ export const INFERIOR_INGREDIENT_SPECIALISTS: Pokemon[] = [
   LARVITAR,
   ARON,
   LAIRON,
+  TRAPINCH,
+  VIBRAVA,
   SHINX,
   LUXIO,
   MIME_JR,
   HAPPINY,
+  SPIRITOMB,
   CROAGUNK,
   SNOVER,
   PUMPKABOO_SMALL,

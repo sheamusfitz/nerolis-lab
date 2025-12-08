@@ -182,7 +182,8 @@ export default class ProductionController {
       wakeup,
       includeCooking,
       stockpiledIngredients,
-      potSize
+      potSize,
+      island: settings.island
     };
   }
 

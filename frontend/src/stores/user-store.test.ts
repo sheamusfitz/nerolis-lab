@@ -23,6 +23,29 @@ describe('User Store', () => {
             "name": "Greengrass Isle (Expert Mode)",
             "shortName": "GGEX",
           },
+          "amber": {
+            "areaBonus": 0,
+            "berries": [
+              {
+                "name": "CHESTO",
+                "type": "poison",
+                "value": 32,
+              },
+              {
+                "name": "LUM",
+                "type": "bug",
+                "value": 24,
+              },
+              {
+                "name": "YACHE",
+                "type": "dragon",
+                "value": 35,
+              },
+            ],
+            "expert": false,
+            "name": "Amber Canyon",
+            "shortName": "amber",
+          },
           "cyan": {
             "areaBonus": 0,
             "berries": [
@@ -147,7 +170,7 @@ describe('User Store', () => {
           },
         },
         "name": "Guest",
-        "potSize": 69,
+        "potSize": 81,
         "randomizeNicknames": true,
         "role": "default",
         "supporterSince": null,
@@ -349,6 +372,29 @@ describe('User Store', () => {
             "name": "Greengrass Isle (Expert Mode)",
             "shortName": "GGEX",
           },
+          "amber": {
+            "areaBonus": 0,
+            "berries": [
+              {
+                "name": "CHESTO",
+                "type": "poison",
+                "value": 32,
+              },
+              {
+                "name": "LUM",
+                "type": "bug",
+                "value": 24,
+              },
+              {
+                "name": "YACHE",
+                "type": "dragon",
+                "value": 35,
+              },
+            ],
+            "expert": false,
+            "name": "Amber Canyon",
+            "shortName": "amber",
+          },
           "cyan": {
             "areaBonus": 0,
             "berries": [
@@ -473,7 +519,7 @@ describe('User Store', () => {
           },
         },
         "name": "some name",
-        "potSize": 69,
+        "potSize": 81,
         "randomizeNicknames": true,
         "role": "default",
         "supporterSince": null,
@@ -513,6 +559,29 @@ describe('User Store', () => {
             "expert": true,
             "name": "Greengrass Isle (Expert Mode)",
             "shortName": "GGEX",
+          },
+          "amber": {
+            "areaBonus": 0,
+            "berries": [
+              {
+                "name": "CHESTO",
+                "type": "poison",
+                "value": 32,
+              },
+              {
+                "name": "LUM",
+                "type": "bug",
+                "value": 24,
+              },
+              {
+                "name": "YACHE",
+                "type": "dragon",
+                "value": 35,
+              },
+            ],
+            "expert": false,
+            "name": "Amber Canyon",
+            "shortName": "amber",
           },
           "cyan": {
             "areaBonus": 10,
@@ -688,6 +757,29 @@ describe('User Store', () => {
             "name": "Greengrass Isle (Expert Mode)",
             "shortName": "GGEX",
           },
+          "amber": {
+            "areaBonus": 0,
+            "berries": [
+              {
+                "name": "CHESTO",
+                "type": "poison",
+                "value": 32,
+              },
+              {
+                "name": "LUM",
+                "type": "bug",
+                "value": 24,
+              },
+              {
+                "name": "YACHE",
+                "type": "dragon",
+                "value": 35,
+              },
+            ],
+            "expert": false,
+            "name": "Amber Canyon",
+            "shortName": "amber",
+          },
           "cyan": {
             "areaBonus": 0,
             "berries": [
@@ -812,7 +904,7 @@ describe('User Store', () => {
           },
         },
         "name": "Guest",
-        "potSize": 69,
+        "potSize": 81,
         "randomizeNicknames": true,
         "role": "default",
         "supporterSince": null,

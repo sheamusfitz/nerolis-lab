@@ -172,6 +172,7 @@ describe('SetCover', () => {
           0,
           0,
           0,
+          0,
         ]
       `);
     });
@@ -503,7 +504,7 @@ describe('SetCover', () => {
 
       // expect 2nd team to be first now in results since it has the least amount of ingredients left
       expect(result[0].remainingRecipeWithSpotsLeft).toEqual(
-        // verify on -1 is fine since in practice we will never call this function with 0 spots, dont want to add additional computational logic for the clamp
+        // verify on -1 is fine since in practice we will never call this function with 0 spots, don't want to add additional computational logic for the clamp
         new Int16Array([2, 1, 1, ...new Int16Array(ingredient.INGREDIENTS.length - 3), -1])
       );
       expect(result[0].remainingIngredientIndices).toEqual([0, 1, 2]);
@@ -511,7 +512,7 @@ describe('SetCover', () => {
       expect(result[0].member).toEqual(producersOfFirstIngredient[1]);
 
       expect(result[1].remainingRecipeWithSpotsLeft).toEqual(
-        // verify on -1 is fine since in practice we will never call this function with 0 spots, dont want to add additional computational logic for the clamp
+        // verify on -1 is fine since in practice we will never call this function with 0 spots, don't want to add additional computational logic for the clamp
         new Int16Array([3, 2, 1, ...new Int16Array(ingredient.INGREDIENTS.length - 3), -1])
       );
       expect(result[1].remainingIngredientIndices).toEqual([0, 1, 2]);
@@ -575,7 +576,7 @@ describe('SetCover', () => {
       expect(result.exhaustive).toBe(true);
       expect(result.teams).toHaveLength(2);
       expect(result.teams[0].producedIngredients).toEqual(
-        new Int16Array([2, 4, 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0])
+        new Int16Array([2, 4, 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0])
       );
       expect(result.teams[0].members).toHaveLength(2);
       expect(result.teams[0].members[0].pokemonSet.pokemon).toEqual('1stTeam1stMember');
