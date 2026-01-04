@@ -8,8 +8,8 @@ import { getBerry, type PokemonInstanceExt, type TeamSettings } from 'sleepapi-c
 
 const MAX_TEAM_MEMBERS = 5
 const SPECIAL_POKEMON_DISPLAY_NAMES: string[] = ['Entei', 'Suicune', 'Raikou', 'Cresselia', 'Darkrai']
-const numWalkers = 4 //TODO change to 10
-const numTopTeams = 10
+const numWalkers = 3 //TODO change to 10
+const numTopTeams = 16
 
 // Global list of top teams
 const topTeams: { team: PokemonInstanceExt[]; strength: number }[] = []
@@ -204,7 +204,8 @@ export const findOptimalTeam = async (
           camp: teamStore.getCurrentTeam.camp,
           bedtime: teamStore.getCurrentTeam.bedtime,
           wakeup: teamStore.getCurrentTeam.wakeup,
-          stockpiledIngredients: teamStore.getCurrentTeam.stockpiledIngredients
+          stockpiledIngredients: teamStore.getCurrentTeam.stockpiledIngredients,
+          island: teamStore.getCurrentTeam.island
         },
         5110
       )
@@ -217,7 +218,8 @@ export const findOptimalTeam = async (
       camp: teamStore.getCurrentTeam.camp,
       bedtime: teamStore.getCurrentTeam.bedtime,
       wakeup: teamStore.getCurrentTeam.wakeup,
-      stockpiledIngredients: teamStore.getCurrentTeam.stockpiledIngredients
+      stockpiledIngredients: teamStore.getCurrentTeam.stockpiledIngredients,
+      island: teamStore.getCurrentTeam.island
     }
 
     const initialTemperature = Math.max(...walkerStrengths)

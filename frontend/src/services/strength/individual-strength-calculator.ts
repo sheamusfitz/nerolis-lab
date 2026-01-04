@@ -26,7 +26,8 @@ export const calculateAndCachePokemonStrengths = async (): Promise<ScoredPokemon
           camp: teamStore.getCurrentTeam.camp,
           bedtime: teamStore.getCurrentTeam.bedtime,
           wakeup: teamStore.getCurrentTeam.wakeup,
-          stockpiledIngredients: teamStore.getCurrentTeam.stockpiledIngredients
+          stockpiledIngredients: teamStore.getCurrentTeam.stockpiledIngredients,
+          island: teamStore.getCurrentTeam.island
         },
         members: [
           {

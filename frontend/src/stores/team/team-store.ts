@@ -513,13 +513,13 @@ export const useTeamStore = defineStore('team', {
       return hbOrErb || supportSkill
     },
     async calculateTeamStrength(members: PokemonInstanceExt[]) {
-      const settings = {
+      const settings: TeamSettings = {
         camp: this.getCurrentTeam.camp,
         bedtime: this.getCurrentTeam.bedtime,
         wakeup: this.getCurrentTeam.wakeup,
-        stockpiledIngredients: this.getCurrentTeam.stockpiledIngredients
+        stockpiledIngredients: this.getCurrentTeam.stockpiledIngredients,
+        island: this.getCurrentTeam.island
       }
-
       const production = await TeamService.calculateProduction({ members, settings })
 
       if (!production) return 0
